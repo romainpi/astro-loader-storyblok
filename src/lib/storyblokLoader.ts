@@ -42,9 +42,8 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
       console.log("total = ", stories.length);
 
       // Clear the store before repopulating
-      logger.info("Clearing store");
-
       if (config.version === "draft") {
+        logger.info(`Clearing store`);
         store.clear();
       }
 
