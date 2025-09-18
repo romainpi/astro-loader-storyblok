@@ -1,5 +1,6 @@
 import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbConfig } from "@storyblok/js";
+import moment from "moment";
 
 export interface StoryblokLoaderConfig {
   accessToken: string;
@@ -58,6 +59,12 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
           excluding_slugs: config.excludingSlugs,
           ...otherParams,
         });
+
+        const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
+
+        // Log the time of the latest update from Storyblok API's response
+        const timeAgo = moment(Number(data.cv) * 1000).fromNow();
+        logger.info(`Loaded ${data.stories.length} stories${contentTypeInfo} (updated ${timeAgo})`);
 
         for (const story of data.stories) {
           const publishedAt = story.published_at ? new Date(story.published_at) : null;

@@ -28,6 +28,7 @@
   "dependencies": {
     "astro": "^5.13.8",
     "@storyblok/js": "^4.3.0",
+    "moment": "^2.30.1",
     "storyblok-js-client": "^7.1.4"
   }
 }
