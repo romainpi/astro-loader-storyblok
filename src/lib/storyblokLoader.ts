@@ -14,7 +14,7 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
     use: [apiPlugin],
   });
   return {
-    name: "story-loader",
+    name: "astro-loader-storyblok",
     load: async ({ store, meta, logger, refreshContextData }) => {
       if (!storyblokApi) {
         throw new Error(`storyblokApi is not loaded`);
