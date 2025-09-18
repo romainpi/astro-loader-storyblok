@@ -33,9 +33,7 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
 
       const storedLastPublishedAt = meta.get("lastPublishedAt");
       const otherParams =
-        storedLastPublishedAt && config.version === "published"
-          ? { published_at_gt: storedLastPublishedAt }
-          : {};
+        storedLastPublishedAt && config.version === "published" ? { published_at_gt: storedLastPublishedAt } : {};
 
       const stories = await storyblokApi?.getAll("cdn/stories", {
         version: config.version,
@@ -50,18 +48,11 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
         store.clear();
       }
 
-      let latestPublishedAt = storedLastPublishedAt
-        ? new Date(storedLastPublishedAt)
-        : null;
+      let latestPublishedAt = storedLastPublishedAt ? new Date(storedLastPublishedAt) : null;
 
       for (const story of stories) {
-        const publishedAt = story.published_at
-          ? new Date(story.published_at)
-          : null;
-        if (
-          publishedAt &&
-          (!latestPublishedAt || publishedAt > latestPublishedAt)
-        ) {
+        const publishedAt = story.published_at ? new Date(story.published_at) : null;
+        if (publishedAt && (!latestPublishedAt || publishedAt > latestPublishedAt)) {
           latestPublishedAt = publishedAt;
         }
         store.set({
