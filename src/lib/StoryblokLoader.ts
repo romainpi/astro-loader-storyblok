@@ -1,7 +1,7 @@
 import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbConfig } from "@storyblok/js";
 
-interface StoryblokLoaderConfig {
+export interface StoryblokLoaderConfig {
   accessToken: string;
   apiOptions?: ISbConfig;
   version: "draft" | "published";

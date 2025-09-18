@@ -1,1 +1,1 @@
-export { StoryblokLoader } from "./lib/StoryblokLoader.js";
+export { StoryblokLoader, type StoryblokLoaderConfig } from "./lib/StoryblokLoader.js";
