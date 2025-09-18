@@ -15,7 +15,7 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
   });
   return {
     name: "astro-loader-storyblok",
-    load: async ({ store, meta, logger, refreshContextData }) => {
+    load: async ({ store, meta, logger, refreshContextData, collection }) => {
       if (!storyblokApi) {
         throw new Error(`storyblokApi is not loaded`);
       }
@@ -29,7 +29,8 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
         });
         return; // Early return to avoid unnecessary processing
       }
-      logger.info("Loading stories");
+
+      logger.info(`Loading stories for "${collection}"`);
 
       const storedLastPublishedAt = meta.get("lastPublishedAt");
       const otherParams =
@@ -43,7 +44,7 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
 
       // Clear the store before repopulating
       if (config.version === "draft") {
-        logger.info(`Clearing store`);
+        logger.info(`Clearing store for "${collection}"`);
         store.clear();
       }
 
