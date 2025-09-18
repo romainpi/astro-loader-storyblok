@@ -1,0 +1,33 @@
+{
+  "name": "astro-loader-storyblok",
+  "version": "0.0.1",
+  "description": "Storyblok loader for the Astro Content Layer API.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "astro",
+    "storyblok",
+    "withastro",
+    "astro-loader"
+  ],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.17.0+sha256.bd9ec5417641391e0acb3912b2912bd5b0385407a82da94744a7407b567fdb4f",
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "astro": "^5.13.8",
+    "@storyblok/js": "^4.3.0",
+    "storyblok-js-client": "^7.1.4"
+  }
+}
