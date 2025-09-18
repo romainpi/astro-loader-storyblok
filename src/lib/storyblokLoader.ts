@@ -36,10 +36,12 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
       const otherParams =
         storedLastPublishedAt && config.version === "published" ? { published_at_gt: storedLastPublishedAt } : {};
 
-      const stories = await storyblokApi?.getAll("cdn/stories", {
+      const { data } = await storyblokApi.get("cdn/stories", {
         version: config.version,
         ...otherParams,
       });
+
+      const stories = data.stories;
       logger.info(`total = ${stories.length}`);
 
       // Clear the store before repopulating
