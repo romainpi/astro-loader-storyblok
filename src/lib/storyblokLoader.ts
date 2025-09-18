@@ -40,7 +40,7 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
         version: config.version,
         ...otherParams,
       });
-      console.log("total = ", stories.length);
+      logger.info(`total = ${stories.length}`);
 
       // Clear the store before repopulating
       if (config.version === "draft") {
