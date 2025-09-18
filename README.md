@@ -10,6 +10,7 @@
 - 📊 **Flexible sorting** - Multiple sorting options for your content
 - 🚀 **Optimized performance** - Incremental updates and efficient caching
 - 📦 **TypeScript ready** - Full TypeScript support with type definitions
+- 🔄 **Real-time sync** - Built-in support for real-time content updates
 
 ## Installation
 
@@ -199,6 +200,51 @@ options [available for `sort_by` at the Storyblok Docs][stories-query-params].
 - **Incremental Updates**: Only fetches content that has changed since the last build
 - **Efficient Caching**: Stores metadata about the last published date to minimize API calls
 - **Selective Loading**: Load only specific content types to reduce payload size
+
+## Real-time Content Updates
+
+OLD: This loader supports Storyblok webhooks for real-time content updates. When a story is updated in Storyblok, the loader will automatically sync the changes.
+
+NEW: The package includes a `syncContentUpdate` utility function that enables real-time content synchronization between Storyblok and your Astro site. This is particularly useful during development or when you want immediate updates from Storyblok.
+
+### How it Works
+
+When content is updated in Storyblok, you can trigger a sync by calling the `syncContentUpdate` function with the updated story data. This sends a refresh request to your Astro development server.
+
+```typescript
+import { syncContentUpdate } from "astro-loader-storyblok/lib/syncContentUpdate";
+
+// Call this when you receive a webhook from Storyblok
+// or when you want to manually sync updated content
+await syncContentUpdate({ story: updatedStoryData });
+```
+
+### Integration with Storyblok Webhooks
+
+You can set up a webhook endpoint in your Astro project to automatically sync content when it's updated in Storyblok:
+
+```typescript
+// src/pages/api/storyblok-webhook.ts
+import type { APIRoute } from 'astro';
+import { syncContentUpdate } from "astro-loader-storyblok/lib/syncContentUpdate";
+
+export const POST: APIRoute = async ({ request }) => {
+  try {
+    const data = await request.json();
+    
+    if (data.story) {
+      await syncContentUpdate({ story: data.story });
+      return new Response('OK', { status: 200 });
+    }
+    
+    return new Response('No story data', { status: 400 });
+  } catch (error) {
+    return new Response('Error', { status: 500 });
+  }
+};
+```
+
+**Note**: This feature is primarily designed for development workflows. In production, content updates will be reflected during your next build process.
 
 ## TypeScript Support
 
