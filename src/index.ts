@@ -1,1 +1,1 @@
-export { StoryblokLoader, type StoryblokLoaderConfig } from "./lib/StoryblokLoader.js";
+export { StoryblokLoader, type StoryblokLoaderConfig, SortBy } from "./lib/StoryblokLoader.js";

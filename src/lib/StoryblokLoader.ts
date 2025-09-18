@@ -2,6 +2,17 @@ import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbConfig } from "@storyblok/js";
 import moment from "moment";
 
+export enum SortBy {
+  CREATED_AT_ASC = "created_at:asc",
+  CREATED_AT_DESC = "created_at:desc",
+  NAME_ASC = "name:asc",
+  NAME_DESC = "name:desc",
+  SLUG_ASC = "slug:asc",
+  SLUG_DESC = "slug:desc",
+  UPDATED_AT_ASC = "updated_at:asc",
+  UPDATED_AT_DESC = "updated_at:desc",
+}
+
 export interface StoryblokLoaderConfig {
   accessToken: string;
   apiOptions?: ISbConfig;
@@ -11,6 +22,8 @@ export interface StoryblokLoaderConfig {
 
   /** Exclude stories by specifying comma-separated values of `full_slug`. It is possible to specify wildcards by using `*`. */
   excludingSlugs?: string;
+
+  sortBy?: SortBy;
 
   version: "draft" | "published";
 
@@ -57,6 +70,7 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
           version: config.version,
           content_type: contentType,
           excluding_slugs: config.excludingSlugs,
+          sort_by: config.sortBy,
           ...otherParams,
         });
 
