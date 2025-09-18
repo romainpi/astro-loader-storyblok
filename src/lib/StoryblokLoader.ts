@@ -2,6 +2,7 @@ import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbConfig } from "@storyblok/js";
 import moment from "moment";
 
+/** Storyblok default sorting options */
 export enum SortBy {
   CREATED_AT_ASC = "created_at:asc",
   CREATED_AT_DESC = "created_at:desc",
@@ -23,7 +24,13 @@ export interface StoryblokLoaderConfig {
   /** Exclude stories by specifying comma-separated values of `full_slug`. It is possible to specify wildcards by using `*`. */
   excludingSlugs?: string;
 
-  sortBy?: SortBy;
+  /** Sort stories in ascending or descending order by a specific property. Possible properties are all default story
+   * properties and any custom fields defined in the schema of the story type.
+   * 
+   * You can use the `SortBy` enum for default Storyblok sorting options, or provide a custom string.
+   * @see https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories
+   * */
+  sortBy?: SortBy | string;
 
   version: "draft" | "published";
 
