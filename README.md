@@ -241,7 +241,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT
+MIT - see [LICENSE.txt](LICENSE.txt) for details.
 
 [astro-collections]: https://docs.astro.build/en/guides/content-collections/
 [astro-alpha]: https://www.storyblok.com/mp/announcing-storyblok-loader-astro-content-layer-api
