@@ -1,8 +1,15 @@
 {
   "name": "astro-loader-storyblok",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Storyblok loader for the Astro Content Layer API.",
   "type": "module",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map",
+    "LICENSE",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -19,16 +26,28 @@
     "withastro",
     "astro-loader"
   ],
-  "author": "",
+  "author": "Romain Pironneau",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/romainpi/astro-loader-storyblok.git",
+    "branch": "main"
+  },
+  "homepage": "https://github.com/romainpi/astro-loader-storyblok#readme",
+  "bugs": {
+    "url": "https://github.com/romainpi/astro-loader-storyblok/issues"
+  },
   "packageManager": "pnpm@10.17.0+sha256.bd9ec5417641391e0acb3912b2912bd5b0385407a82da94744a7407b567fdb4f",
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "astro": "^5.13.8"
   },
   "dependencies": {
-    "astro": "^5.13.8",
     "@storyblok/js": "^4.3.0",
     "moment": "^2.30.1",
     "storyblok-js-client": "^7.1.4"
+  },
+  "peerDependencies": {
+    "astro": "^5.13.8"
   }
 }
