@@ -10,7 +10,7 @@ interface StoryblokLoaderConfig {
   useUuids?: boolean;
 }
 
-export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
+export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
   const { storyblokApi } = storyblokInit({
     accessToken: config.accessToken,
     apiOptions: config.apiOptions,
@@ -74,4 +74,4 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
       id: config.useUuids ? updatedStory.uuid : updatedStory.full_slug,
     });
   }
-}
+};
