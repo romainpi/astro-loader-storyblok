@@ -4,6 +4,9 @@ import { storyblokInit, apiPlugin, type ISbConfig } from "@storyblok/js";
 export interface StoryblokLoaderConfig {
   accessToken: string;
   apiOptions?: ISbConfig;
+
+  /** Content types to filter by */
+  contentTypes?: string[];
   version: "draft" | "published";
 
   /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
@@ -36,14 +39,6 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
       const otherParams =
         storedLastPublishedAt && config.version === "published" ? { published_at_gt: storedLastPublishedAt } : {};
 
-      const { data } = await storyblokApi.get("cdn/stories", {
-        version: config.version,
-        ...otherParams,
-      });
-
-      const stories = data.stories;
-      logger.info(`total = ${stories.length}`);
-
       // Clear the store before repopulating
       if (config.version === "draft") {
         logger.info(`Clearing store for "${collection}"`);
@@ -52,13 +47,21 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
 
       let latestPublishedAt = storedLastPublishedAt ? new Date(storedLastPublishedAt) : null;
 
-      for (const story of stories) {
-        const publishedAt = story.published_at ? new Date(story.published_at) : null;
-        if (publishedAt && (!latestPublishedAt || publishedAt > latestPublishedAt)) {
-          latestPublishedAt = publishedAt;
-        }
+      for (const contentType of config.contentTypes || [undefined]) {
+        const { data } = await storyblokApi.get("cdn/stories", {
+          version: config.version,
+          content_type: contentType,
+          ...otherParams,
+        });
 
-        setStoryInStore(store, story);
+        for (const story of data.stories) {
+          const publishedAt = story.published_at ? new Date(story.published_at) : null;
+          if (publishedAt && (!latestPublishedAt || publishedAt > latestPublishedAt)) {
+            latestPublishedAt = publishedAt;
+          }
+
+          setStoryInStore(store, story);
+        }
 
         // Update meta if new stories are found
         if (latestPublishedAt) {
