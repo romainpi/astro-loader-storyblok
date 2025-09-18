@@ -7,6 +7,10 @@ export interface StoryblokLoaderConfig {
 
   /** Content types to filter by */
   contentTypes?: string[];
+
+  /** Exclude stories by specifying comma-separated values of `full_slug`. It is possible to specify wildcards by using `*`. */
+  excludingSlugs?: string;
+
   version: "draft" | "published";
 
   /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
@@ -51,6 +55,7 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
         const { data } = await storyblokApi.get("cdn/stories", {
           version: config.version,
           content_type: contentType,
+          excluding_slugs: config.excludingSlugs,
           ...otherParams,
         });
 
