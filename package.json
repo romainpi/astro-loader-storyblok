@@ -44,8 +44,7 @@
     "astro": "^5.13.8"
   },
   "dependencies": {
-    "@storyblok/js": "^4.3.0",
-    "storyblok-js-client": "^7.1.4"
+    "@storyblok/js": "^4.3.0"
   },
   "peerDependencies": {
     "astro": "^5.13.8"

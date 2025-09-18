@@ -11,16 +11,10 @@ importers:
       '@storyblok/js':
         specifier: ^4.3.0
         version: 4.3.0
+    devDependencies:
       astro:
         specifier: ^5.13.8
         version: 5.13.8(@types/node@24.5.2)(rollup@4.50.2)(typescript@5.9.2)
-      moment:
-        specifier: ^2.30.1
-        version: 2.30.1
-      storyblok-js-client:
-        specifier: ^7.1.4
-        version: 7.1.4
-    devDependencies:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -1049,9 +1043,6 @@ packages:
 
   micromark@4.0.2:
     resolution: {integrity: sha512-zpe98Q6kvavpCr1NPVSCMebCKfD7CA2NqZ+rykeNhONIJBpc1tFKt9hucLGwha3jNTNI8lHpctWJWoimVF4PfA==}
-
-  moment@2.30.1:
-    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
 
   mrmime@2.0.1:
     resolution: {integrity: sha512-Y3wQdFg2Va6etvQ5I82yUhGdsKrcYox6p7FfL1LbK2J4V01F9TGlepTIhnK24t7koZibmg82KGglhA1XK5IsLQ==}
@@ -2777,8 +2768,6 @@ snapshots:
       micromark-util-types: 2.0.2
     transitivePeerDependencies:
       - supports-color
-
-  moment@2.30.1: {}
 
   mrmime@2.0.1: {}
 
