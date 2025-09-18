@@ -16,6 +16,9 @@ export enum SortBy {
 
 export interface StoryblokLoaderConfig {
   accessToken: string;
+
+  version: "draft" | "published";
+
   apiOptions?: ISbConfig;
 
   /** Content types to filter by */
@@ -26,13 +29,11 @@ export interface StoryblokLoaderConfig {
 
   /** Sort stories in ascending or descending order by a specific property. Possible properties are all default story
    * properties and any custom fields defined in the schema of the story type.
-   * 
+   *
    * You can use the `SortBy` enum for default Storyblok sorting options, or provide a custom string.
    * @see https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories
    * */
   sortBy?: SortBy | string;
-
-  version: "draft" | "published";
 
   /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
   useUuids?: boolean;
