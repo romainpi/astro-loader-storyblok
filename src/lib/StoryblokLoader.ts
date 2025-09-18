@@ -1,6 +1,20 @@
 import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbConfig } from "@storyblok/js";
-import moment from "moment";
+
+/** Simple utility to format time ago without external dependencies */
+function timeAgo(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMinutes < 1) return 'just now';
+  if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+  if (diffDays < 30) return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+  return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? '' : 's'} ago`;
+}
 
 /** Storyblok default sorting options */
 export enum SortBy {
@@ -85,8 +99,8 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
         const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
 
         // Log the time of the latest update from Storyblok API's response
-        const timeAgo = moment(Number(data.cv) * 1000).fromNow();
-        logger.info(`Loaded ${data.stories.length} stories${contentTypeInfo} (updated ${timeAgo})`);
+        const lastUpdate = timeAgo(new Date(Number(data.cv) * 1000));
+        logger.info(`Loaded ${data.stories.length} stories${contentTypeInfo} (updated ${lastUpdate})`);
 
         for (const story of data.stories) {
           const publishedAt = story.published_at ? new Date(story.published_at) : null;
