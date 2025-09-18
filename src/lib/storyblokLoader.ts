@@ -1,10 +1,13 @@
-import type { Loader } from "astro/loaders";
+import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbConfig } from "@storyblok/js";
 
 interface StoryblokLoaderConfig {
   accessToken: string;
   apiOptions?: ISbConfig;
   version: "draft" | "published";
+
+  /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
+  useUuids?: boolean;
 }
 
 export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
@@ -23,10 +26,7 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
       if (refreshContextData?.story) {
         logger.info("Syncing... story updated in Storyblok");
         const updatedStory = refreshContextData.story as any; // Improve type if possible
-        store.set({
-          data: updatedStory,
-          id: updatedStory.uuid,
-        });
+        setStoryInStore(store, updatedStory);
         return; // Early return to avoid unnecessary processing
       }
 
@@ -55,10 +55,8 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
         if (publishedAt && (!latestPublishedAt || publishedAt > latestPublishedAt)) {
           latestPublishedAt = publishedAt;
         }
-        store.set({
-          data: story,
-          id: story.uuid,
-        });
+
+        setStoryInStore(store, story);
 
         // Update meta if new stories are found
         if (latestPublishedAt) {
@@ -67,4 +65,11 @@ export function storyblokLoader(config: StoryblokLoaderConfig): Loader {
       }
     },
   };
+
+  function setStoryInStore(store: DataStore, updatedStory: any) {
+    store.set({
+      data: updatedStory,
+      id: config.useUuids ? updatedStory.uuid : updatedStory.full_slug,
+    });
+  }
 }
