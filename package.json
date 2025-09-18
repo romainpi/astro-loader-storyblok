@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Storyblok loader for the Astro Content Layer API.",
   "type": "module",
+  "main": "./dist/index.js",
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
