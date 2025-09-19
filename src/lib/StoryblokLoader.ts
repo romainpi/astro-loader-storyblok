@@ -55,7 +55,7 @@ export interface StoryblokLoaderConfig {
    * properties and any custom fields defined in the schema of the story type.
    *
    * You can use the `SortBy` enum for default Storyblok sorting options, or provide a custom string.
-   * @see https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories
+   * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters}
    * */
   sortBy?: SortBy | string;
 
