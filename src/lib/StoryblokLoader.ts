@@ -29,14 +29,23 @@ export enum SortBy {
 }
 
 export interface StoryblokLoaderConfig {
+  /**
+   * Storyblok Content Delivery API access token.
+   * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2/getting-started/authentication | Storyblok Docs: Authentication}
+   * @see {@link https://www.storyblok.com/docs/concepts/access-tokens | Storyblok Docs: Access Tokens}
+   */
   accessToken: string;
 
   /** Access `draft` or `published` content. Default is `published`. */
   version?: "draft" | "published";
 
+  /**
+   * `config` options object to pass to the Storyblok JS SDK instance.
+   * @see {@link https://github.com/storyblok/storyblok-js-client#class-storyblok | `storyblok-js-client` Docs}
+   */
   apiOptions?: ISbConfig;
 
-  /** Content types to filter by */
+  /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
   contentTypes?: string[];
 
   /** Exclude stories by specifying comma-separated values of `full_slug`. It is possible to specify wildcards by using `*`. */
@@ -88,6 +97,7 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
 
       let latestPublishedAt = storedLastPublishedAt ? new Date(storedLastPublishedAt) : null;
 
+      // If no content types are specified, fetch all stories with content_type = undefined
       for (const contentType of config.contentTypes || [undefined]) {
         const { data } = await storyblokApi.get("cdn/stories", {
           version: config.version,
