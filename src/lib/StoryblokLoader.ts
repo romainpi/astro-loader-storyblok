@@ -1,5 +1,6 @@
 import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbConfig, type ISbStoryData, type ISbStoriesParams } from "@storyblok/js";
+import { timeAgo } from "./utils";
 
 /**
  * Storyblok default sorting options.
@@ -41,6 +42,17 @@ export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfi
 
   /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
   contentTypes?: string[];
+}
+
+interface StoryblokLoaderDatasourceQueryParams extends StoryblokLoaderCommonConfig {
+  datasource: string;
+  dimension?: string;
+}
+
+export interface StoryblokLoaderDatasourceConfig
+  extends StoryblokLoaderCommonConfig,
+    StoryblokLoaderDatasourceQueryParams {
+  switchNamesAndValues?: boolean;
 }
 
 export const StoryblokLoaderStories = (
@@ -122,4 +134,54 @@ export const StoryblokLoaderStories = (
       id: config.useUuids ? updatedStory.uuid : updatedStory.full_slug,
     });
   }
+};
+
+export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfig): Loader => {
+  const { storyblokApi } = storyblokInit({
+    accessToken: config.accessToken,
+    apiOptions: config.apiOptions,
+    use: [apiPlugin],
+  });
+  return {
+    name: "astro-loader-storyblok-datasource",
+    load: async ({ store, logger, collection }) => {
+      if (!storyblokApi) {
+        throw new Error(`storyblokApi is not loaded`);
+      }
+
+      logger.info(`Loading datasource entries for "${collection}"`);
+
+      const { data } = await storyblokApi.get("cdn/datasource_entries/", {
+        datasource: config.datasource,
+      });
+
+      const entries = data.datasource_entries;
+
+      // Log the time of the latest update from Storyblok API's response
+      const lastUpdate = timeAgo(new Date(Number(data.cv) * 1000));
+      logger.info(`'${collection}': Loaded ${entries.length} entries (updated ${lastUpdate})`);
+
+      if (config.switchNamesAndValues) {
+        logger.info(`'${collection}': Switching names and values`);
+      }
+
+      for (const entry of entries) {
+        // Use name as key and value as body by default
+        // Switch if config.switchNamesAndValues is true
+        store.set(
+          !config.switchNamesAndValues
+            ? {
+                id: entry.name,
+                body: entry.value,
+                data: entry,
+              }
+            : {
+                id: entry.value,
+                body: entry.name,
+                data: entry,
+              }
+        );
+      }
+    },
+  };
 };

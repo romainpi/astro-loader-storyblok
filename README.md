@@ -5,7 +5,7 @@
 ## Features
 
 - ✅ **Full Astro Content Layer API support** - Compatible with Astro 5.0+
-- 📝 **Draft and published content** - Support for both draft and published versions
+- 🗂️ **Stories and datasources** - Comprehensive support for both Storyblok stories and datasources
 - 🎯 **Content type filtering** - Load specific content types or all stories
 - 📊 **Flexible sorting** - Multiple sorting options for your content
 - 🚀 **Optimized performance** - Incremental updates and efficient caching
@@ -88,42 +88,109 @@ const stories = defineCollection({
 ```typescript
 import { StoryblokLoaderStories, SortByEnum } from "astro-loader-storyblok";
 
-
-
 const stories = defineCollection({
-  loader: StoryblokLoaderStories(
-    {
-      accessToken: "your-access-token",
+  loader: StoryblokLoaderStories({
+    accessToken: "your-access-token",
 
-      // Filter by specific content types
-      contentTypes: ["article", "page", "product"],
+    // Filter by specific content types
+    contentTypes: ["article", "page", "product"],
 
-      // Use UUIDs instead of slugs as IDs
-      useUuids: true,
+    // Use UUIDs instead of slugs as IDs
+    useUuids: true,
 
-      // Additional Storyblok API options
-      apiOptions: {
-        region: "us", // 'eu' (default), 'us', 'ap', 'ca', 'cn'
-        https: true,
-        cache: {
-          type: "memory",
-        },
+    // Exclude specific slugs
+    excludingSlugs: "home,about,contact",
+
+    // Sort stories
+    sortBy: SortByEnum.CREATED_AT_DESC,
+
+    // Content version
+    version: "draft",
+
+    // Additional Storyblok API options
+    apiOptions: {
+      region: "us", // 'eu' (default), 'us', 'ap', 'ca', 'cn'
+      https: true,
+      cache: {
+        type: "memory",
       },
     },
-    {
-      version: "draft",
-
-      // Exclude specific slugs
-      excluding_slugs: "home,about,contact",
-
-      // Sort stories
-      sort_by: SortByEnum.CREATED_AT_DESC,
-    }
-  ),
+  }),
 });
 ```
 
-## Configuration Options
+### Datasource Loader Configuration
+
+```typescript
+import { StoryblokLoaderDatasource } from "astro-loader-storyblok";
+
+const categories = defineCollection({
+  loader: StoryblokLoaderDatasource({
+    accessToken: "your-access-token",
+    datasource: "categories", // Your datasource slug
+  }),
+});
+```
+
+## Datasource Loader
+
+The `StoryblokLoaderDatasource` allows you to load data from Storyblok datasources into your Astro content collections. Datasources in Storyblok are useful for managing structured data like categories, tags, or any other reference data.
+
+### Basic Usage
+
+```typescript
+import { defineCollection } from "astro:content";
+import { StoryblokLoaderDatasource } from "astro-loader-storyblok";
+
+const categories = defineCollection({
+  loader: StoryblokLoaderDatasource({
+    accessToken: "your-storyblok-access-token",
+    datasource: "categories", // Your datasource slug in Storyblok
+  }),
+});
+
+export const collections = { categories };
+```
+
+### Using Datasource Data
+
+```astro
+---
+// src/pages/categories.astro
+import { getCollection } from "astro:content";
+
+const categories = await getCollection("categories");
+---
+
+<html>
+  <body>
+    <h1>Categories</h1>
+    <ul>
+      {categories.map((category) => (
+        <li key={category.id}>
+          <strong>{category.id}</strong>: {category.body}
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
+```
+
+### Data Structure
+
+By default, the loader uses the datasource entry's `name` as the collection entry ID and the `value` as the body content. You can switch this behavior using the `switchNamesAndValues` option:
+
+```typescript
+const categories = defineCollection({
+  loader: StoryblokLoaderDatasource({
+    accessToken: "your-access-token",
+    datasource: "categories",
+    switchNamesAndValues: true, // Use value as ID, name as body
+  }),
+});
+```
+
+## `StoryblokLoaderStories` Configuration Options
 
 The `StoryblokLoaderStories` function accepts two parameters:
 
@@ -162,9 +229,31 @@ The second parameter accepts all standard Storyblok Stories API parameters. Comm
 
 For a complete list of available parameters, see the [Storyblok Stories API documentation][stories-query-params].
 
+### `StoryblokLoaderDatasourceConfig`
+
+This is the `StoryblokLoaderDatasourceConfig` interface:
+
+```typescript
+export interface StoryblokLoaderDatasourceConfig {
+  accessToken: string;
+  datasource: string;
+  dimension?: string;
+  switchNamesAndValues?: boolean;
+  apiOptions?: ISbConfig;
+}
+```
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `accessToken` | `string` | **Required** | Your Storyblok access token |
+| `datasource` | `string` | **Required** | The slug of your Storyblok datasource |
+| `dimension` | `string` | `undefined` | Filter entries by dimension (if configured in Storyblok) |
+| `switchNamesAndValues` | `boolean` | `false` | Use value as ID and name as body instead of the default |
+| `apiOptions` | `ISbConfig` | `{}` | Additional Storyblok API configuration |
+
 ## Sorting Options
 
-The `SortByEnum` enum provides the following default sorting options for use in the `sort_by` parameter:
+The `SortByEnum` enum provides the following default sorting options for use in the `sortBy` parameter:
 
 ```typescript
 import { SortByEnum } from "astro-loader-storyblok";
@@ -211,14 +300,10 @@ import { pageSchema } from './types/storyblok.zod.ts';
 
 // Example with Zod schema (when using storyblok-to-zod)
 const stories = defineCollection({
-  loader: StoryblokLoaderStories(
-    {
-      accessToken: import.meta.env.STORYBLOK_TOKEN,
-    },
-    {
-      version: "published",
-    }
-  ),
+  loader: StoryblokLoaderStories({
+    accessToken: import.meta.env.STORYBLOK_TOKEN,
+    version: "published",
+  }),
   schema: pageSchema,
 });
 ```
@@ -230,16 +315,12 @@ const stories = defineCollection({
 ```typescript
 // src/content/config.ts
 const blog = defineCollection({
-  loader: StoryblokLoaderStories(
-    {
-      accessToken: import.meta.env.STORYBLOK_TOKEN,
-      contentTypes: ["blog-post"],
-    },
-    {
-      version: "published",
-      sort_by: SortByEnum.CREATED_AT_DESC,
-    }
-  ),
+  loader: StoryblokLoaderStories({
+    accessToken: import.meta.env.STORYBLOK_TOKEN,
+    contentTypes: ["blog-post"],
+    version: "published",
+    sortBy: SortByEnum.CREATED_AT_DESC,
+  }),
 });
 ```
 
@@ -247,17 +328,13 @@ const blog = defineCollection({
 
 ```typescript
 const stories = defineCollection({
-  loader: StoryblokLoaderStories(
-    {
-      accessToken: import.meta.env.STORYBLOK_TOKEN,
-      apiOptions: {
-        region: "us", // for US region
-      },
+  loader: StoryblokLoaderStories({
+    accessToken: import.meta.env.STORYBLOK_TOKEN,
+    version: "published",
+    apiOptions: {
+      region: "us", // for US region
     },
-    {
-      version: "published",
-    }
-  ),
+  }),
 });
 ```
 
@@ -265,14 +342,10 @@ const stories = defineCollection({
 
 ```typescript
 const stories = defineCollection({
-  loader: StoryblokLoaderStories(
-    {
-      accessToken: import.meta.env.STORYBLOK_TOKEN,
-    },
-    {
-      version: import.meta.env.DEV ? "draft" : "published",
-    }
-  ),
+  loader: StoryblokLoaderStories({
+    accessToken: import.meta.env.STORYBLOK_TOKEN,
+    version: import.meta.env.DEV ? "draft" : "published",
+  }),
 });
 ```
 
