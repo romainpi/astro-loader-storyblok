@@ -53,7 +53,9 @@ export interface StoryblokLoaderCommonConfig {
   apiOptions?: ISbConfig;
 }
 
-export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig {
+// TODO: Implement all the query params from Storyblok API
+// https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters
+interface StoryblokStoriesQueryParams {
   /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
   contentTypes?: string[];
 
@@ -68,11 +70,16 @@ export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfi
    * */
   sortBy?: SortByEnum | string;
 
-  /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
-  useUuids?: boolean;
-
   /** Access `draft` or `published` content. Default is `published`. */
   version?: "draft" | "published";
+}
+
+/**
+ * Configuration for the Storyblok Stories loader
+ */
+export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig, StoryblokStoriesQueryParams {
+  /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
+  useUuids?: boolean;
 }
 
 export const StoryblokLoaderStories = (config: StoryblokLoaderStoriesConfig): Loader => {
