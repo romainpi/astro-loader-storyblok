@@ -35,7 +35,10 @@ export enum SortByEnum {
   UPDATED_AT_DESC = "updated_at:desc",
 }
 
-export interface StoryblokLoaderConfig {
+/**
+ * Common configuration shared between all Storyblok loaders
+ */
+export interface StoryblokLoaderCommonConfig {
   /**
    * Storyblok Content Delivery API access token.
    * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2/getting-started/authentication | Storyblok Docs: Authentication}
@@ -43,15 +46,14 @@ export interface StoryblokLoaderConfig {
    */
   accessToken: string;
 
-  /** Access `draft` or `published` content. Default is `published`. */
-  version?: "draft" | "published";
-
   /**
    * `config` options object to pass to the Storyblok JS SDK instance.
    * @see {@link https://github.com/storyblok/storyblok-js-client#class-storyblok | `storyblok-js-client` Docs}
    */
   apiOptions?: ISbConfig;
+}
 
+export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig {
   /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
   contentTypes?: string[];
 
@@ -68,16 +70,19 @@ export interface StoryblokLoaderConfig {
 
   /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
   useUuids?: boolean;
+
+  /** Access `draft` or `published` content. Default is `published`. */
+  version?: "draft" | "published";
 }
 
-export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
+export const StoryblokLoaderStories = (config: StoryblokLoaderStoriesConfig): Loader => {
   const { storyblokApi } = storyblokInit({
     accessToken: config.accessToken,
     apiOptions: config.apiOptions,
     use: [apiPlugin],
   });
   return {
-    name: "astro-loader-storyblok",
+    name: "astro-loader-storyblok-stories",
     load: async ({ store, meta, logger, refreshContextData, collection }) => {
       if (!storyblokApi) {
         throw new Error(`storyblokApi is not loaded`);
