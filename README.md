@@ -29,10 +29,10 @@ Create or update your `src/content/config.ts`:
 
 ```typescript
 import { defineCollection } from "astro:content";
-import { StoryblokLoader } from "astro-loader-storyblok";
+import { StoryblokLoaderStories } from "astro-loader-storyblok";
 
 const stories = defineCollection({
-  loader: StoryblokLoader({
+  loader: StoryblokLoaderStories({
     accessToken: "your-storyblok-access-token",
     version: "published", // or "draft"
   }),
@@ -72,26 +72,26 @@ const { story } = Astro.props;
 
 ## Configuration
 
-### Basic Configuration
+### Stories Loader - Basic Configuration
 
 ```typescript
-import { StoryblokLoader, SortBy } from "astro-loader-storyblok";
+import { StoryblokLoaderStories, SortByEnum } from "astro-loader-storyblok";
 
 const stories = defineCollection({
-  loader: StoryblokLoader({
+  loader: StoryblokLoaderStories({
     accessToken: "your-access-token",
     version: "published", // "published" | "draft"
   }),
 });
 ```
 
-### Advanced Configuration
+### Stories Loader - Advanced Configuration
 
 ```typescript
-import { StoryblokLoader, SortBy } from "astro-loader-storyblok";
+import { StoryblokLoaderStories, SortByEnum } from "astro-loader-storyblok";
 
 const stories = defineCollection({
-  loader: StoryblokLoader({
+  loader: StoryblokLoaderStories({
     accessToken: "your-access-token",
     version: "published",
     
@@ -102,7 +102,10 @@ const stories = defineCollection({
     excludingSlugs: "home,about,contact",
     
     // Sort stories
-    sortBy: SortBy.CREATED_AT_DESC,
+    sortBy: SortByEnum.CREATED_AT_DESC,
+    
+    // Use UUIDs instead of slugs as IDs
+    useUuids: true,
     
     // Additional Storyblok API options
     apiOptions: {
@@ -135,29 +138,32 @@ export interface StoryblokLoaderConfig {
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `accessToken` | `string` | **Required** | Your Storyblok access token |
-| `version` | `"draft" \| "published"` | **Required** | Content version to load |
+| `apiOptions` | `ISbConfig` | `{}` | Additional Storyblok API configuration |
 | `contentTypes` | `string[]` | `undefined` | Array of content types to load. If not provided, loads all stories |
 | `excludingSlugs` | `string` | `undefined` | Comma-separated list of slugs to exclude |
 | `sortBy` | `SortBy \| string` | `undefined` | Sort order for stories |
-| `apiOptions` | `ISbConfig` | `{}` | Additional Storyblok API configuration |
+| `version` | `"draft" \| "published"` | `published` | Content version to load |
 
 ## Sorting Options
 
-The `SortBy` enum provides the following options:
+The `SortByEnum` enum provides the following default sorting options:
 
 ```typescript
-import { SortBy } from "astro-loader-storyblok";
+import { SortByEnum } from "astro-loader-storyblok";
 
 // Available sorting options
-SortBy.CREATED_AT_ASC    // "created_at:asc"
-SortBy.CREATED_AT_DESC   // "created_at:desc"
-SortBy.NAME_ASC          // "name:asc"
-SortBy.NAME_DESC         // "name:desc"
-SortBy.SLUG_ASC          // "slug:asc"
-SortBy.SLUG_DESC         // "slug:desc"
-SortBy.UPDATED_AT_ASC    // "updated_at:asc"
-SortBy.UPDATED_AT_DESC   // "updated_at:desc"
+SortByEnum.CREATED_AT_ASC    // "created_at:asc"
+SortByEnum.CREATED_AT_DESC   // "created_at:desc"
+SortByEnum.NAME_ASC          // "name:asc"
+SortByEnum.NAME_DESC         // "name:desc"
+SortByEnum.SLUG_ASC          // "slug:asc"
+SortByEnum.SLUG_DESC         // "slug:desc"
+SortByEnum.UPDATED_AT_ASC    // "updated_at:asc"
+SortByEnum.UPDATED_AT_DESC   // "updated_at:desc"
 ```
+
+You may also specify a custom string for custom sorting options. For more details please refer to the different custom
+options [available for `sort_by` at the Storyblok Docs][stories-query-params].
 
 ## Performance Features
 
@@ -171,12 +177,12 @@ This package is built with TypeScript and provides full type definitions. For ev
 
 ```typescript
 import { z } from "astro:content";
-import { StoryblokLoader } from "astro-loader-storyblok";
+import { StoryblokLoaderStories } from "astro-loader-storyblok";
 import { pageSchema } from './types/storyblok.zod.ts';
 
 // Example with Zod schema (when using storyblok-to-zod)
 const stories = defineCollection({
-  loader: StoryblokLoader({
+  loader: StoryblokLoaderStories({
     accessToken: import.meta.env.STORYBLOK_TOKEN,
     version: "published",
   }),
@@ -191,11 +197,11 @@ const stories = defineCollection({
 ```typescript
 // src/content/config.ts
 const blog = defineCollection({
-  loader: StoryblokLoader({
+  loader: StoryblokLoaderStories({
     accessToken: import.meta.env.STORYBLOK_TOKEN,
     version: "published",
     contentTypes: ["blog-post"],
-    sortBy: SortBy.CREATED_AT_DESC,
+    sortBy: SortByEnum.CREATED_AT_DESC,
   }),
 });
 ```
@@ -204,7 +210,7 @@ const blog = defineCollection({
 
 ```typescript
 const stories = defineCollection({
-  loader: StoryblokLoader({
+  loader: StoryblokLoaderStories({
     accessToken: import.meta.env.STORYBLOK_TOKEN,
     version: "published",
     apiOptions: {
@@ -218,7 +224,7 @@ const stories = defineCollection({
 
 ```typescript
 const stories = defineCollection({
-  loader: StoryblokLoader({
+  loader: StoryblokLoaderStories({
     accessToken: import.meta.env.STORYBLOK_TOKEN,
     version: import.meta.env.DEV ? "draft" : "published",
   }),
@@ -248,3 +254,4 @@ MIT - see [LICENSE.txt](LICENSE.txt) for details.
 [abandoned-implementation]: https://github.com/storyblok/storyblok-astro/commit/1a9bfb16e5886b3419607eb77802088f5eb9dfc4
 [`storyblok-to-zod`]: https://www.npmjs.com/package/storyblok-to-zod
 [new-issue]: https://github.com/romainpi/astro-loader-storyblok/issues/new
+[stories-query-params]: https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters
