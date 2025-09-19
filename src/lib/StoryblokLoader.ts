@@ -31,7 +31,8 @@ export enum SortBy {
 export interface StoryblokLoaderConfig {
   accessToken: string;
 
-  version: "draft" | "published";
+  /** Access `draft` or `published` content. Default is `published`. */
+  version?: "draft" | "published";
 
   apiOptions?: ISbConfig;
 
@@ -77,7 +78,7 @@ export const StoryblokLoader = (config: StoryblokLoaderConfig): Loader => {
 
       const storedLastPublishedAt = meta.get("lastPublishedAt");
       const otherParams =
-        storedLastPublishedAt && config.version === "published" ? { published_at_gt: storedLastPublishedAt } : {};
+        storedLastPublishedAt && config.version === "draft" ? {} : { published_at_gt: storedLastPublishedAt };
 
       // Clear the store before repopulating
       if (config.version === "draft") {
