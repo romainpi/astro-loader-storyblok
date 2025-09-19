@@ -16,8 +16,15 @@ function timeAgo(date: Date): string {
   return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? "" : "s"} ago`;
 }
 
-/** Storyblok default sorting options */
-export enum SortBy {
+/**
+ * Storyblok default sorting options.
+ *
+ * These values correspond to the standard sorting parameters supported by the Storyblok API
+ * for ordering content entries in API responses.
+ *
+ * @enum {string}
+ */
+export enum SortByEnum {
   CREATED_AT_ASC = "created_at:asc",
   CREATED_AT_DESC = "created_at:desc",
   NAME_ASC = "name:asc",
@@ -57,7 +64,7 @@ export interface StoryblokLoaderConfig {
    * You can use the `SortBy` enum for default Storyblok sorting options, or provide a custom string.
    * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters}
    * */
-  sortBy?: SortBy | string;
+  sortBy?: SortByEnum | string;
 
   /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
   useUuids?: boolean;
