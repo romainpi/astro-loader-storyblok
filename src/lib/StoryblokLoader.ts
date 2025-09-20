@@ -30,13 +30,13 @@ export const StoryblokLoaderStories = (
       try {
         // Handle story updates from webhooks
         if (refreshContextData?.story) {
-          logger.info("Syncing... story updated in Storyblok");
+          logger.info(`'${collection}': Syncing... story updated in Storyblok`);
           const updatedStory = refreshContextData.story as ISbStoryData;
           setStoryInStore(store, updatedStory, config);
           return;
         }
 
-        logger.info(`Loading stories for "${collection}"`);
+        logger.info(`'${collection}': Loading stories for "${collection}"`);
 
         const storedLastPublishedAt = meta.get("lastPublishedAt");
         const otherParams = shouldUseDateFilter(storedLastPublishedAt, storyblokParams?.version)
@@ -45,7 +45,7 @@ export const StoryblokLoaderStories = (
 
         // Clear store for draft mode to ensure fresh data
         if (storyblokParams?.version === "draft") {
-          logger.info(`Clearing store for "${collection}" (draft mode)`);
+          logger.info(`'${collection}': Clearing store (draft mode)`);
           store.clear();
         }
 
@@ -94,7 +94,7 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
     name: "astro-loader-storyblok-datasource",
     load: async ({ store, logger, collection }) => {
       try {
-        logger.info(`Loading datasource entries for "${collection}"`);
+        logger.info(`'${collection}': Loading datasource entries for "${collection}"`);
 
         const response = await fetchDatasourceEntries(storyblokApi, config);
 

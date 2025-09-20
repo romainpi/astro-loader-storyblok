@@ -112,7 +112,7 @@ export function processStoriesResponse(
   /*
   const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
   const lastUpdate = timeAgo(new Date(Number(cv) * 1000));
-  logger.info(`Loaded ${stories.length} stories${contentTypeInfo} (updated ${lastUpdate})`);
+  logger.info(`'${collection}': Loaded ${stories.length} stories${contentTypeInfo} (updated ${lastUpdate})`);
   */
 
   let updatedLatestPublishedAt = latestPublishedAt;
