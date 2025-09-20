@@ -11,6 +11,9 @@ importers:
       '@storyblok/js':
         specifier: 4.3.0
         version: 4.3.0
+      '@storyblok/management-api-client':
+        specifier: 0.1.4
+        version: 0.1.4
     devDependencies:
       astro:
         specifier: 5.13.9
@@ -491,6 +494,12 @@ packages:
 
   '@storyblok/js@4.3.0':
     resolution: {integrity: sha512-oNnx3AdQ4Lw0ucr4vIH0We2B2lXeWhKNJmmNw3jnj4L5ZZuXoBqZfGAm9r/qVzaHb6IKwb0VWmzXLOScxdwVFA==}
+
+  '@storyblok/management-api-client@0.1.4':
+    resolution: {integrity: sha512-7JkB+H6aNd7ynEUAddDzcgCNY5Ldz8ECwUB9TeAN9Vz0MhrN8YI1h4h6PBX1r4giCqhbYhjgp25Giptaccw2AQ==}
+
+  '@storyblok/region-helper@1.3.1':
+    resolution: {integrity: sha512-6Oc+8/qXGtUQio1dQddD4AakI1sDANg+cpliGA3oHM6hkAGXqNnR9HkskgBKotwUxvr9++nBGZQiHIw49IJQyA==}
 
   '@storyblok/richtext@3.8.0':
     resolution: {integrity: sha512-GL3pLlrj+WdDZMjc4uQlSVbtlOMUtZgYHbLsOo0iEWRacj6Dro4e5BrryLZQ1189cUCQqGdR1s8+qvVbxfJhCw==}
@@ -1901,6 +1910,12 @@ snapshots:
     dependencies:
       '@storyblok/richtext': 3.8.0
       storyblok-js-client: 7.1.4
+
+  '@storyblok/management-api-client@0.1.4':
+    dependencies:
+      '@storyblok/region-helper': 1.3.1
+
+  '@storyblok/region-helper@1.3.1': {}
 
   '@storyblok/richtext@3.8.0':
     dependencies:

@@ -1,7 +1,7 @@
 import type { DataStore, Loader } from "astro/loaders";
 import { storyblokInit, apiPlugin, type ISbStoryData, type ISbStoriesParams } from "@storyblok/js";
-import type { StoryblokLoaderStoriesConfig } from "./types";
-
+import { timeAgo } from "./utils";
+import type { StoryblokLoaderDatasourceConfig, StoryblokLoaderStoriesConfig } from "./types";
 
 export const StoryblokLoaderStories = (
   config: StoryblokLoaderStoriesConfig,
@@ -82,4 +82,54 @@ export const StoryblokLoaderStories = (
       id: config.useUuids ? updatedStory.uuid : updatedStory.full_slug,
     });
   }
+};
+
+export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfig): Loader => {
+  const { storyblokApi } = storyblokInit({
+    accessToken: config.accessToken,
+    apiOptions: config.apiOptions,
+    use: [apiPlugin],
+  });
+  return {
+    name: "astro-loader-storyblok-datasource",
+    load: async ({ store, logger, collection }) => {
+      if (!storyblokApi) {
+        throw new Error(`storyblokApi is not loaded`);
+      }
+
+      logger.info(`Loading datasource entries for "${collection}"`);
+
+      const { data } = await storyblokApi.get("cdn/datasource_entries/", {
+        datasource: config.datasource,
+      });
+
+      const entries = data.datasource_entries;
+
+      // Log the time of the latest update from Storyblok API's response
+      const lastUpdate = timeAgo(new Date(Number(data.cv) * 1000));
+      logger.info(`'${collection}': Loaded ${entries.length} entries (updated ${lastUpdate})`);
+
+      if (config.switchNamesAndValues) {
+        logger.info(`'${collection}': Switching names and values`);
+      }
+
+      for (const entry of entries) {
+        // Use name as key and value as body by default
+        // Switch if config.switchNamesAndValues is true
+        store.set(
+          !config.switchNamesAndValues
+            ? {
+                id: entry.name,
+                body: entry.value,
+                data: entry,
+              }
+            : {
+                id: entry.value,
+                body: entry.name,
+                data: entry,
+              }
+        );
+      }
+    },
+  };
 };

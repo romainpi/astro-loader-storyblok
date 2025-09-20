@@ -46,7 +46,8 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "@storyblok/js": "4.3.0"
+    "@storyblok/js": "4.3.0",
+    "@storyblok/management-api-client": "0.1.4"
   },
   "peerDependencies": {
     "astro": "^5.0.0"

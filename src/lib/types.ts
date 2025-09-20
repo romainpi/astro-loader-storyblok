@@ -28,3 +28,20 @@ export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfi
   /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
   contentTypes?: string[];
 }
+
+/**
+ * Query parameters for Storyblok Datasource API
+ */
+interface StoryblokLoaderDatasourceQueryParams {
+  datasource: string;
+  dimension?: string;
+}
+
+/**
+ * Configuration for the Storyblok Datasource loader
+ */
+export interface StoryblokLoaderDatasourceConfig
+  extends StoryblokLoaderCommonConfig,
+    StoryblokLoaderDatasourceQueryParams {
+  switchNamesAndValues?: boolean;
+}
