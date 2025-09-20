@@ -5,4 +5,4 @@ export {
   SortByEnum,
 } from "./lib/StoryblokLoader.js";
 
-export type { ISbConfig } from "@storyblok/js";
+export type { ISbConfig, ISbStoriesParams } from "@storyblok/js";
