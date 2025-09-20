@@ -1,5 +1,5 @@
 import type { DataStore, Loader } from "astro/loaders";
-import { storyblokInit, apiPlugin, type ISbConfig, type ISbStories, type ISbStoryData } from "@storyblok/js";
+import { storyblokInit, apiPlugin, type ISbConfig, type ISbStoryData, type ISbStoriesParams } from "@storyblok/js";
 
 /**
  * Storyblok default sorting options.
@@ -38,36 +38,21 @@ export interface StoryblokLoaderCommonConfig {
   apiOptions?: ISbConfig;
 }
 
-// TODO: Implement all the query params from Storyblok API
-// https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters
-interface StoryblokStoriesQueryParams {
-  /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
-  contentTypes?: string[];
-
-  /** Exclude stories by specifying comma-separated values of `full_slug`. It is possible to specify wildcards by using `*`. */
-  excludingSlugs?: string;
-
-  /** Sort stories in ascending or descending order by a specific property. Possible properties are all default story
-   * properties and any custom fields defined in the schema of the story type.
-   *
-   * You can use the `SortBy` enum for default Storyblok sorting options, or provide a custom string.
-   * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters}
-   * */
-  sortBy?: SortByEnum | string;
-
-  /** Access `draft` or `published` content. Default is `published`. */
-  version?: "draft" | "published";
-}
-
 /**
  * Configuration for the Storyblok Stories loader
  */
-export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig, StoryblokStoriesQueryParams {
+export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig {
   /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
   useUuids?: boolean;
+
+  /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
+  contentTypes?: string[];
 }
 
-export const StoryblokLoaderStories = (config: StoryblokLoaderStoriesConfig): Loader => {
+export const StoryblokLoaderStories = (
+  config: StoryblokLoaderStoriesConfig,
+  storyblokParams?: ISbStoriesParams
+): Loader => {
   const { storyblokApi } = storyblokInit({
     accessToken: config.accessToken,
     apiOptions: config.apiOptions,
@@ -91,23 +76,24 @@ export const StoryblokLoaderStories = (config: StoryblokLoaderStoriesConfig): Lo
 
       const storedLastPublishedAt = meta.get("lastPublishedAt");
       const otherParams =
-        storedLastPublishedAt && config.version === "draft" ? {} : { published_at_gt: storedLastPublishedAt };
+        storedLastPublishedAt && storyblokParams?.version === "draft" ? {} : { published_at_gt: storedLastPublishedAt };
 
       // Clear the store before repopulating
-      if (config.version === "draft") {
+      if (storyblokParams?.version === "draft") {
         logger.info(`Clearing store for "${collection}"`);
         store.clear();
       }
 
       let latestPublishedAt = storedLastPublishedAt ? new Date(storedLastPublishedAt) : null;
 
+      // Convert `config` into an object containing only the properies of ISbStoriesParams
+      // to avoid passing unsupported params to the Storyblok API
+
       // If no content types are specified, fetch all stories with content_type = undefined
       for (const contentType of config.contentTypes || [undefined]) {
         const apiResponse = (await storyblokApi.getAll("cdn/stories", {
-          version: config.version,
           content_type: contentType,
-          excluding_slugs: config.excludingSlugs,
-          sort_by: config.sortBy,
+          ...storyblokParams,
           ...otherParams,
         })) as Array<ISbStoryData>;
 
