@@ -1,5 +1,5 @@
 import type { DataStore, Loader } from "astro/loaders";
-import { storyblokInit, apiPlugin, type ISbConfig, type ISbStories } from "@storyblok/js";
+import { storyblokInit, apiPlugin, type ISbConfig, type ISbStories, type ISbStoryData } from "@storyblok/js";
 
 /** Simple utility to format time ago without external dependencies */
 function timeAgo(date: Date): string {
@@ -118,21 +118,23 @@ export const StoryblokLoaderStories = (config: StoryblokLoaderStoriesConfig): Lo
 
       // If no content types are specified, fetch all stories with content_type = undefined
       for (const contentType of config.contentTypes || [undefined]) {
-        const apiResponse: ISbStories = await storyblokApi.get("cdn/stories", {
+        const apiResponse = (await storyblokApi.getAll("cdn/stories", {
           version: config.version,
           content_type: contentType,
           excluding_slugs: config.excludingSlugs,
           sort_by: config.sortBy,
           ...otherParams,
-        });
-
-        const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
+        })) as Array<ISbStoryData>;
 
         // Log the time of the latest update from Storyblok API's response
+        // Note: storyblokApi.getAll does not return 'cv' (storyblokApi.get does)
+        /*
+        const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
         const lastUpdate = timeAgo(new Date(Number(apiResponse.data.cv) * 1000));
         logger.info(`Loaded ${apiResponse.data.stories.length} stories${contentTypeInfo} (updated ${lastUpdate})`);
+        */
 
-        for (const story of apiResponse.data.stories) {
+        for (const story of apiResponse) {
           const publishedAt = story.published_at ? new Date(story.published_at) : null;
           if (publishedAt && (!latestPublishedAt || publishedAt > latestPublishedAt)) {
             latestPublishedAt = publishedAt;
