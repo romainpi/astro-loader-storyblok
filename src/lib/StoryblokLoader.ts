@@ -44,7 +44,7 @@ export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfi
   contentTypes?: string[];
 }
 
-interface StoryblokLoaderDatasourceQueryParams extends StoryblokLoaderCommonConfig {
+interface StoryblokLoaderDatasourceQueryParams {
   datasource: string;
   dimension?: string;
 }
