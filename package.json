@@ -42,13 +42,13 @@
   },
   "packageManager": "pnpm@10.17.0+sha256.bd9ec5417641391e0acb3912b2912bd5b0385407a82da94744a7407b567fdb4f",
   "devDependencies": {
-    "typescript": "^5.9.2",
-    "astro": "^5.13.8"
+    "astro": "5.13.9",
+    "typescript": "5.9.2"
   },
   "dependencies": {
-    "@storyblok/js": "^4.3.0"
+    "@storyblok/js": "4.3.0"
   },
   "peerDependencies": {
-    "astro": "^5.13.8"
+    "astro": "^5.0.0"
   }
 }
