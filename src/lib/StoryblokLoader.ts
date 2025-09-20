@@ -1,53 +1,7 @@
 import type { DataStore, Loader } from "astro/loaders";
-import { storyblokInit, apiPlugin, type ISbConfig, type ISbStoryData, type ISbStoriesParams } from "@storyblok/js";
+import { storyblokInit, apiPlugin, type ISbStoryData, type ISbStoriesParams } from "@storyblok/js";
+import type { StoryblokLoaderStoriesConfig } from "./types";
 
-/**
- * Storyblok default sorting options.
- *
- * These values correspond to the standard sorting parameters supported by the Storyblok API
- * for ordering content entries in API responses.
- *
- * @enum {string}
- */
-export enum SortByEnum {
-  CREATED_AT_ASC = "created_at:asc",
-  CREATED_AT_DESC = "created_at:desc",
-  NAME_ASC = "name:asc",
-  NAME_DESC = "name:desc",
-  SLUG_ASC = "slug:asc",
-  SLUG_DESC = "slug:desc",
-  UPDATED_AT_ASC = "updated_at:asc",
-  UPDATED_AT_DESC = "updated_at:desc",
-}
-
-/**
- * Common configuration shared between all Storyblok loaders
- */
-export interface StoryblokLoaderCommonConfig {
-  /**
-   * Storyblok Content Delivery API access token.
-   * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2/getting-started/authentication | Storyblok Docs: Authentication}
-   * @see {@link https://www.storyblok.com/docs/concepts/access-tokens | Storyblok Docs: Access Tokens}
-   */
-  accessToken: string;
-
-  /**
-   * `config` options object to pass to the Storyblok JS SDK instance.
-   * @see {@link https://github.com/storyblok/storyblok-js-client#class-storyblok | `storyblok-js-client` Docs}
-   */
-  apiOptions?: ISbConfig;
-}
-
-/**
- * Configuration for the Storyblok Stories loader
- */
-export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig {
-  /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
-  useUuids?: boolean;
-
-  /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
-  contentTypes?: string[];
-}
 
 export const StoryblokLoaderStories = (
   config: StoryblokLoaderStoriesConfig,
