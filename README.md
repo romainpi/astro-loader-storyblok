@@ -159,18 +159,12 @@ export const collections = { categories };
 const categories = defineCollection({
   loader: StoryblokLoaderDatasource({
     accessToken: "your-access-token",
-    datasource: "categories",
-    
-    // Switch names and values
-    switchNamesAndValues: true, // Use value as ID, name as body
-    
-    // Filter by dimension (if configured in Storyblok)
-    dimension: "default",
-    
-    // Additional Storyblok API options
-    apiOptions: {
-      region: "us",
-    },
+    datasource: "categories",     // Datasource slug in Storyblok
+
+    // Optionals:
+    switchNamesAndValues: true,   // Use value as ID and name as body
+    dimension: "es",              // Specify query dimension
+    apiOptions: { region: "us" }, // Additional Storyblok API options
   }),
 });
 ```
