@@ -1,4 +1,5 @@
-import type { ISbConfig } from "@storyblok/js";
+import type { ISbConfig, ISbStoryData } from "@storyblok/js";
+import type { DatasourceEntry } from "@storyblok/management-api-client/resources/datasource_entries";
 
 /**
  * Common configuration shared between all Storyblok loaders
@@ -44,4 +45,19 @@ export interface StoryblokLoaderDatasourceConfig
   extends StoryblokLoaderCommonConfig,
     StoryblokLoaderDatasourceQueryParams {
   switchNamesAndValues?: boolean;
+}
+
+/**
+ * Extended story type with proper typing for refreshContextData
+ */
+export interface StoryblokStory extends ISbStoryData {
+  [key: string]: any; // Add index signature for DataStore compatibility
+}
+
+/**
+ * Storyblok API response structure for datasource entries
+ */
+export interface StoryblokDatasourceResponse {
+  datasource_entries: Array<DatasourceEntry>;
+  cv: number;
 }

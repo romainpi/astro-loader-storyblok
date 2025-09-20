@@ -1,134 +1,108 @@
-import type { DataStore, Loader } from "astro/loaders";
-import { storyblokInit, apiPlugin, type ISbStoryData, type ISbStoriesParams } from "@storyblok/js";
-import { timeAgo } from "./utils";
-import type { StoryblokLoaderDatasourceConfig, StoryblokLoaderStoriesConfig } from "./types";
+import type { Loader } from "astro/loaders";
+import { type ISbStoryData, type ISbStoriesParams } from "@storyblok/js";
+import { createStoryblokClient } from "./utils";
 
+import type { StoryblokLoaderDatasourceConfig, StoryblokLoaderStoriesConfig } from "./types";
+import {
+  fetchDatasourceEntries,
+  fetchStories,
+  processDatasourceResponse,
+  processStoriesResponse,
+  setStoryInStore,
+  shouldUseDateFilter,
+} from "./utils";
+
+/**
+ * Creates a Storyblok Stories loader with the provided configuration
+ *
+ * @param config - Configuration options for the Stories loader
+ * @returns Astro Loader instance for Storyblok Stories
+ */
 export const StoryblokLoaderStories = (
   config: StoryblokLoaderStoriesConfig,
   storyblokParams?: ISbStoriesParams
 ): Loader => {
-  const { storyblokApi } = storyblokInit({
-    accessToken: config.accessToken,
-    apiOptions: config.apiOptions,
-    use: [apiPlugin],
-  });
+  const storyblokApi = createStoryblokClient(config);
+
   return {
     name: "astro-loader-storyblok-stories",
     load: async ({ store, meta, logger, refreshContextData, collection }) => {
-      if (!storyblokApi) {
-        throw new Error(`storyblokApi is not loaded`);
-      }
-      // Handle updated stories
-      if (refreshContextData?.story) {
-        logger.info("Syncing... story updated in Storyblok");
-        const updatedStory = refreshContextData.story as any; // Improve type if possible
-        setStoryInStore(store, updatedStory);
-        return; // Early return to avoid unnecessary processing
-      }
-
-      logger.info(`Loading stories for "${collection}"`);
-
-      const storedLastPublishedAt = meta.get("lastPublishedAt");
-      const otherParams =
-        storedLastPublishedAt && storyblokParams?.version === "draft" ? {} : { published_at_gt: storedLastPublishedAt };
-
-      // Clear the store before repopulating
-      if (storyblokParams?.version === "draft") {
-        logger.info(`Clearing store for "${collection}"`);
-        store.clear();
-      }
-
-      let latestPublishedAt = storedLastPublishedAt ? new Date(storedLastPublishedAt) : null;
-
-      // Convert `config` into an object containing only the properies of ISbStoriesParams
-      // to avoid passing unsupported params to the Storyblok API
-
-      // If no content types are specified, fetch all stories with content_type = undefined
-      for (const contentType of config.contentTypes || [undefined]) {
-        const apiResponse = (await storyblokApi.getAll("cdn/stories", {
-          content_type: contentType,
-          ...storyblokParams,
-          ...otherParams,
-        })) as Array<ISbStoryData>;
-
-        // Log the time of the latest update from Storyblok API's response
-        // Note: storyblokApi.getAll does not return 'cv' (storyblokApi.get does)
-        /*
-        const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
-        const lastUpdate = timeAgo(new Date(Number(apiResponse.data.cv) * 1000));
-        logger.info(`Loaded ${apiResponse.data.stories.length} stories${contentTypeInfo} (updated ${lastUpdate})`);
-        */
-
-        for (const story of apiResponse) {
-          const publishedAt = story.published_at ? new Date(story.published_at) : null;
-          if (publishedAt && (!latestPublishedAt || publishedAt > latestPublishedAt)) {
-            latestPublishedAt = publishedAt;
-          }
-
-          setStoryInStore(store, story);
+      try {
+        // Handle story updates from webhooks
+        if (refreshContextData?.story) {
+          logger.info("Syncing... story updated in Storyblok");
+          const updatedStory = refreshContextData.story as ISbStoryData;
+          setStoryInStore(store, updatedStory, config);
+          return;
         }
 
-        // Update meta if new stories are found
+        logger.info(`Loading stories for "${collection}"`);
+
+        const storedLastPublishedAt = meta.get("lastPublishedAt");
+        const otherParams = shouldUseDateFilter(storedLastPublishedAt, storyblokParams?.version)
+          ? { published_at_gt: storedLastPublishedAt }
+          : {};
+
+        // Clear store for draft mode to ensure fresh data
+        if (storyblokParams?.version === "draft") {
+          logger.info(`Clearing store for "${collection}" (draft mode)`);
+          store.clear();
+        }
+
+        let latestPublishedAt = storedLastPublishedAt ? new Date(storedLastPublishedAt) : null;
+
+        // Process each content type (or all if none specified)
+        const contentTypes = config.contentTypes || [undefined];
+
+        for (const contentType of contentTypes) {
+          const response = await fetchStories(storyblokApi, otherParams, contentType, storyblokParams);
+
+          latestPublishedAt = processStoriesResponse(
+            response,
+            store,
+            logger,
+            collection,
+            contentType,
+            latestPublishedAt,
+            config
+          );
+        }
+
+        // Update metadata with latest published timestamp
         if (latestPublishedAt) {
           meta.set("lastPublishedAt", latestPublishedAt.toISOString());
         }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        logger.error(`Failed to load stories for "${collection}": ${errorMessage}`);
+        throw error;
       }
     },
   };
-
-  function setStoryInStore(store: DataStore, updatedStory: any) {
-    store.set({
-      data: updatedStory,
-      id: config.useUuids ? updatedStory.uuid : updatedStory.full_slug,
-    });
-  }
 };
 
+/**
+ * Creates a Storyblok Datasource loader with the provided configuration
+ *
+ * @param config - Configuration options for the Datasource loader
+ * @returns Astro Loader instance for Storyblok Datasources
+ */
 export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfig): Loader => {
-  const { storyblokApi } = storyblokInit({
-    accessToken: config.accessToken,
-    apiOptions: config.apiOptions,
-    use: [apiPlugin],
-  });
+  const storyblokApi = createStoryblokClient(config);
+
   return {
     name: "astro-loader-storyblok-datasource",
     load: async ({ store, logger, collection }) => {
-      if (!storyblokApi) {
-        throw new Error(`storyblokApi is not loaded`);
-      }
+      try {
+        logger.info(`Loading datasource entries for "${collection}"`);
 
-      logger.info(`Loading datasource entries for "${collection}"`);
+        const response = await fetchDatasourceEntries(storyblokApi, config);
 
-      const { data } = await storyblokApi.get("cdn/datasource_entries/", {
-        datasource: config.datasource,
-      });
-
-      const entries = data.datasource_entries;
-
-      // Log the time of the latest update from Storyblok API's response
-      const lastUpdate = timeAgo(new Date(Number(data.cv) * 1000));
-      logger.info(`'${collection}': Loaded ${entries.length} entries (updated ${lastUpdate})`);
-
-      if (config.switchNamesAndValues) {
-        logger.info(`'${collection}': Switching names and values`);
-      }
-
-      for (const entry of entries) {
-        // Use name as key and value as body by default
-        // Switch if config.switchNamesAndValues is true
-        store.set(
-          !config.switchNamesAndValues
-            ? {
-                id: entry.name,
-                body: entry.value,
-                data: entry,
-              }
-            : {
-                id: entry.value,
-                body: entry.name,
-                data: entry,
-              }
-        );
+        processDatasourceResponse(response, store, logger, collection, config);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        logger.error(`Failed to load datasource entries for "${collection}": ${errorMessage}`);
+        throw error;
       }
     },
   };
