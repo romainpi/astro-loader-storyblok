@@ -1,6 +1,7 @@
 # astro-loader-storyblok
 
-~~A robust~~ _An experimental_ Storyblok loader for the [Astro Content Layer API][astro-collections] that enables seamless integration between Storyblok CMS and Astro content collections.
+~~A robust~~ _An experimental_ Storyblok loader for the [Astro Content Layer API][astro-collections] that enables
+seamless integration between Storyblok CMS and Astro content collections.
 
 ## Features
 
@@ -133,7 +134,8 @@ const stories = defineCollection({
 
 ## Datasource Loader
 
-The `StoryblokLoaderDatasource` allows you to load data from Storyblok datasources into your Astro content collections. Datasources in Storyblok are useful for managing structured data like categories, tags, or any other reference data.
+The `StoryblokLoaderDatasource` allows you to load data from Storyblok datasources into your Astro content collections.
+Datasources in Storyblok are useful for managing structured data like categories, tags, or any other reference data.
 
 ### Basic Usage
 
@@ -199,7 +201,8 @@ const categories = await getCollection("categories");
 
 ### Data Structure
 
-By default, the loader uses the datasource entry's `name` as the collection entry ID and the `value` as the body content. You can switch this behavior using the `switchNamesAndValues` option.
+By default, the loader uses the datasource entry's `name` as the collection entry ID and the `value` as the body
+content. You can switch this behavior using the `switchNamesAndValues` option.
 
 ## API Reference
 
@@ -374,9 +377,13 @@ export const collections = { stories, categories };
 
 ## Breaking Changes
 
+<details>
+<summary>Since v0.0.4:</summary>
+
 ### Since v0.0.4
 
-This section documents all breaking changes introduced since version v0.0.4. If you're upgrading from v0.0.4 or earlier, please review these changes carefully.
+This section documents all breaking changes introduced since version v0.0.4. If you're upgrading from v0.0.4 or earlier,
+please review these changes carefully.
 
 #### 1. Function Name Changes
 
@@ -519,11 +526,15 @@ To migrate from v0.0.4 to the latest version:
    - `excludingSlugs` → `excluding_slugs`
    - `sortBy` → `sort_by`
 
-4. **Test your configuration**: After making these changes, verify that your content loads correctly in both development and production environments.
+4. **Test your configuration**: After making these changes, verify that your content loads correctly in both development
+   and production environments.
+
+</details>
 
 ## TypeScript Support
 
-This package is built with TypeScript and provides full type definitions. For even better type safety, consider using [`storyblok-to-zod`] to generate Zod schemas for your Storyblok components.
+This package is built with TypeScript and provides full type definitions. For even better type safety, consider using
+[`storyblok-to-zod`] to generate Zod schemas for your Storyblok components.
 
 ```typescript
 import { z } from "astro:content";
@@ -546,9 +557,12 @@ const stories = defineCollection({
 
 ## Background
 
-This loader was created as an alternative to Storyblok's official Astro Content Layer implementation. In September 2024, Storyblok announced an [alpha version of a loader][astro-alpha], but the [implementation][abandoned-implementation] was later archived and didn't include proper Zod schema definitions.
+This loader was created as an alternative to Storyblok's official Astro Content Layer implementation. In September 2024,
+Storyblok announced an [alpha version of a loader][astro-alpha], but the [implementation][abandoned-implementation] was
+later archived and didn't include proper Zod schema definitions.
 
-This package provides a complete, production-ready solution with full TypeScript support and works seamlessly with [`storyblok-to-zod`] for type-safe content schemas.
+This package provides a complete, production-ready solution with full TypeScript support and works seamlessly with
+[`storyblok-to-zod`] for type-safe content schemas.
 
 ## Feedback
 
