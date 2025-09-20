@@ -21,6 +21,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
+    "lint:markdown": "markdownlint-cli2 \"**/*.{md,mdx}\" \"!node_modules\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -42,7 +43,10 @@
   },
   "packageManager": "pnpm@10.17.0+sha256.bd9ec5417641391e0acb3912b2912bd5b0385407a82da94744a7407b567fdb4f",
   "devDependencies": {
+    "@github/markdownlint-github": "0.8.0",
     "astro": "5.13.9",
+    "markdownlint-cli2": "0.18.1",
+    "markdownlint-cli2-formatter-pretty": "0.0.8",
     "typescript": "5.9.2"
   },
   "dependencies": {
