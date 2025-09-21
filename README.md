@@ -1,7 +1,8 @@
 # astro-loader-storyblok
 
-~~A robust~~ _An experimental_ Storyblok loader for the [Astro Content Layer API][astro-collections] that enables
-seamless integration between Storyblok CMS and Astro content collections.
+~~A robust~~ *An experimental* [Astro content loader][astro-collections] is a community-driven continuation of
+Storyblok’s [archived Astro Content Layer integration](#background), enabling smooth integration between Storyblok CMS
+and Astro content collections.
 
 ## Features
 
@@ -551,9 +552,9 @@ const stories = defineCollection({
 
 ## Background
 
-This loader was created as an alternative to Storyblok's official Astro Content Layer implementation. In September 2024,
-Storyblok announced an [alpha version of a loader][astro-alpha], but the [implementation][abandoned-implementation] was
-later archived and didn't include proper Zod schema definitions.
+This Astro content loader is a community-driven successor to Storyblok’s archived Astro Content Layer integration. In
+September 2024, Storyblok released an [alpha version of a loader][astro-alpha]; however, the
+[implementation][abandoned-implementation] was subsequently archived and remained in a premature state.
 
 This package provides a complete, production-ready solution with full TypeScript support and works seamlessly with
 [`storyblok-to-zod`] for type-safe content schemas.
