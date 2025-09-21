@@ -30,22 +30,25 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
         }
 
         for (const entry of entries) {
-          if (!entry.name || !entry.value) {
-            logger.warn(`Skipping entry with missing name or value: ${JSON.stringify(entry)}`);
+          if (!entry) {
+            logger.warn(`Skipping null or undefined entry: ${JSON.stringify(entry)}`);
             continue;
           }
 
-          const entryData: DataEntry = config.switchNamesAndValues
-            ? {
-                id: entry.value,
-                body: entry.name,
-                data: entry,
-              }
-            : {
-                id: entry.name,
-                body: entry.value,
-                data: entry,
-              };
+          const idValue = config.switchNamesAndValues ? entry.value : entry.name;
+          const bodyValue = config.switchNamesAndValues ? entry.name : entry.value;
+
+          // We tolerate empty body but not empty id
+          if (!idValue || idValue === "") {
+            logger.warn(`Skipping entry with empty id: ${JSON.stringify(entry)}`);
+            continue;
+          }
+
+          const entryData: DataEntry = {
+            id: idValue,
+            body: bodyValue,
+            data: entry,
+          };
 
           store.set(entryData);
         }
