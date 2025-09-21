@@ -1,7 +1,6 @@
 import { storyblokInit, apiPlugin, type StoryblokClient } from "@storyblok/js";
 import type { StoryblokLoaderCommonConfig } from "./types";
 import type { DataStore } from "astro/loaders";
-import type { DataEntry } from "astro/content/config";
 import type {
   StoryblokDatasourceResponse,
   StoryblokLoaderDatasourceConfig,
@@ -132,47 +131,6 @@ export function processStoriesResponse(
 }
 
 /**
- * Processes the datasource response and updates the store
- */
-export function processDatasourceResponse(
-  response: StoryblokDatasourceResponse,
-  store: DataStore,
-  logger: any,
-  collection: string,
-  config: StoryblokLoaderDatasourceConfig
-): void {
-  const { datasource_entries: entries, cv } = response;
-  const lastUpdate = timeAgo(new Date(Number(cv) * 1000));
-
-  logger.info(`'${collection}': Loaded ${entries.length} entries (updated ${lastUpdate})`);
-
-  if (config.switchNamesAndValues) {
-    logger.info(`'${collection}': Switching names and values`);
-  }
-
-  for (const entry of entries) {
-    if (!entry.name || !entry.value) {
-      logger.warn(`Skipping entry with missing name or value: ${JSON.stringify(entry)}`);
-      continue;
-    }
-
-    const entryData: DataEntry = config.switchNamesAndValues
-      ? {
-          id: entry.value,
-          body: entry.name,
-          data: entry,
-        }
-      : {
-          id: entry.name,
-          body: entry.value,
-          data: entry,
-        };
-
-    store.set(entryData);
-  }
-}
-
-/**
  * Sets a story in the data store with the appropriate ID format
  */
 export function setStoryInStore(store: DataStore, story: StoryblokStory, config: StoryblokLoaderStoriesConfig): void {
@@ -192,7 +150,7 @@ export function shouldUseDateFilter(storedLastPublishedAt: string | undefined, v
 /**
  * Simple utility to format time ago without external dependencies
  */
-function timeAgo(date: Date): string {
+export function timeAgo(date: Date): string {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
