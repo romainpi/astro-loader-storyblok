@@ -216,24 +216,24 @@ export interface StoryblokLoaderStoriesConfig {
 }
 ```
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `accessToken` | `string` | **Required** | Your Storyblok access token |
-| `apiOptions` | `ISbConfig` | `{}` | Additional Storyblok API configuration |
-| `contentTypes` | `string[]` | `undefined` | Array of content types to load. If not provided, loads all stories |
-| `useUuids` | `boolean` | `false` | Use story UUIDs instead of slugs as collection entry IDs |
+| Option         | Type        | Default      | Description                                                        |
+|----------------|-------------|--------------|--------------------------------------------------------------------|
+| `accessToken`  | `string`    | **Required** | Your Storyblok access token                                        |
+| `apiOptions`   | `ISbConfig` | `{}`         | Additional Storyblok API configuration                             |
+| `contentTypes` | `string[]`  | `undefined`  | Array of content types to load. If not provided, loads all stories |
+| `useUuids`     | `boolean`   | `false`      | Use story UUIDs instead of slugs as collection entry IDs           |
 
 **Storyblok API Parameters (`ISbStoriesParams`):**
 
 The second parameter accepts all standard Storyblok Stories API parameters:
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `version` | `"draft" \| "published"` | `"published"` | Content version to load |
-| `excluding_slugs` | `string` | `undefined` | Comma-separated list of slugs to exclude |
-| `sort_by` | `string` | `undefined` | Sort order for stories |
-| `starts_with` | `string` | `undefined` | Filter by slug prefix |
-| `by_slugs` | `string` | `undefined` | Filter by specific slugs |
+| Option            | Type                     | Default       | Description                              |
+|-------------------|--------------------------|---------------|------------------------------------------|
+| `version`         | `"draft" \| "published"` | `"published"` | Content version to load                  |
+| `excluding_slugs` | `string`                 | `undefined`   | Comma-separated list of slugs to exclude |
+| `sort_by`         | `string`                 | `undefined`   | Sort order for stories                   |
+| `starts_with`     | `string`                 | `undefined`   | Filter by slug prefix                    |
+| `by_slugs`        | `string`                 | `undefined`   | Filter by specific slugs                 |
 
 For a complete list of available parameters, see the [Storyblok Stories API documentation][stories-query-params].
 
@@ -249,13 +249,13 @@ export interface StoryblokLoaderDatasourceConfig {
 }
 ```
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `accessToken` | `string` | **Required** | Your Storyblok access token |
-| `datasource` | `string` | **Required** | The slug of your Storyblok datasource |
-| `dimension` | `string` | `undefined` | Filter entries by dimension (if configured in Storyblok) |
-| `switchNamesAndValues` | `boolean` | `false` | Use value as ID and name as body instead of the default |
-| `apiOptions` | `ISbConfig` | `{}` | Additional Storyblok API configuration |
+| Option                 | Type        | Default      | Description                                              |
+|------------------------|-------------|--------------|----------------------------------------------------------|
+| `accessToken`          | `string`    | **Required** | Your Storyblok access token                              |
+| `datasource`           | `string`    | **Required** | The slug of your Storyblok datasource                    |
+| `dimension`            | `string`    | `undefined`  | Filter entries by dimension (if configured in Storyblok) |
+| `switchNamesAndValues` | `boolean`   | `false`      | Use value as ID and name as body instead of the default  |
+| `apiOptions`           | `ISbConfig` | `{}`         | Additional Storyblok API configuration                   |
 
 ### Sorting Options
 
@@ -479,11 +479,11 @@ const stories = defineCollection({
 - **What changed**: Some properties now use snake_case to match Storyblok's API exactly
 - **Reason**: Direct mapping to Storyblok API parameters for consistency and better IntelliSense
 
-| Old Property (v0.0.4) | New Property (v0.1.0+) | Parameter Location |
-|------------------------|-------------------------|-------------------|
-| `excludingSlugs` | `excluding_slugs` | Storyblok API params (2nd parameter) |
-| `sortBy` | `sort_by` | Storyblok API params (2nd parameter) |
-| `version` | `version` | Moved to Storyblok API params (2nd parameter) |
+| Old Property (v0.0.4) | New Property (v0.1.0+) | Parameter Location                            |
+|-----------------------|------------------------|-----------------------------------------------|
+| `excludingSlugs`      | `excluding_slugs`      | Storyblok API params (2nd parameter)          |
+| `sortBy`              | `sort_by`              | Storyblok API params (2nd parameter)          |
+| `version`             | `version`              | Moved to Storyblok API params (2nd parameter) |
 
 #### 5. Type Name Changes
 
