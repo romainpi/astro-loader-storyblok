@@ -16,7 +16,7 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
     name: "astro-loader-storyblok-datasource",
     load: async ({ store, logger, collection }) => {
       try {
-        logger.info(`'${collection}': Loading datasource entries for "${collection}"`);
+        logger.info(`'${collection}': Loading datasource entries for "${config.datasource}"`);
 
         const response = await fetchDatasourceEntries(storyblokApi, config);
 
