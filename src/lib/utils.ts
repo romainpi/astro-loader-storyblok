@@ -8,6 +8,7 @@ import type {
   StoryblokStory,
 } from "./types";
 import type { ISbStoriesParams, ISbStoryData } from "@storyblok/js";
+import type { AstroIntegrationLogger } from "astro";
 
 /**
  * Initializes the Storyblok API client with comprehensive error handling
@@ -43,7 +44,7 @@ export function createStoryblokClient(config: StoryblokLoaderCommonConfig): Stor
  * @throws Error when API request fails
  */
 export async function fetchDatasourceEntries(
-  storyblokApi: any,
+  storyblokApi: StoryblokClient,
   config: StoryblokLoaderDatasourceConfig
 ): Promise<StoryblokDatasourceResponse> {
   try {
@@ -73,7 +74,7 @@ export async function fetchDatasourceEntries(
  * @throws Error when API request fails
  */
 export async function fetchStories(
-  storyblokApi: any,
+  storyblokApi: StoryblokClient,
   otherParams: Record<string, any>,
   contentType?: string,
   storyblokParams?: ISbStoriesParams
@@ -100,7 +101,7 @@ export async function fetchStories(
 export function processStoriesResponse(
   response: Array<ISbStoryData>,
   store: DataStore,
-  logger: any,
+  logger: AstroIntegrationLogger,
   collection: string,
   contentType: string | undefined,
   latestPublishedAt: Date | null,
