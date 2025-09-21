@@ -45,6 +45,7 @@
   "devDependencies": {
     "@github/markdownlint-github": "0.8.0",
     "astro": "5.13.9",
+    "markdown-it": "14.1.0",
     "markdownlint-cli2": "0.18.1",
     "markdownlint-cli2-formatter-pretty": "0.0.8",
     "typescript": "5.9.2"

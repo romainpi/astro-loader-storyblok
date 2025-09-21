@@ -21,6 +21,9 @@ importers:
       astro:
         specifier: 5.13.9
         version: 5.13.9(@types/node@24.5.2)(rollup@4.52.0)(typescript@5.9.2)
+      markdown-it:
+        specifier: 14.1.0
+        version: 14.1.0
       markdownlint-cli2:
         specifier: 0.18.1
         version: 0.18.1
