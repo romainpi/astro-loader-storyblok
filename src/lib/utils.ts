@@ -125,7 +125,7 @@ export function processStoriesResponse(
       updatedLatestPublishedAt = publishedAt;
     }
 
-    setStoryInStore(store, story, config);
+    setStoryInStore(store, story, config, logger, collection);
   }
 
   return updatedLatestPublishedAt;
@@ -134,7 +134,17 @@ export function processStoriesResponse(
 /**
  * Sets a story in the data store with the appropriate ID format
  */
-export function setStoryInStore(store: DataStore, story: StoryblokStory, config: StoryblokLoaderStoriesConfig): void {
+export function setStoryInStore(
+  store: DataStore,
+  story: StoryblokStory,
+  config: StoryblokLoaderStoriesConfig,
+  logger: AstroIntegrationLogger,
+  collection: string
+): void {
+  logger.debug(
+    `'${collection}': Storing story - ID: ${config.useUuids ? story.uuid : story.full_slug}, Title: ${story.name}`
+  );
+
   store.set({
     data: story,
     id: config.useUuids ? story.uuid : story.full_slug,

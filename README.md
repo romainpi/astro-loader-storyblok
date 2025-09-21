@@ -559,6 +559,19 @@ September 2024, Storyblok released an [alpha version of a loader][astro-alpha]; 
 This package provides a complete, production-ready solution with full TypeScript support and works seamlessly with
 [`storyblok-to-zod`] for type-safe content schemas.
 
+## Verbose output / debugging
+
+There are two ways of outputting debug messages from `astro-loader-storyblok` to console.
+
+1. Run `astro` with the [`--verbose` flag][astro-verbose] in order to output all of Astro's and Vite's debug messages to
+   console.
+2. Enable and filter only for messages from `astro-loader-storyblok` with the `DEBUG=astro:astro-loader-storyblok*`
+  environment variable ([more info][debugjs-env]). Example:  
+
+    ```bash
+    DEBUG=astro:astro-loader-storyblok* astro build
+    ```
+
 ## Feedback
 
 Feedback and contributions are welcome! If you run into a problem, don't hesitate to [open a GitHub issue][new-issue].
@@ -577,3 +590,5 @@ MIT - see [LICENSE.txt](LICENSE.txt) for details.
 [`storyblok-to-zod`]: https://www.npmjs.com/package/storyblok-to-zod
 [new-issue]: https://github.com/romainpi/astro-loader-storyblok/issues/new
 [stories-query-params]: https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters
+[astro-verbose]: https://docs.astro.build/en/reference/cli-reference/#--verbose
+[debugjs-env]: https://github.com/debug-js/debug#environment-variables

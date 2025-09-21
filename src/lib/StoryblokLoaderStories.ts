@@ -25,7 +25,7 @@ export const StoryblokLoaderStories = (
         if (refreshContextData?.story) {
           logger.info(`'${collection}': Syncing... story updated in Storyblok`);
           const updatedStory = refreshContextData.story as ISbStoryData;
-          setStoryInStore(store, updatedStory, config);
+          setStoryInStore(store, updatedStory, config, logger, collection);
           return;
         }
 

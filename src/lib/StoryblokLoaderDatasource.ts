@@ -44,6 +44,8 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
             continue;
           }
 
+          logger.debug(`'${collection}': Processing entry - ID: ${idValue}, Body: ${bodyValue}`);
+
           const entryData: DataEntry = {
             id: idValue,
             body: bodyValue,
