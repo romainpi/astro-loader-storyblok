@@ -1,10 +1,13 @@
 export { StoryblokLoaderStories } from "./lib/StoryblokLoaderStories";
 export { StoryblokLoaderDatasource } from "./lib/StoryblokLoaderDatasource";
+export { StoryblokLoader } from "./lib/StoryblokLoader";
 
 export type {
   StoryblokLoaderCommonConfig,
   StoryblokLoaderStoriesConfig,
   StoryblokLoaderDatasourceConfig,
+  StoryblokLoaderDatasourceParameters,
+  StoryblokLoaderStoriesParameters,
 } from "./lib/types";
 
 export { SortByEnum } from "./lib/enums";

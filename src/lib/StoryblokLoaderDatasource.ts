@@ -1,5 +1,5 @@
 import type { Loader, LoaderContext } from "astro/loaders";
-import { createStoryblokClient, fetchDatasourceEntries, timeAgo } from "./utils";
+import { checkStoredVersionUpToDate, createStoryblokClient, fetchDatasourceEntries, timeAgo } from "./utils";
 import { DatasourceSchema, type StoryblokLoaderDatasourceConfig } from "./types";
 import type { DataEntry } from "astro/content/config";
 import type { StoryblokClient } from "@storyblok/js";
@@ -23,15 +23,21 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
 export async function storyblokLoaderDatasourceImplem(
   config: StoryblokLoaderDatasourceConfig,
   storyblokApi: StoryblokClient,
-  context: LoaderContext
+  context: LoaderContext,
+  cacheVersion?: number
 ): Promise<void> {
-  const { store, logger, collection } = context;
+  const { store, logger, collection, meta } = context;
 
   try {
-    const response = await fetchDatasourceEntries(storyblokApi, config);
+    if (checkStoredVersionUpToDate(meta, logger, collection, cacheVersion)) {
+      // Storyblok space says it hasn't been changed since last fetch, so we can skip fetching
+      return;
+    }
 
-    const { datasource_entries: entries, cv } = response;
-    const lastUpdate = timeAgo(new Date(Number(cv) * 1000));
+    const response = await fetchDatasourceEntries(storyblokApi, config, cacheVersion);
+
+    const { datasource_entries: entries, cv: responseCv } = response;
+    const lastUpdate = timeAgo(new Date(Number(responseCv) * 1000));
 
     logger.info(`'${collection}': Loaded ${entries.length} entries (updated ${lastUpdate})`);
 
@@ -64,6 +70,10 @@ export async function storyblokLoaderDatasourceImplem(
 
       store.set(entryData);
     }
+
+    // Store the cache version
+    meta.set("cacheVersion", responseCv.toString());
+    logger.debug(`'${collection}': Stored cacheVersion: ${responseCv}`);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`Failed to load datasource entries for "${collection}": ${errorMessage}`);

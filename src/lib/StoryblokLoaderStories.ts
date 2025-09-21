@@ -1,6 +1,6 @@
 import type { Loader, LoaderContext } from "astro/loaders";
 import { type ISbStoryData, type ISbStoriesParams, type StoryblokClient } from "@storyblok/js";
-import { createStoryblokClient } from "./utils";
+import { checkStoredVersionUpToDate, createStoryblokClient } from "./utils";
 
 import type { StoryblokLoaderStoriesConfig } from "./types";
 import { fetchStories, processStoriesResponse, setStoryInStore, shouldUseDateFilter } from "./utils";
@@ -19,7 +19,7 @@ export const StoryblokLoaderStories = (
 
   return {
     name: "astro-loader-storyblok-stories",
-    load: async (context) => storyblokLoaderStoriesImplem(config, storyblokApi, context, storyblokParams),
+    load: async (context) => storyblokLoaderStoriesImplem(config, storyblokApi, context),
   };
 };
 
@@ -27,7 +27,6 @@ export async function storyblokLoaderStoriesImplem(
   config: StoryblokLoaderStoriesConfig,
   storyblokApi: StoryblokClient,
   context: LoaderContext,
-  storyblokParams?: ISbStoriesParams,
   cacheVersion?: number
 ): Promise<void> {
   const { store, logger, collection, refreshContextData, meta } = context;
@@ -40,13 +39,20 @@ export async function storyblokLoaderStoriesImplem(
       return;
     }
 
+    if (checkStoredVersionUpToDate(meta, logger, collection, cacheVersion)) {
+      // Storyblok space says it hasn't been changed since last fetch, so we can skip fetching
+      return;
+    }
+
+    // Only fetches stories since the last published timestamp if available
+    // and not in draft mode (which should always fetch everything)
     const storedLastPublishedAt = meta.get("lastPublishedAt");
-    const otherParams = shouldUseDateFilter(storedLastPublishedAt, storyblokParams?.version)
+    const otherParams = shouldUseDateFilter(storedLastPublishedAt, config.storyblokParams?.version)
       ? { published_at_gt: storedLastPublishedAt }
       : {};
 
     // Clear store for draft mode to ensure fresh data
-    if (storyblokParams?.version === "draft") {
+    if (config.storyblokParams?.version === "draft") {
       logger.info(`'${collection}': Clearing store (draft mode)`);
       store.clear();
     }
@@ -57,7 +63,7 @@ export async function storyblokLoaderStoriesImplem(
     const contentTypes = config.contentTypes || [undefined];
 
     for (const contentType of contentTypes) {
-      const response = await fetchStories(storyblokApi, otherParams, contentType, storyblokParams);
+      const response = await fetchStories(storyblokApi, otherParams, contentType, config.storyblokParams);
 
       latestPublishedAt = processStoriesResponse(
         response,
@@ -73,6 +79,12 @@ export async function storyblokLoaderStoriesImplem(
     // Update metadata with latest published timestamp
     if (latestPublishedAt) {
       meta.set("lastPublishedAt", latestPublishedAt.toISOString());
+    }
+
+    // Store the cache version
+    if (cacheVersion) {
+      meta.set("cacheVersion", cacheVersion.toString());
+      logger.debug(`'${collection}': Stored cacheVersion: ${cacheVersion}`);
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

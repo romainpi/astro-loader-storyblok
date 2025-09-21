@@ -1,7 +1,7 @@
 import { storyblokInit, apiPlugin, type StoryblokClient } from "@storyblok/js";
 import type { StoryblokLoaderCommonConfig } from "./types";
 import { SLUGS } from "./constants";
-import type { DataStore } from "astro/loaders";
+import type { DataStore, MetaStore } from "astro/loaders";
 import type {
   StoryblokDatasourceResponse,
   StoryblokLoaderDatasourceConfig,
@@ -46,12 +46,14 @@ export function createStoryblokClient(config: StoryblokLoaderCommonConfig): Stor
  */
 export async function fetchDatasourceEntries(
   storyblokApi: StoryblokClient,
-  config: StoryblokLoaderDatasourceConfig
+  config: StoryblokLoaderDatasourceConfig,
+  cv?: number
 ): Promise<StoryblokDatasourceResponse> {
   try {
     const { data } = await storyblokApi.get(SLUGS.DatasourceEntries, {
       datasource: config.datasource,
       dimension: config.dimension,
+      cv,
     });
 
     return data as StoryblokDatasourceResponse;
@@ -93,6 +95,26 @@ export async function fetchStories(
     throw new Error(
       `Failed to fetch stories${contentTypeInfo}: ${error instanceof Error ? error.message : String(error)}`
     );
+  }
+}
+
+export async function fetchSpaceCacheVersionValue(
+  storyblokApi: StoryblokClient,
+  logger: AstroIntegrationLogger
+): Promise<number> {
+  try {
+    const resultSpaceResponse = await storyblokApi.get(SLUGS.CurrentSpace);
+
+    const retValue = resultSpaceResponse.data.space?.version;
+    if (!retValue || isNaN(retValue)) {
+      throw new Error("Invalid cache version received from Storyblok API.");
+    }
+
+    logger.debug(`Fetched space cache version: ${retValue}`);
+
+    return Number(retValue);
+  } catch (error) {
+    throw new Error(`Failed to fetch space cache version: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -174,4 +196,20 @@ export function timeAgo(date: Date): string {
   if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
   if (diffDays < 30) return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
   return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? "" : "s"} ago`;
+}
+
+export function checkStoredVersionUpToDate(meta: MetaStore, logger: AstroIntegrationLogger, collection: string, cacheVersion?: number): boolean {
+  // Try and read the last cache version from meta
+  const metaCvEntry = meta.get("cacheVersion");
+  const metaCv = metaCvEntry ? parseInt(metaCvEntry, 10) : undefined;
+  if (metaCv && !isNaN(metaCv)) {
+    logger.debug(`'${collection}': Found stored cache version: ${metaCv}`);
+
+    if (metaCv === cacheVersion) {
+      logger.info(`'${collection}': No changes detected (cv: ${cacheVersion}), skipping fetch`);
+      return true;
+    }
+  }
+
+  return false;
 }

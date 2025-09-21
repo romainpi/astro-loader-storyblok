@@ -1,4 +1,4 @@
-import type { ISbConfig, ISbStoryData } from "@storyblok/js";
+import type { ISbConfig, ISbStoriesParams, ISbStoryData } from "@storyblok/js";
 import type { DatasourceEntry } from "@storyblok/management-api-client/resources/datasource_entries";
 import { z } from "astro/zod";
 
@@ -23,20 +23,38 @@ export interface StoryblokLoaderCommonConfig {
 /**
  * Configuration for the Storyblok Stories loader
  */
-export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig {
+export interface StoryblokLoaderStoriesParameters {
   /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
   useUuids?: boolean;
 
   /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
   contentTypes?: string[];
+
+  storyblokParams?: ISbStoriesParams;
+}
+
+export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig, StoryblokLoaderStoriesParameters {
 }
 
 /**
- * Query parameters for Storyblok Datasource API
+ * Query parameters for retrieving datasource entries from Storyblok.
+ *
+ * @interface StoryblokLoaderDatasourceQueryParams
+ * @property {string} datasource - The name or slug of the datasource to query
+ * @property {string} [dimension] - Optional dimension parameter to filter datasource entries by specific criteria
  */
 interface StoryblokLoaderDatasourceQueryParams {
+  // ^ This interface exists because it's not been defined by Storyblok's SDK yet like it is for ISbStoriesParams
+
+  /** The name or slug of the datasource to query */
   datasource: string;
+
+  /** Optional dimension parameter to filter datasource entries by specific criteria */
   dimension?: string;
+}
+
+export interface StoryblokLoaderDatasourceParameters extends StoryblokLoaderDatasourceQueryParams {
+  switchNamesAndValues?: boolean;
 }
 
 /**
@@ -44,9 +62,7 @@ interface StoryblokLoaderDatasourceQueryParams {
  */
 export interface StoryblokLoaderDatasourceConfig
   extends StoryblokLoaderCommonConfig,
-    StoryblokLoaderDatasourceQueryParams {
-  switchNamesAndValues?: boolean;
-}
+    StoryblokLoaderDatasourceParameters {}
 
 /**
  * Extended story type with proper typing for refreshContextData
