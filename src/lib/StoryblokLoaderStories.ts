@@ -67,7 +67,7 @@ export const StoryblokLoaderStories = (
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        logger.error(`Failed to load stories for "${collection}": ${errorMessage}`);
+        logger.error(`'${collection}': Failed to load stories for "${collection}": ${errorMessage}`);
         throw error;
       }
     },

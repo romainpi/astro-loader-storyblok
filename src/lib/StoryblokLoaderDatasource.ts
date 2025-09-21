@@ -31,7 +31,7 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
 
         for (const entry of entries) {
           if (!entry) {
-            logger.warn(`Skipping null or undefined entry: ${JSON.stringify(entry)}`);
+            logger.warn(`'${collection}': Skipping null or undefined entry: ${JSON.stringify(entry)}`);
             continue;
           }
 
@@ -40,7 +40,7 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
 
           // We tolerate empty body but not empty id
           if (!idValue || idValue === "") {
-            logger.warn(`Skipping entry with empty id: ${JSON.stringify(entry)}`);
+            logger.warn(`'${collection}': Skipping entry with empty id: ${JSON.stringify(entry)}`);
             continue;
           }
 
