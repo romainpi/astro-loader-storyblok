@@ -1,5 +1,6 @@
 import { storyblokInit, apiPlugin, type StoryblokClient } from "@storyblok/js";
 import type { StoryblokLoaderCommonConfig } from "./types";
+import { SLUGS } from "./constants";
 import type { DataStore } from "astro/loaders";
 import type {
   StoryblokDatasourceResponse,
@@ -48,7 +49,7 @@ export async function fetchDatasourceEntries(
   config: StoryblokLoaderDatasourceConfig
 ): Promise<StoryblokDatasourceResponse> {
   try {
-    const { data } = await storyblokApi.get("cdn/datasource_entries/", {
+    const { data } = await storyblokApi.get(SLUGS.DatasourceEntries, {
       datasource: config.datasource,
       dimension: config.dimension,
     });
@@ -80,7 +81,7 @@ export async function fetchStories(
   storyblokParams?: ISbStoriesParams
 ): Promise<Array<ISbStoryData>> {
   try {
-    const apiResponse = (await storyblokApi.getAll("cdn/stories", {
+    const apiResponse = (await storyblokApi.getAll(SLUGS.Stories, {
       content_type: contentType,
       ...storyblokParams,
       ...otherParams,
