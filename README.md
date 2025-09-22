@@ -116,7 +116,8 @@ export const collections = { stories, categories };
 
 ### Benefits of the StoryblokLoader Class
 
-- **Shared Cache Management**: Multiple collections share the same cache version, reducing redundant API calls
+- **Shared Cache Management**: Multiple collections share the same cache version, reducing redundant API calls and
+  preventing conflicts if changes are made to a Storyblok space while collections are being loaded by Astro.
 - **Better Performance**: Cache version is fetched once and reused across all loaders
 - **Cleaner Architecture**: Centralized configuration and better separation of concerns
 
