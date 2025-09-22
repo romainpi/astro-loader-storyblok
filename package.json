@@ -20,7 +20,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && tsc",
+    "build": "pnpm clean && tsc",
     "lint:markdown": "markdownlint-cli2 \"**/*.{md,mdx}\" \"!node_modules\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
