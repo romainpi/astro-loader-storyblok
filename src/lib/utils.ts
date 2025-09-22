@@ -151,6 +151,10 @@ export function processStoriesResponse(
     setStoryInStore(store, story, config, logger, collection);
   }
 
+  logger.info(
+    `'${collection}': Processed ${response.length} stories${contentType ? ` for content type "${contentType}"` : ""}`
+  );
+
   return updatedLatestPublishedAt;
 }
 
@@ -198,7 +202,12 @@ export function timeAgo(date: Date): string {
   return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? "" : "s"} ago`;
 }
 
-export function checkStoredVersionUpToDate(meta: MetaStore, logger: AstroIntegrationLogger, collection: string, cacheVersion?: number): boolean {
+export function checkStoredVersionUpToDate(
+  meta: MetaStore,
+  logger: AstroIntegrationLogger,
+  collection: string,
+  cacheVersion?: number
+): boolean {
   // Try and read the last cache version from meta
   const metaCvEntry = meta.get("cacheVersion");
   const metaCv = metaCvEntry ? parseInt(metaCvEntry, 10) : undefined;
@@ -217,11 +226,11 @@ export function checkStoredVersionUpToDate(meta: MetaStore, logger: AstroIntegra
 /**
  * Helper function to create a StoryblokLoaderStoriesConfig with storyblok parameters
  * This helps migrate from the deprecated second parameter pattern
- * 
+ *
  * @param config - Base configuration
  * @param storyblokParams - Storyblok API parameters
  * @returns Combined configuration object
- * 
+ *
  * @example
  * // Instead of: StoryblokLoaderStories(config, { version: "draft" })
  * // Use: StoryblokLoaderStories(createStoriesConfig(config, { version: "draft" }))
