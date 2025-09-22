@@ -213,3 +213,25 @@ export function checkStoredVersionUpToDate(meta: MetaStore, logger: AstroIntegra
 
   return false;
 }
+
+/**
+ * Helper function to create a StoryblokLoaderStoriesConfig with storyblok parameters
+ * This helps migrate from the deprecated second parameter pattern
+ * 
+ * @param config - Base configuration
+ * @param storyblokParams - Storyblok API parameters
+ * @returns Combined configuration object
+ * 
+ * @example
+ * // Instead of: StoryblokLoaderStories(config, { version: "draft" })
+ * // Use: StoryblokLoaderStories(createStoriesConfig(config, { version: "draft" }))
+ */
+export function createStoriesConfig(
+  config: StoryblokLoaderCommonConfig,
+  storyblokParams?: ISbStoriesParams
+): StoryblokLoaderStoriesConfig {
+  return {
+    ...config,
+    storyblokParams,
+  };
+}

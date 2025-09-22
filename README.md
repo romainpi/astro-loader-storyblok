@@ -506,6 +506,51 @@ import type {
 
 ### Migration Guide
 
+#### ⚠️ Deprecation Notice (v0.1.2+)
+
+**The second parameter in `StoryblokLoaderStories` is deprecated.** While still functional with automatic backward
+compatibility, it will be removed in a future major version.
+
+**Old (deprecated but still works):**
+
+```javascript
+// ⚠️ This triggers a deprecation warning but works
+const stories = defineCollection({
+  loader: StoryblokLoaderStories(config, { version: "draft" })
+});
+```
+
+**New (recommended):**
+
+```javascript
+// ✅ Move storyblok parameters to config.storyblokParams
+const stories = defineCollection({
+  loader: StoryblokLoaderStories({
+    ...config,
+    storyblokParams: { version: "draft" }
+  })
+});
+```
+
+**Or use the helper function:**
+
+```javascript
+// ✅ Use the helper function for easier migration
+import { createStoriesConfig } from "astro-loader-storyblok";
+
+const stories = defineCollection({
+  loader: StoryblokLoaderStories(
+    createStoriesConfig(config, { version: "draft" })
+  )
+});
+```
+
+The deprecation warning will guide you through the migration and provides automatic backward compatibility.
+
+---
+
+#### Migration from v0.0.4
+
 To migrate from v0.0.4 to the latest version:
 
 1. **Update import names**:
