@@ -27,8 +27,6 @@ export async function storyblokLoaderDatasourceImplem(
   const { store, logger, collection } = context;
 
   try {
-    logger.info(`'${collection}': Loading datasource entries for "${config.datasource}"`);
-
     const response = await fetchDatasourceEntries(storyblokApi, config);
 
     const { datasource_entries: entries, cv } = response;

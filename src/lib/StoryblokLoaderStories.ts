@@ -40,8 +40,6 @@ export async function storyblokLoaderStoriesImplem(
       return;
     }
 
-    logger.info(`'${collection}': Loading stories for "${collection}"`);
-
     const storedLastPublishedAt = meta.get("lastPublishedAt");
     const otherParams = shouldUseDateFilter(storedLastPublishedAt, storyblokParams?.version)
       ? { published_at_gt: storedLastPublishedAt }
