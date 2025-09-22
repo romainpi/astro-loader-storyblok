@@ -1,6 +1,8 @@
 # astro-loader-storyblok
 
-~~A robust~~ *An experimental* [Astro content loader][astro-collections] is a community-driven continuation of
+~~A robust~~ *An experimental* [Astro content loader][astro-collections] for Storyblok.
+
+`astro-loader-storyblok` is a community-driven continuation of
 Storyblok’s [archived Astro Content Layer integration](#background), enabling smooth integration between Storyblok CMS
 and Astro content collections.
 
@@ -116,7 +118,8 @@ export const collections = { stories, categories };
 
 ### Benefits of the StoryblokLoader Class
 
-- **Shared Cache Management**: Multiple collections share the same cache version, reducing redundant API calls
+- **Shared Cache Management**: Multiple collections share the same cache version, reducing redundant API calls and
+  preventing conflicts if changes are made to a Storyblok space while collections are being loaded by Astro.
 - **Better Performance**: Cache version is fetched once and reused across all loaders
 - **Cleaner Architecture**: Centralized configuration and better separation of concerns
 
