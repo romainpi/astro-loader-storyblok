@@ -1,5 +1,6 @@
 import type { ISbConfig, ISbStoryData } from "@storyblok/js";
 import type { DatasourceEntry } from "@storyblok/management-api-client/resources/datasource_entries";
+import { z } from "astro/zod";
 
 /**
  * Common configuration shared between all Storyblok loaders
@@ -61,3 +62,23 @@ export interface StoryblokDatasourceResponse {
   datasource_entries: Array<DatasourceEntry>;
   cv: number;
 }
+
+// TODO: Add a test that checks that DatasourceEntry from "@storyblok/management-api-client/resources/datasource_entries"
+// and DatasourceEntrySchema defined here are in sync
+// to avoid future discrepancies when the external type changes.
+// This could be done with a unit test that imports both and compares their keys and types.
+const DatasourceEntrySchema = z.object({
+  id: z.number().optional(),
+  name: z.string().optional(),
+  value: z.string().optional(),
+  dimension_value: z.string().nullable().optional(),
+  datasource_id: z.number().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
+});
+
+export const DatasourceSchema = z.object({
+  id: z.string().min(0).max(1000),
+  body: z.string().optional(),
+  data: DatasourceEntrySchema,
+});

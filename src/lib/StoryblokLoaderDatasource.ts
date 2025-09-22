@@ -1,6 +1,6 @@
 import type { Loader, LoaderContext } from "astro/loaders";
 import { createStoryblokClient, fetchDatasourceEntries, timeAgo } from "./utils";
-import type { StoryblokLoaderDatasourceConfig } from "./types";
+import { DatasourceSchema, type StoryblokLoaderDatasourceConfig } from "./types";
 import type { DataEntry } from "astro/content/config";
 import type { StoryblokClient } from "@storyblok/js";
 
@@ -16,6 +16,7 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
   return {
     name: "astro-loader-storyblok-datasource",
     load: async (context) => storyblokLoaderDatasourceImplem(config, storyblokApi, context),
+    schema: DatasourceSchema,
   };
 };
 
