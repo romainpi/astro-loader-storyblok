@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop, test]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    name: Test on Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x] # Test all supported Node.js versions
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+          
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Run linting
+        run: pnpm lint
+        
+      - name: Run type checking
+        run: pnpm type-check
+        
+      - name: Run tests
+        run: pnpm test
+        
+      - name: Generate coverage report
+        if: matrix.node-version == '20.x'
+        run: pnpm test:coverage

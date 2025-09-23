@@ -1,7 +1,7 @@
 {
   "name": "astro-loader-storyblok",
-  "version": "0.2.0",
-  "description": "Storyblok loader for the Astro Content Layer API.",
+  "version": "0.2.1",
+  "description": "Astro content loader for Storyblok",
   "type": "module",
   "main": "./dist/index.js",
   "files": [

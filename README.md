@@ -1,5 +1,10 @@
 # astro-loader-storyblok
 
+[![License](https://img.shields.io/npm/l/astro-loader-storyblok?label=License&color=blue)](https://raw.githubusercontent.com/romainpi/astro-loader-storyblok/refs/heads/main/LICENSE.txt)
+[![CI](https://img.shields.io/github/actions/workflow/status/romainpi/astro-loader-storyblok/ci.yml?logo=github&label=CI)](https://github.com/romainpi/astro-loader-storyblok/actions/workflows/ci.yml)
+[![Build](https://img.shields.io/github/actions/workflow/status/romainpi/astro-loader-storyblok/build.yml?logo=github&label=Build)](https://github.com/romainpi/astro-loader-storyblok/actions/workflows/build.yml)
+[![Version](https://img.shields.io/npm/v/astro-loader-storyblok?logo=npm)](https://npmjs.org/package/astro-loader-storyblok)
+
 ~~A robust~~ *An experimental* [Astro content loader][astro-collections] for Storyblok.
 
 `astro-loader-storyblok` is a community-driven continuation of
@@ -372,7 +377,8 @@ const stories = defineCollection({
 });
 ```
 
-You may also specify a custom string for custom sorting options. For more details, refer to the [Storyblok Stories API documentation][stories-query-params].
+You may also specify a custom string for custom sorting options. For more details, refer to the [Storyblok Stories API
+documentation][stories-query-params].
 
 ## Examples
 
@@ -485,7 +491,8 @@ export const collections = { stories, categories };
 
 ### Since v0.2.0
 
-This section documents changes that may affect your configuration but are backward compatible through deprecation warnings.
+This section documents changes that may affect your configuration but are backward compatible through deprecation
+warnings.
 
 #### ⚠️ Configuration Structure Change (Deprecated but Compatible)
 
@@ -610,7 +617,8 @@ const stories = defineCollection({
 
 ##### Flattened configuration → Separated loader config and Storyblok API parameters
 
-- **What changed**: The configuration is now split into two parameters: loader-specific config and Storyblok API parameters
+- **What changed**: The configuration is now split into two parameters: loader-specific config and Storyblok API
+  parameters
 - **Reason**: Better separation of concerns and more flexible API that directly maps to Storyblok's API parameters
 
 ```typescript
@@ -806,6 +814,7 @@ MIT - see [LICENSE.txt](LICENSE.txt) for details.
 [abandoned-implementation]: https://github.com/storyblok/storyblok-astro/commit/1a9bfb16e5886b3419607eb77802088f5eb9dfc4
 [`storyblok-to-zod`]: https://www.npmjs.com/package/storyblok-to-zod
 [new-issue]: https://github.com/romainpi/astro-loader-storyblok/issues/new
-[stories-query-params]: https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters
+[stories-query-params]:
+    https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters
 [astro-verbose]: https://docs.astro.build/en/reference/cli-reference/#--verbose
 [debugjs-env]: https://github.com/debug-js/debug#environment-variables
