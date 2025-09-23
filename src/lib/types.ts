@@ -33,8 +33,7 @@ export interface StoryblokLoaderStoriesParameters {
   storyblokParams?: ISbStoriesParams;
 }
 
-export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig, StoryblokLoaderStoriesParameters {
-}
+export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig, StoryblokLoaderStoriesParameters {}
 
 /**
  * Query parameters for retrieving datasource entries from Storyblok.
