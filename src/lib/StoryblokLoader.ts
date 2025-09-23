@@ -53,12 +53,7 @@ export class StoryblokLoader {
           this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
         }
 
-        return storyblokLoaderStoriesImplem(
-          { ...this.commonConfig, ...config },
-          this.storyblokApi,
-          context,
-          this.cv
-        );
+        return storyblokLoaderStoriesImplem({ ...this.commonConfig, ...config }, this.storyblokApi, context, this.cv);
       },
     };
   }
