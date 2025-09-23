@@ -9,15 +9,25 @@ import { fetchStories, processStoriesResponse, setStoryInStore, shouldUseDateFil
  * Creates a Storyblok Stories loader with the provided configuration
  *
  * @param config - Configuration options for the Stories loader
+ * @returns Astro Loader instance for Storyblok Stories
+ */
+export function StoryblokLoaderStories(config: StoryblokLoaderStoriesConfig): Loader;
+
+/**
+ * Creates a Storyblok Stories loader with the provided configuration
+ *
+ * @param config - Configuration options for the Stories loader
  * @param storyblokParams - **DEPRECATED**: Pass storyblok parameters via config.storyblokParams instead
  * @deprecated Use config.storyblokParams instead of the second parameter
  * @returns Astro Loader instance for Storyblok Stories
  */
-export const StoryblokLoaderStories = (
+export function StoryblokLoaderStories(config: StoryblokLoaderStoriesConfig, storyblokParams: ISbStoriesParams): Loader;
+
+export function StoryblokLoaderStories(
   config: StoryblokLoaderStoriesConfig,
-  /** @deprecated Use config.storyblokParams instead */
-  storyblokParams?: ISbStoriesParams
-): Loader => {
+  /** @deprecated Use config.storyblokParams instead of the second parameter */
+  storyblokParams: ISbStoriesParams | undefined = undefined
+): Loader {
   // Detect and warn about deprecated parameter usage
   if (storyblokParams && Object.keys(storyblokParams).length > 0) {
     console.warn(
@@ -46,7 +56,7 @@ export const StoryblokLoaderStories = (
     name: "astro-loader-storyblok-stories",
     load: async (context) => storyblokLoaderStoriesImplem(config, storyblokApi, context),
   };
-};
+}
 
 export async function storyblokLoaderStoriesImplem(
   config: StoryblokLoaderStoriesConfig,
