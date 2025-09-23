@@ -21,6 +21,9 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "pnpm clean && tsc",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs --fix",
+    "type-check": "tsc --noEmit",
     "lint:markdown": "markdownlint-cli2 \"**/*.{md,mdx}\" \"!node_modules\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -43,12 +46,17 @@
   },
   "packageManager": "pnpm@10.17.0+sha256.bd9ec5417641391e0acb3912b2912bd5b0385407a82da94744a7407b567fdb4f",
   "devDependencies": {
+    "@eslint/js": "9.36.0",
     "@github/markdownlint-github": "0.8.0",
     "astro": "5.13.10",
+    "eslint": "9.36.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.4",
     "markdown-it": "14.1.0",
     "markdownlint-cli2": "0.18.1",
     "markdownlint-cli2-formatter-pretty": "0.0.8",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "typescript-eslint": "8.44.1"
   },
   "dependencies": {
     "@storyblok/js": "4.3.0",
