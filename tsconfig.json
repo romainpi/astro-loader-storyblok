@@ -3,17 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    // "target": "ES2022",
-    // "module": "ESNext",
-    // "moduleResolution": "bundler",
-
-    // "allowSyntheticDefaultImports": true,
-    // "sourceMap": true,
     "declaration": true,
-    // "declarationMap": true,
     "allowImportingTsExtensions": false,
-    "noEmit": false,
+    "noEmit": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"]
 }
