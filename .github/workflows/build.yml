@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    branches: [main, develop, test]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    name: Build on Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x] # Test all supported Node.js versions
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+          
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build package
+        run: pnpm build
+        
+      - name: Check build output
+        run: |
+          ls -la dist/
+          test -f dist/index.js
+          test -f dist/index.d.ts
