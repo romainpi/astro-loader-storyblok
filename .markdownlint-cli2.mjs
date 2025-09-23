@@ -7,17 +7,19 @@ const overriddenOptions = init({
     "line_length": 120,
     "code_block_line_length": 120,
     "heading_line_length": 120,
-  }
+  },
 });
 
 const markdownItFactory = () => markdownIt({ html: true });
-
 const options = {
-  config: overriddenOptions,
+  config: { ...configOptions, ...overriddenOptions },
   customRules: ["@github/markdownlint-github"],
   markdownItFactory,
   outputFormatters: [
-    ["markdownlint-cli2-formatter-pretty", { appendLink: true }], // ensures the error message includes a link to the rule documentation
+    [
+      "markdownlint-cli2-formatter-pretty",
+      { appendLink: true }, // ensures the error message includes a link to the rule documentation
+    ],
   ],
 };
 export default options;
