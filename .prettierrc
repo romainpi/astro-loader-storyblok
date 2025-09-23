@@ -1,0 +1,12 @@
+{
+  "semi": true,
+  "doubleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 120,
+  "endOfLine": "lf",
+  "useTabs": false,
+  "quoteProps": "preserve",
+  "bracketSpacing": true,
+  "bracketSameLine": false
+}
