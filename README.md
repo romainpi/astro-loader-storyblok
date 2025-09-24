@@ -1,23 +1,27 @@
 # astro-loader-storyblok
 
-[![License](https://img.shields.io/npm/l/astro-loader-storyblok?label=License&color=blue)](https://raw.githubusercontent.com/romainpi/astro-loader-storyblok/refs/heads/main/LICENSE.txt)
+![types](https://img.shields.io/badge/types_included-3077c4?logo=typescript&logoColor=white)
 [![CI](https://img.shields.io/github/actions/workflow/status/romainpi/astro-loader-storyblok/ci.yml?logo=github&label=CI)](https://github.com/romainpi/astro-loader-storyblok/actions/workflows/ci.yml)
-[![Build](https://img.shields.io/github/actions/workflow/status/romainpi/astro-loader-storyblok/build.yml?logo=github&label=Build)](https://github.com/romainpi/astro-loader-storyblok/actions/workflows/build.yml)
+[![Build](https://img.shields.io/github/actions/workflow/status/romainpi/astro-loader-storyblok/build.yml?logo=github&label=build)](https://github.com/romainpi/astro-loader-storyblok/actions/workflows/build.yml)
 [![Version](https://img.shields.io/npm/v/astro-loader-storyblok?logo=npm)](https://npmjs.org/package/astro-loader-storyblok)
+![Dependencies](https://img.shields.io/librariesio/release/npm/astro-loader-storyblok)
+![Maturity](https://img.shields.io/github/created-at/romainpi/astro-loader-storyblok?label=born&color=hotpink)
+[![License](https://img.shields.io/npm/l/astro-loader-storyblok?label=license&color=blue)](https://github.com/romainpi/astro-loader-storyblok/blob/main/LICENSE.txt)
 
 ~~A robust~~ *An experimental* [Astro content loader][astro-collections] for Storyblok.
 
-`astro-loader-storyblok` is a community-driven continuation of
-Storyblok’s [archived Astro Content Layer integration](#background), enabling smooth integration between Storyblok CMS
-and Astro content collections.
+`astro-loader-storyblok` is a community-driven continuation of Storyblok’s [archived Astro Content Layer
+integration](#background), enabling smooth integration between Storyblok CMS and Astro content collections. Read more
+about the [origins of this project here](#background).
 
 ## Features
 
 - ✅ **Full Astro Content Layer API support** - Compatible with Astro 5.0+
 - 🗂️ **Stories and datasources** - Comprehensive support for both Storyblok stories and datasources
+- 🚀 **Optimized performance** - Incremental updates and efficient caching
+- ✨ **Automatic schema generation** - Auto-generates Astro collection schemas for datasources
 - 🎯 **Content type filtering** - Load specific content types or all stories
 - 📊 **Flexible sorting** - Multiple sorting options for your content
-- 🚀 **Optimized performance** - Incremental updates and efficient caching
 - 📦 **TypeScript ready** - Full TypeScript support with type definitions
 
 ## Performance Features
@@ -778,8 +782,9 @@ const stories = defineCollection({
 ## Background
 
 This Astro content loader is a community-driven successor to Storyblok’s archived Astro Content Layer integration. In
-September 2024, Storyblok released an [alpha version of a loader][astro-alpha]; however, the
-[implementation][abandoned-implementation] was subsequently archived and remained in a premature state.
+September 2024, [Storyblok had partnered with Astro][astro-blogpost] for the launch of the Content Layer API and
+released an [alpha version of a loader][astro-alpha] however, the [implementation][abandoned-implementation] never made
+it to the mainline and was subsequently archived and remained in a premature state.
 
 This package provides a complete, production-ready solution with full TypeScript support and works seamlessly with
 [`storyblok-to-zod`] for type-safe content schemas.
@@ -818,3 +823,4 @@ MIT - see [LICENSE.txt](LICENSE.txt) for details.
     https://www.storyblok.com/docs/api/content-delivery/v2/stories/retrieve-multiple-stories#query-parameters
 [astro-verbose]: https://docs.astro.build/en/reference/cli-reference/#--verbose
 [debugjs-env]: https://github.com/debug-js/debug#environment-variables
+[astro-blogpost]: https://astro.build/blog/storyblok-loader/
