@@ -1,6 +1,6 @@
 import type { Loader } from "astro/loaders";
 import {
-  DatasourceSchema,
+  DatasourceEntrySchema,
   type StoryblokLoaderCommonConfig,
   type StoryblokLoaderDatasourceParameters,
   type StoryblokLoaderStoriesParameters,
@@ -40,7 +40,7 @@ export class StoryblokLoader {
           this.cv
         );
       },
-      schema: DatasourceSchema,
+      schema: DatasourceEntrySchema,
     };
   }
 
