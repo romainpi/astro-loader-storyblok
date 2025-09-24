@@ -459,7 +459,20 @@ export const collections = { stories, categories };
 
 ## What's New
 
-### Latest Changes (v0.2.0)
+### v0.2.3
+
+- Fix: schema for Datasource
+
+### v0.2.2
+
+- Fix: proper overload for `StoryblokLoaderStories()`
+
+### v0.2.1
+
+- Add test suite
+- Add Github workflows
+
+### v0.2.0
 
 #### 🚀 Performance Improvements
 
