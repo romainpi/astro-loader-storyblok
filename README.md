@@ -459,6 +459,10 @@ export const collections = { stories, categories };
 
 ## What's New
 
+### v0.2.4
+
+- Add `FIRST_PUBLISHED_AT_ASC`, `FIRST_PUBLISHED_AT_DESC`, `PUBLISHED_AT_ASC`, `PUBLISHED_AT_DESC` to `SortByEnum`.
+
 ### v0.2.3
 
 - Fix: schema for Datasource
