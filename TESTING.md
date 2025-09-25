@@ -26,9 +26,6 @@ Tests for the stories loader class:
 Tests for the datasource loader class:
 - `StoryblokLoaderDatasource` - Datasource loader functionality and error handling
 
-#### `test/enums.test.ts` (5 tests)
-Tests for the `SortByEnum` enumeration values and completeness.
-
 #### `test/index.test.ts` (4 tests)
 Tests for the main package exports and public API structure.
 
