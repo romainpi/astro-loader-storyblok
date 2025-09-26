@@ -1,8 +1,14 @@
 import type { Loader, LoaderContext } from "astro/loaders";
-import { checkStoredVersionUpToDate, createStoryblokClient, fetchDatasourceEntries, timeAgo } from "./utils";
+import {
+  checkStoredVersionUpToDate,
+  createStoryblokClient,
+  fetchDatasourceDetails,
+  fetchDatasourceEntries,
+  timeAgo,
+} from "./utils";
 import { DatasourceEntrySchema, type StoryblokLoaderDatasourceConfig } from "./types";
 import type { DataEntry } from "astro/content/config";
-import type { StoryblokClient } from "@storyblok/js";
+import type { ISbDimensions, StoryblokClient } from "@storyblok/js";
 
 /**
  * Creates a Storyblok Datasource loader with the provided configuration
@@ -32,6 +38,11 @@ export async function storyblokLoaderDatasourceImplem(
     if (checkStoredVersionUpToDate(meta, logger, collection, cacheVersion)) {
       // Storyblok space says it hasn't been changed since last fetch, so we can skip fetching
       return;
+    }
+
+    const details = await fetchDatasourceDetails(storyblokApi, config);
+    for (const dimension of details.dimensions) {
+      logger.info(`'${collection}': Found dimension: '${dimension.name}' (value: ${dimension.entry_value})`);
     }
 
     const response = await fetchDatasourceEntries(storyblokApi, config, cacheVersion);
