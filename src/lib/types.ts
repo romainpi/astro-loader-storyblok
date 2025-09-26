@@ -53,6 +53,7 @@ interface StoryblokLoaderDatasourceQueryParams {
 }
 
 export interface StoryblokLoaderDatasourceParameters extends StoryblokLoaderDatasourceQueryParams {
+  /** If true, switches the `name` and `value` fields when creating collection entries */
   switchNamesAndValues?: boolean;
 }
 
