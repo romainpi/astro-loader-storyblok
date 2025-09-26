@@ -8,7 +8,7 @@ import type {
   StoryblokLoaderStoriesConfig,
   StoryblokStory,
 } from "./types";
-import type { ISbStoriesParams, ISbStoryData } from "@storyblok/js";
+import type { ISbDimensions, ISbStoriesParams, ISbStoryData } from "@storyblok/js";
 import type { AstroIntegrationLogger } from "astro";
 
 /**
@@ -60,6 +60,27 @@ export async function fetchDatasourceEntries(
   } catch (error) {
     throw new Error(
       `Failed to fetch datasource entries for "${config.datasource}": ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
+  }
+}
+
+export async function fetchDatasourceDetails(
+  storyblokApi: StoryblokClient,
+  config: StoryblokLoaderDatasourceConfig,
+  cv?: number
+): Promise<ISbDimensions> {
+  try {
+    // Get datasource dimensions
+    const { data } = await storyblokApi.get(`cdn/datasources/${config.datasource}`, { cv });
+
+    const datasourceDetails = data.datasource as ISbDimensions;
+
+    return datasourceDetails;
+  } catch (error) {
+    throw new Error(
+      `Failed to fetch datasource details for "${config.datasource}": ${
         error instanceof Error ? error.message : String(error)
       }`
     );
