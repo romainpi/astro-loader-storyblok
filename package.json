@@ -21,6 +21,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "pnpm clean && tsc",
+    "prepublishOnly": "pnpm build",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs --fix",
     "type-check": "tsc --noEmit",
