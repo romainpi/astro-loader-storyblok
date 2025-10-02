@@ -29,7 +29,7 @@ about the [origins of this project here](#background).
 - **Cache Version Optimization**: Uses Storyblok's cache version (`cv`) to detect when content has changed, avoiding
   unnecessary API calls
 - **Incremental Updates**: Only fetches content that has changed since the last published date
-- **Efficient Caching**: Stores metadata about cache version and last published date to minimize API calls  
+- **Efficient Caching**: Stores metadata about cache version and last published date to minimize API calls
 - **Selective Loading**: Load only specific content types to reduce payload size
 - **Smart Cache Validation**: Automatically skips fetching when no changes are detected in the Storyblok space
 
@@ -109,16 +109,16 @@ const storyblokLoader = new StoryblokLoader({
 const stories = defineCollection({
   loader: storyblokLoader.getStoriesLoader({
     contentTypes: ["article", "page"],
-    storyblokParams: { 
+    storyblokParams: {
       version: "published",
-      sort_by: "created_at:desc" 
-    }
+      sort_by: "created_at:desc",
+    },
   }),
 });
 
 const categories = defineCollection({
   loader: storyblokLoader.getDatasourceLoader({
-    datasource: "categories"
+    datasource: "categories",
   }),
 });
 
@@ -373,9 +373,9 @@ SortByEnum.UPDATED_AT_DESC   // "updated_at:desc"
 const stories = defineCollection({
   loader: StoryblokLoaderStories(
     { accessToken: "your-token" },
-    { 
+    {
       version: "published",
-      sort_by: SortByEnum.CREATED_AT_DESC 
+      sort_by: SortByEnum.CREATED_AT_DESC,
     }
   ),
 });
@@ -485,10 +485,10 @@ export const collections = { stories, categories };
 - **Smart Cache Validation**: Automatically skips fetching when no changes are detected in your Storyblok space
 - **Shared Cache Management**: New `StoryblokLoader` class enables multiple collections to share the same cache version
 
-#### 🏗️ Architecture Improvements  
+#### 🏗️ Architecture Improvements
 
 - **Improved Code Organization**: Split the monolithic loader into separate, focused modules:
-  - `StoryblokLoaderStories` - Stories functionality  
+  - `StoryblokLoaderStories` - Stories functionality
   - `StoryblokLoaderDatasource` - Datasource functionality
   - `StoryblokLoader` - Advanced class-based usage
 - **Better Type Safety**: Enhanced TypeScript definitions and schema validation for datasources
@@ -501,7 +501,7 @@ export const collections = { stories, categories };
 
 #### 🛠️ Developer Experience
 
-- **Better Debugging**: Enhanced logging with collection context and debug information  
+- **Better Debugging**: Enhanced logging with collection context and debug information
 - **Improved Error Messages**: More detailed error reporting with better context
 - **Migration Warnings**: Clear deprecation warnings with migration guidance
 
@@ -524,15 +524,15 @@ warnings.
 ```typescript
 // ⚠️ DEPRECATED (but still works with warnings)
 const stories = defineCollection({
-  loader: StoryblokLoaderStories(config, { version: "draft" })
+  loader: StoryblokLoaderStories(config, { version: "draft" }),
 });
 
 // ✅ RECOMMENDED
 const stories = defineCollection({
   loader: StoryblokLoaderStories({
     ...config,
-    storyblokParams: { version: "draft" }
-  })
+    storyblokParams: { version: "draft" },
+  }),
 });
 ```
 
@@ -561,13 +561,13 @@ const storyblokLoader = new StoryblokLoader({ accessToken: "token" });
 const stories = defineCollection({
   loader: storyblokLoader.getStoriesLoader({
     contentTypes: ["article"],
-    storyblokParams: { version: "published" }
+    storyblokParams: { version: "published" },
   }),
 });
 
 const categories = defineCollection({
   loader: storyblokLoader.getDatasourceLoader({
-    datasource: "categories"
+    datasource: "categories",
   }),
 });
 ```
@@ -619,7 +619,7 @@ import { SortBy } from "astro-loader-storyblok";
 const stories = defineCollection({
   loader: StoryblokLoader({
     accessToken: "token",
-    sortBy: SortBy.CREATED_AT_DESC
+    sortBy: SortBy.CREATED_AT_DESC,
   }),
 });
 
@@ -652,7 +652,7 @@ const stories = defineCollection({
     excludingSlugs: "home,about",
     sortBy: SortBy.CREATED_AT_DESC,
     useUuids: true,
-    apiOptions: { region: "us" }
+    apiOptions: { region: "us" },
   }),
 });
 
@@ -664,13 +664,13 @@ const stories = defineCollection({
       accessToken: "token",
       contentTypes: ["article"],
       useUuids: true,
-      apiOptions: { region: "us" }
+      apiOptions: { region: "us" },
     },
     {
       // Standard Storyblok API parameters
       version: "draft",
       excluding_slugs: "home,about",
-      sort_by: SortByEnum.CREATED_AT_DESC
+      sort_by: SortByEnum.CREATED_AT_DESC,
     }
   ),
 });
@@ -703,7 +703,7 @@ import type { StoryblokLoaderConfig } from "astro-loader-storyblok";
 // ✅ New (v0.1.0+)
 import type { 
   StoryblokLoaderStoriesConfig,
-  StoryblokLoaderDatasourceConfig 
+  StoryblokLoaderDatasourceConfig
 } from "astro-loader-storyblok";
 ```
 
@@ -719,7 +719,7 @@ compatibility, it will be removed in a future major version.
 ```javascript
 // ⚠️ This triggers a deprecation warning but works
 const stories = defineCollection({
-  loader: StoryblokLoaderStories(config, { version: "draft" })
+  loader: StoryblokLoaderStories(config, { version: "draft" }),
 });
 ```
 
@@ -730,8 +730,8 @@ const stories = defineCollection({
 const stories = defineCollection({
   loader: StoryblokLoaderStories({
     ...config,
-    storyblokParams: { version: "draft" }
-  })
+    storyblokParams: { version: "draft" },
+  }),
 });
 ```
 
@@ -743,7 +743,7 @@ import { createStoriesConfig } from "astro-loader-storyblok";
 
 const stories = defineCollection({
   loader: StoryblokLoaderStories(
-    createStoriesConfig(config, { version: "draft" })
+    createStoriesConfig(config, { version: "draft" }),
   )
 });
 ```
@@ -757,15 +757,18 @@ The deprecation warning will guide you through the migration and provides automa
 To migrate from v0.0.4 to the latest version:
 
 1. **Update import names**:
+
    - `StoryblokLoader` → `StoryblokLoaderStories`
    - `SortBy` → `SortByEnum`
    - `StoryblokLoaderConfig` → `StoryblokLoaderStoriesConfig`
 
 2. **Restructure configuration**:
+
    - Move `version`, `excluding_slugs`, `sort_by` to the second parameter
    - Keep `accessToken`, `contentTypes`, `useUuids`, `apiOptions` in the first parameter
 
 3. **Update property names**:
+
    - `excludingSlugs` → `excluding_slugs`
    - `sortBy` → `sort_by`
 
@@ -782,7 +785,7 @@ This package is built with TypeScript and provides full type definitions. For ev
 ```typescript
 import { z } from "astro:content";
 import { StoryblokLoaderStories } from "astro-loader-storyblok";
-import { pageSchema } from './types/storyblok.zod.ts';
+import { pageSchema } from "./types/storyblok.zod.ts";
 
 // Example with Zod schema (when using storyblok-to-zod)
 const stories = defineCollection({
@@ -813,11 +816,11 @@ There are two ways of outputting debug messages from `astro-loader-storyblok` to
 1. Run `astro` with the [`--verbose` flag][astro-verbose] in order to output all of Astro's and Vite's debug messages to
    console.
 2. Enable and filter only for messages from `astro-loader-storyblok` with the `DEBUG=astro:astro-loader-storyblok*`
-  environment variable ([more info][debugjs-env]). Example:  
+   environment variable ([more info][debugjs-env]). Example:
 
-    ```bash
-    DEBUG=astro:astro-loader-storyblok* astro build
-    ```
+   ```bash
+   DEBUG=astro:astro-loader-storyblok* astro build
+   ```
 
 ## Feedback
 
