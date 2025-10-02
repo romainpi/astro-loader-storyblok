@@ -53,7 +53,7 @@ export function StoryblokLoaderStories(
   const storyblokApi = createStoryblokClient(config);
 
   return {
-    name: "astro-loader-storyblok-stories",
+    name: "loader-storyblok-stories",
     load: async (context) => storyblokLoaderStoriesImplem(config, storyblokApi, context),
   };
 }

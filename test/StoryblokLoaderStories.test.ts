@@ -59,7 +59,7 @@ describe("StoryblokLoaderStories", () => {
 
     const loader = StoryblokLoaderStories(config);
 
-    expect(loader.name).toBe("astro-loader-storyblok-stories");
+    expect(loader.name).toBe("loader-storyblok-stories");
     expect(typeof loader.load).toBe("function");
   });
 

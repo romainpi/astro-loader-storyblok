@@ -41,11 +41,11 @@ describe("Main Exports", () => {
     });
 
     // Check loader structure
-    expect(storiesLoader).toHaveProperty("name", "astro-loader-storyblok-stories");
+    expect(storiesLoader).toHaveProperty("name", "loader-storyblok-stories");
     expect(storiesLoader).toHaveProperty("load");
     expect(typeof storiesLoader.load).toBe("function");
 
-    expect(datasourceLoader).toHaveProperty("name", "astro-loader-storyblok-datasource");
+    expect(datasourceLoader).toHaveProperty("name", "loader-storyblok-datasource");
     expect(datasourceLoader).toHaveProperty("load");
     expect(typeof datasourceLoader.load).toBe("function");
   });

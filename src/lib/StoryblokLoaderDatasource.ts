@@ -14,7 +14,7 @@ export const StoryblokLoaderDatasource = (config: StoryblokLoaderDatasourceConfi
   const storyblokApi = createStoryblokClient(config);
 
   return {
-    name: "astro-loader-storyblok-datasource",
+    name: "loader-storyblok-datasource",
     load: async (context) => storyblokLoaderDatasourceImplem(config, storyblokApi, context),
     schema: DatasourceEntrySchema,
   };

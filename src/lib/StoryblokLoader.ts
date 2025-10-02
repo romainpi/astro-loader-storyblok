@@ -27,7 +27,7 @@ export class StoryblokLoader {
   public getDatasourceLoader(config: StoryblokLoaderDatasourceParameters): Loader {
     // Return an instance of the Datasource loader
     return {
-      name: "astro-loader-storyblok-datasource",
+      name: "loader-storyblok-datasource",
       load: async (context) => {
         if (!this.cv) {
           this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
@@ -47,7 +47,7 @@ export class StoryblokLoader {
   public getStoriesLoader(config: StoryblokLoaderStoriesParameters): Loader {
     // Return an instance of the Stories loader
     return {
-      name: "astro-loader-storyblok-stories",
+      name: "loader-storyblok-stories",
       load: async (context) => {
         if (!this.cv) {
           this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);

@@ -47,7 +47,7 @@ describe("StoryblokLoaderDatasource", () => {
 
     const loader = StoryblokLoaderDatasource(config);
 
-    expect(loader.name).toBe("astro-loader-storyblok-datasource");
+    expect(loader.name).toBe("loader-storyblok-datasource");
     expect(typeof loader.load).toBe("function");
   });
 
