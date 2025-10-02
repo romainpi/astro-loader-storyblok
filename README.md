@@ -8,7 +8,7 @@
 ![Maturity](https://img.shields.io/github/created-at/romainpi/astro-loader-storyblok?label=born&color=hotpink)
 [![License](https://img.shields.io/npm/l/astro-loader-storyblok?label=license&color=blue)](https://github.com/romainpi/astro-loader-storyblok/blob/main/LICENSE.txt)
 
-~~A robust~~ *An experimental* [Astro content loader][astro-collections] for Storyblok.
+~~A robust~~ _An experimental_ [Astro content loader][astro-collections] for Storyblok.
 
 `astro-loader-storyblok` is a community-driven continuation of Storyblok’s [archived Astro Content Layer
 integration](#background), enabling smooth integration between Storyblok CMS and Astro content collections. Read more
@@ -458,6 +458,10 @@ export const collections = { stories, categories };
 ```
 
 ## What's New
+
+### v0.2.7
+
+- Changed the name appearing in Astro's logger (removed 'astro-' for consistency with other Astro integrations).
 
 ### v0.2.4
 
