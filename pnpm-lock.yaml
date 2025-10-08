@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@storyblok/js':
-        specifier: 4.3.1
-        version: 4.3.1
+        specifier: 4.3.2
+        version: 4.3.2
       '@storyblok/management-api-client':
         specifier: 0.1.5
         version: 0.1.5
@@ -645,8 +645,8 @@ packages:
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
 
-  '@storyblok/js@4.3.1':
-    resolution: {integrity: sha512-6aPhjGuHWrObLfhW4/RPl9X/T/CdahDiEzbV6TKcYm0lseDq1XvMb8S3c5HmwVJNL3vsk4AiYuc51Ko4fAhOmg==}
+  '@storyblok/js@4.3.2':
+    resolution: {integrity: sha512-adaiG7CLhsdgPkuDVCYpBAfCkySkzBOj4HrgfNFmPsNst0rHQHB09uj2Ak6BnFWefSTLgA6EB4BfSj/FymH69Q==}
 
   '@storyblok/management-api-client@0.1.5':
     resolution: {integrity: sha512-aU25c0pUrgljUk8m3CBmcrZy8XvNdz/mhMRlCwap+i6snr3D4X6gJ07dgvvM3Yb2VEgSFPwOnLhH3pumxODa4g==}
@@ -654,8 +654,8 @@ packages:
   '@storyblok/region-helper@1.3.1':
     resolution: {integrity: sha512-6Oc+8/qXGtUQio1dQddD4AakI1sDANg+cpliGA3oHM6hkAGXqNnR9HkskgBKotwUxvr9++nBGZQiHIw49IJQyA==}
 
-  '@storyblok/richtext@3.8.1':
-    resolution: {integrity: sha512-G4TJjjill8F2SICXOkGyhSv4fecwqRX16gReh7PHIQm8+WX7Sw0l5MDHyP08TZU5ukVjgMR7KZL3l3EjvGaqUA==}
+  '@storyblok/richtext@3.8.2':
+    resolution: {integrity: sha512-zI86BOE5hE8eqIwnOBi20Hl3/C9CpMha88Ni9gs2qf3ECTqYP40p0ZQ2oeYQOCsVCoxEOZcTDaeKg5+LSF6gxA==}
 
   '@swc/helpers@0.5.17':
     resolution: {integrity: sha512-5IKx/Y13RsYd+sauPb2x+U/xZikHjolzfuDgTAl/Tdf3Q8rslRvC19NKDLgAJQ6wsqADk10ntlv08nPFw/gO/A==}
@@ -1984,8 +1984,8 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
-  semver@7.7.2:
-    resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
+  semver@7.7.3:
+    resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -2980,9 +2980,9 @@ snapshots:
 
   '@sindresorhus/merge-streams@2.3.0': {}
 
-  '@storyblok/js@4.3.1':
+  '@storyblok/js@4.3.2':
     dependencies:
-      '@storyblok/richtext': 3.8.1
+      '@storyblok/richtext': 3.8.2
       storyblok-js-client: 7.1.5
 
   '@storyblok/management-api-client@0.1.5':
@@ -2991,7 +2991,7 @@ snapshots:
 
   '@storyblok/region-helper@1.3.1': {}
 
-  '@storyblok/richtext@3.8.1':
+  '@storyblok/richtext@3.8.2':
     dependencies:
       markdown-it: 14.1.0
       markdown-it-github: 0.5.0
@@ -3120,7 +3120,7 @@ snapshots:
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.1.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -3311,7 +3311,7 @@ snapshots:
       picomatch: 4.0.3
       prompts: 2.4.2
       rehype: 13.0.2
-      semver: 7.7.2
+      semver: 7.7.3
       shiki: 3.13.0
       smol-toml: 1.4.2
       tinyexec: 0.3.2
@@ -4070,7 +4070,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   markdown-it-github@0.5.0:
     dependencies:
@@ -4782,13 +4782,13 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
-  semver@7.7.2: {}
+  semver@7.7.3: {}
 
   sharp@0.34.4:
     dependencies:
       '@img/colour': 1.0.0
       detect-libc: 2.1.2
-      semver: 7.7.2
+      semver: 7.7.3
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.34.4
       '@img/sharp-darwin-x64': 0.34.4

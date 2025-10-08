@@ -49,7 +49,7 @@
   "bugs": {
     "url": "https://github.com/romainpi/astro-loader-storyblok/issues"
   },
-  "packageManager": "pnpm@10.18.0+sha512.e804f889f1cecc40d572db084eec3e4881739f8dec69c0ff10d2d1beff9a4e309383ba27b5b750059d7f4c149535b6cd0d2cb1ed3aeb739239a4284a68f40cfa",
+  "packageManager": "pnpm@10.18.1+sha256.95a9702424f17c0f17eb0276d01417a169bdfeb61d5e2ccd36476f0e21a53ecd",
   "devDependencies": {
     "@eslint/js": "9.37.0",
     "@github/markdownlint-github": "0.8.0",
@@ -69,7 +69,7 @@
     "vitest": "3.2.4"
   },
   "dependencies": {
-    "@storyblok/js": "4.3.1",
+    "@storyblok/js": "4.3.2",
     "@storyblok/management-api-client": "0.1.5"
   },
   "peerDependencies": {
