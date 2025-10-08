@@ -119,7 +119,8 @@ export async function fetchSpaceCacheVersionValue(
 }
 
 /**
- * Processes the stories response and updates the store
+ * Processes the stories response and inserts them into the data store
+ * @returns The latest `published_at` date found in the stories
  */
 export function processStoriesResponse(
   response: Array<ISbStoryData>,
