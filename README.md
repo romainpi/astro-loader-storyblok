@@ -321,14 +321,16 @@ The `SortByEnum` enum provides the following default sorting options for use in 
 import { SortByEnum } from "astro-loader-storyblok";
 
 // Available sorting options
-SortByEnum.CREATED_AT_ASC    // "created_at:asc"
-SortByEnum.CREATED_AT_DESC   // "created_at:desc"
-SortByEnum.NAME_ASC          // "name:asc"
-SortByEnum.NAME_DESC         // "name:desc"
-SortByEnum.SLUG_ASC          // "slug:asc"
-SortByEnum.SLUG_DESC         // "slug:desc"
-SortByEnum.UPDATED_AT_ASC    // "updated_at:asc"
-SortByEnum.UPDATED_AT_DESC   // "updated_at:desc"
+SortByEnum.CREATED_AT_ASC             // "created_at:asc"
+SortByEnum.CREATED_AT_DESC            // "created_at:desc"
+SortByEnum.FIRST_PUBLISHED_AT_ASC     // "first_published_at:asc"
+SortByEnum.FIRST_PUBLISHED_AT_DESC    // "first_published_at:desc"
+SortByEnum.NAME_ASC                   // "name:asc"
+SortByEnum.NAME_DESC                  // "name:desc"
+SortByEnum.SLUG_ASC                   // "slug:asc"
+SortByEnum.SLUG_DESC                  // "slug:desc"
+SortByEnum.UPDATED_AT_ASC             // "updated_at:asc"
+SortByEnum.UPDATED_AT_DESC            // "updated_at:desc"
 
 // Usage example
 const stories = defineCollection({
