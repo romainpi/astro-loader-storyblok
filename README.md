@@ -763,11 +763,11 @@ There are two ways of outputting debug messages from `astro-loader-storyblok` to
 
 1. Run `astro` with the [`--verbose` flag][astro-verbose] in order to output all of Astro's and Vite's debug messages to
    console.
-2. Enable and filter only for messages from `astro-loader-storyblok` with the `DEBUG=astro:astro-loader-storyblok*`
+2. Enable and filter only for messages from `loader-storyblok` with the `DEBUG=astro:loader-storyblok*`
    environment variable ([more info][debugjs-env]). Example:
 
    ```bash
-   DEBUG=astro:astro-loader-storyblok* astro build
+   DEBUG=astro:loader-storyblok* astro build
    ```
 
 ## Feedback
