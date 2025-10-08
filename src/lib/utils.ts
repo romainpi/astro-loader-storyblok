@@ -130,14 +130,6 @@ export function processStoriesResponse(
   latestPublishedAt: Date | null,
   config: StoryblokLoaderStoriesConfig
 ): Date | null {
-  // Log the time of the latest update from Storyblok API's response
-  // Note: storyblokApi.getAll does not return 'cv' (storyblokApi.get does)
-  /*
-  const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
-  const lastUpdate = timeAgo(new Date(Number(cv) * 1000));
-  logger.info(`'${collection}': Loaded ${stories.length} stories${contentTypeInfo} (updated ${lastUpdate})`);
-  */
-
   let updatedLatestPublishedAt = latestPublishedAt;
 
   for (const story of response) {
