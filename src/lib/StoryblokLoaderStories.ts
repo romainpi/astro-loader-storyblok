@@ -28,6 +28,8 @@ export async function storyblokLoaderStoriesImplem(
 ): Promise<void> {
   const { store, logger, collection, refreshContextData, meta } = context;
   try {
+    console.log("storyblokLoaderStoriesImplem:: config.storyblokParams: ", config.storyblokParams);
+
     // Handle story updates from webhooks
     if (refreshContextData?.story) {
       logger.info(`'${collection}': Syncing... story updated in Storyblok`);

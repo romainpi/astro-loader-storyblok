@@ -45,6 +45,9 @@ yarn add astro-loader-storyblok
 
 ## Quick Start
 
+> 💡 **Want to jump right in?** Check out the [playground example](#playground-example) to see a working implementation
+> before setting up your own project.
+
 ### 1. Configure your Astro content collection
 
 Create or update your `src/content/config.ts`:
@@ -348,6 +351,9 @@ You may also specify a custom string for custom sorting options. For more detail
 documentation][stories-query-params].
 
 ## Examples
+
+> 📁 **Live Example**: See the [`playground/minimal-astro-project`](./playground/minimal-astro-project) for a complete
+> working example that you can run locally.
 
 ### Loading Blog Posts
 
@@ -726,6 +732,40 @@ To migrate from v0.0.4 to the latest version:
    and production environments.
 
 </details>
+
+## Playground Example
+
+Want to see it in action? Check out our minimal playground example in the
+[`playground/minimal-astro-project`](./playground/minimal-astro-project) directory. This demonstrates a basic
+implementation that displays a table of stories from Storyblok. It can be used for testing and development.
+
+To run the playground:
+
+1. Clone this repository and install dependencies:
+
+    ```bash
+    # Clone and setup
+    git clone https://github.com/romainpi/astro-loader-storyblok.git
+    cd astro-loader-storyblok
+    pnpm install
+    ```
+
+2. Set up your environment variables in the playground directory:
+
+   ```bash
+   cd playground/minimal-astro-project
+   cp .env.example .env  # If available
+   # Add your STORYBLOK_DELIVERY_PREVIEW_API_TOKEN to the .env file
+   ```
+
+3. Start the development server: `pnpm dev`
+4. Open your browser to `http://localhost:4321`
+
+The playground showcases:
+
+- Basic content collection configuration using the new `StoryblokLoader` class
+- Fetching and displaying stories in a simple table format
+- Environment variable setup for the Storyblok access token
 
 ## TypeScript Support
 

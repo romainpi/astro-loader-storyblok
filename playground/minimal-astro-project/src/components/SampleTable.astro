@@ -1,0 +1,48 @@
+---
+const { storiesCollection } = Astro.props;
+---
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Full slug</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>Published at</th>
+      <th>First published at</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      storiesCollection.map((story) => (
+        <tr data-story-uuid={story.data.uuid}>
+          <td>{story.data.name}</td>
+          <td>{story.data.full_slug}</td>
+          <td>{story.data.created_at}</td>
+          <td>{story.data.updated_at}</td>
+          <td>{story.data.published_at}</td>
+          <td>{story.data.first_published_at}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  td,
+  th {
+    border: 1px solid rgb(26, 26, 26);
+    padding: 4px;
+    text-align: left;
+  }
+
+  tr:nth-of-type(even) {
+    background-color: #eeeeee;
+  }
+
+  table {
+    border-collapse: collapse;
+    border: 2px solid rgb(36, 36, 36);
+  }
+</style>
