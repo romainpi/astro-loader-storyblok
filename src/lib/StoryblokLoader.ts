@@ -1,4 +1,4 @@
-import type { Loader } from "astro/loaders";
+import type { Loader, LoaderContext } from "astro/loaders";
 import {
   DatasourceEntrySchema,
   type StoryblokLoaderCommonConfig,
@@ -9,7 +9,6 @@ import { createStoryblokClient, fetchSpaceCacheVersionValue } from "./utils";
 import { storyblokLoaderDatasourceImplem } from "./StoryblokLoaderDatasource";
 import type { StoryblokClient } from "@storyblok/js";
 import { storyblokLoaderStoriesImplem } from "./StoryblokLoaderStories";
-import type { AstroIntegrationLogger } from "astro";
 
 export class StoryblokLoader {
   private commonConfig: StoryblokLoaderCommonConfig;
@@ -34,7 +33,7 @@ export class StoryblokLoader {
     return {
       name: "loader-storyblok-datasource",
       load: async (context) => {
-        await this.updateCacheVersionValue(context.logger);
+        await this.updateCacheVersionValue(context);
 
         return storyblokLoaderDatasourceImplem(
           { ...this.commonConfig, ...config },
@@ -52,14 +51,15 @@ export class StoryblokLoader {
     return {
       name: "loader-storyblok-stories",
       load: async (context) => {
-        await this.updateCacheVersionValue(context.logger);
+        await this.updateCacheVersionValue(context);
 
         return storyblokLoaderStoriesImplem({ ...this.commonConfig, ...config }, this.storyblokApi, context, this.cv);
       },
     };
   }
 
-  private async updateCacheVersionValue(logger: AstroIntegrationLogger): Promise<void> {
+  private async updateCacheVersionValue(context: LoaderContext): Promise<void> {
+    const { logger, collection } = context;
     const timeNow = new Date();
 
     // Only fetch the CV if we haven't done so in the last five seconds:

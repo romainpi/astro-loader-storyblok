@@ -1,7 +1,7 @@
 import { storyblokInit, apiPlugin, type StoryblokClient } from "@storyblok/js";
 import type { StoryblokLoaderCommonConfig } from "./types";
 import { SLUGS } from "./constants";
-import type { DataStore, MetaStore } from "astro/loaders";
+import type { DataStore, LoaderContext, MetaStore } from "astro/loaders";
 import type {
   StoryblokDatasourceResponse,
   StoryblokLoaderDatasourceConfig,
@@ -100,7 +100,7 @@ export async function fetchStories(
 
 export async function fetchSpaceCacheVersionValue(
   storyblokApi: StoryblokClient,
-  logger: AstroIntegrationLogger
+  _context: LoaderContext
 ): Promise<number> {
   try {
     const resultSpaceResponse = await storyblokApi.get(SLUGS.CurrentSpace);
@@ -109,8 +109,6 @@ export async function fetchSpaceCacheVersionValue(
     if (!retValue || isNaN(retValue)) {
       throw new Error("Invalid cache version received from Storyblok API.");
     }
-
-    logger.debug(`Fetched space cache version: ${retValue}`);
 
     return Number(retValue);
   } catch (error) {
@@ -162,7 +160,7 @@ export function setStoryInStore(
   collection: string
 ): void {
   logger.debug(
-    `'${collection}': Storing story - ID: ${config.useUuids ? story.uuid : story.full_slug}, Title: ${story.name}`
+    `[${collection}] Storing story - ID: ${config.useUuids ? story.uuid : story.full_slug}, Title: ${story.name}`
   );
 
   store.set({
@@ -205,7 +203,7 @@ export function checkStoredVersionUpToDate(
   const metaCvEntry = meta.get("cacheVersion");
   const metaCv = metaCvEntry ? parseInt(metaCvEntry, 10) : undefined;
   if (metaCv && !isNaN(metaCv)) {
-    logger.debug(`'${collection}': Found stored cache version: ${metaCv}`);
+    logger.debug(`[${collection}] Cached collection's CV value: '${metaCv}' (${timeAgo(new Date(metaCv * 1000))}).`);
 
     if (metaCv === cacheVersion) {
       logger.info(`'${collection}': No changes detected (cv: ${cacheVersion}), skipping fetch`);

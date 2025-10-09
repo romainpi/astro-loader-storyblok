@@ -1,6 +1,6 @@
 import type { Loader, LoaderContext } from "astro/loaders";
 import { type ISbStoryData, type StoryblokClient } from "@storyblok/js";
-import { checkStoredVersionUpToDate, createStoryblokClient } from "./utils";
+import { checkStoredVersionUpToDate, createStoryblokClient, timeAgo } from "./utils";
 
 import type { StoryblokLoaderStoriesConfig } from "./types";
 import { fetchStories, processStoriesResponse, setStoryInStore, shouldUseDateFilter } from "./utils";
@@ -81,7 +81,7 @@ export async function storyblokLoaderStoriesImplem(
     // Store the cache version
     if (cacheVersion) {
       meta.set("cacheVersion", cacheVersion.toString());
-      logger.debug(`'${collection}': Stored cacheVersion: ${cacheVersion}`);
+      logger.debug(`[${collection}] Stored cacheVersion: ${cacheVersion} (${timeAgo(new Date(cacheVersion * 1000))})`);
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

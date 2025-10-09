@@ -60,7 +60,7 @@ export async function storyblokLoaderDatasourceImplem(
         continue;
       }
 
-      logger.debug(`'${collection}': Processing entry - ID: ${idValue}, Body: ${bodyValue}`);
+      logger.debug(`${collection}:: Processing entry - ID: ${idValue}, Body: ${bodyValue}`);
 
       const entryData: DataEntry = {
         id: idValue,
@@ -73,7 +73,7 @@ export async function storyblokLoaderDatasourceImplem(
 
     // Store the cache version
     meta.set("cacheVersion", responseCv.toString());
-    logger.debug(`'${collection}': Stored cacheVersion: ${responseCv}`);
+    logger.debug(`${collection}:: Stored cacheVersion: ${responseCv}`);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`Failed to load datasource entries for "${collection}": ${errorMessage}`);
