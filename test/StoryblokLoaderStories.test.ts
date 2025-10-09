@@ -35,6 +35,7 @@ import {
 
 // Import the loader after mocking
 import { StoryblokLoaderStories } from "../src/lib/StoryblokLoaderStories";
+import { SortByEnum } from "../src/lib/enums";
 
 const mockCreateStoryblokClient = vi.mocked(createStoryblokClient);
 const mockFetchStories = vi.mocked(fetchStories);
@@ -46,6 +47,7 @@ const mockCheckStoredVersionUpToDate = vi.mocked(checkStoredVersionUpToDate);
 // Test constants
 const TEST_DATES = {
   JANUARY_1: "2024-01-01T00:00:00.000Z",
+  JANUARY_5: "2024-01-05T08:00:00.000Z",
   JANUARY_10: "2024-01-10T10:00:00.000Z",
   JANUARY_15: "2024-01-15T10:00:00.000Z",
   JANUARY_20: "2024-01-20T10:00:00.000Z",
@@ -210,6 +212,272 @@ describe("StoryblokLoaderStories", () => {
       expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_1, "published");
       expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: TEST_DATES.JANUARY_1 }, undefined, {
         version: "published",
+      });
+    });
+  });
+
+  describe("Sorting Configuration", () => {
+    describe("first_published_at sorting", () => {
+      it("should pass FIRST_PUBLISHED_AT_ASC sort parameter to API", async () => {
+        const config = createBasicConfig({
+          storyblokParams: {
+            sort_by: SortByEnum.FIRST_PUBLISHED_AT_ASC,
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(3);
+
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockFetchStories).toHaveBeenCalledWith(mockClient, {}, undefined, {
+          sort_by: "first_published_at:asc",
+        });
+      });
+
+      it("should pass FIRST_PUBLISHED_AT_DESC sort parameter to API", async () => {
+        const config = createBasicConfig({
+          storyblokParams: {
+            sort_by: SortByEnum.FIRST_PUBLISHED_AT_DESC,
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(3);
+
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockFetchStories).toHaveBeenCalledWith(mockClient, {}, undefined, {
+          sort_by: "first_published_at:desc",
+        });
+      });
+
+      it("should combine first_published_at sorting with content type filtering", async () => {
+        const config = createBasicConfig({
+          contentTypes: ["blog-post", "article"],
+          storyblokParams: {
+            sort_by: SortByEnum.FIRST_PUBLISHED_AT_DESC,
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(2);
+
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockFetchStories).toHaveBeenCalledTimes(2);
+        expect(mockFetchStories).toHaveBeenNthCalledWith(1, mockClient, {}, "blog-post", {
+          sort_by: "first_published_at:desc",
+        });
+        expect(mockFetchStories).toHaveBeenNthCalledWith(2, mockClient, {}, "article", {
+          sort_by: "first_published_at:desc",
+        });
+      });
+
+      it("should combine first_published_at sorting with date filtering", async () => {
+        const config = createBasicConfig({
+          storyblokParams: {
+            version: "published",
+            sort_by: SortByEnum.FIRST_PUBLISHED_AT_ASC,
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(2);
+
+        context.meta.set("lastPublishedAt", TEST_DATES.JANUARY_15);
+        mockShouldUseDateFilter.mockReturnValue(true);
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_15, "published");
+        expect(mockFetchStories).toHaveBeenCalledWith(
+          mockClient,
+          { published_at_gt: TEST_DATES.JANUARY_15 },
+          undefined,
+          {
+            version: "published",
+            sort_by: "first_published_at:asc",
+          }
+        );
+      });
+
+      it("should work with deprecated second parameter syntax", async () => {
+        const config = createBasicConfig({
+          storyblokParams: {
+            sort_by: SortByEnum.FIRST_PUBLISHED_AT_DESC,
+            version: "published",
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(1);
+
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockFetchStories).toHaveBeenCalledWith(mockClient, {}, undefined, {
+          sort_by: "first_published_at:desc",
+          version: "published",
+        });
+      });
+    });
+
+    describe("Other sorting options", () => {
+      it("should support custom sorting string", async () => {
+        const config = createBasicConfig({
+          storyblokParams: {
+            sort_by: "position:asc",
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(1);
+
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockFetchStories).toHaveBeenCalledWith(mockClient, {}, undefined, {
+          sort_by: "position:asc",
+        });
+      });
+
+      it("should support published_at sorting", async () => {
+        const config = createBasicConfig({
+          storyblokParams: {
+            sort_by: SortByEnum.PUBLISHED_AT_DESC,
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(1);
+
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockFetchStories).toHaveBeenCalledWith(mockClient, {}, undefined, {
+          sort_by: "published_at:desc",
+        });
+      });
+
+      it("should work without any sorting parameter", async () => {
+        const config = createBasicConfig();
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createMockStories(1);
+
+        mockFetchStories.mockResolvedValue(mockStories);
+
+        await loader.load(context);
+
+        expect(mockFetchStories).toHaveBeenCalledWith(mockClient, {}, undefined, undefined);
+      });
+    });
+
+    describe("Realistic sorting scenarios", () => {
+      const createStoriesWithFirstPublishedAt = () => [
+        createMockStory({
+          id: 1,
+          name: "Oldest Story",
+          full_slug: "blog/oldest-story",
+          created_at: TEST_DATES.JANUARY_10,
+          published_at: TEST_DATES.JANUARY_15,
+          first_published_at: TEST_DATES.JANUARY_5, // First published earlier
+        }),
+        createMockStory({
+          id: 2,
+          name: "Middle Story",
+          full_slug: "blog/middle-story",
+          created_at: TEST_DATES.JANUARY_20,
+          published_at: TEST_DATES.FEBRUARY_5,
+          first_published_at: TEST_DATES.JANUARY_25, // First published in the middle
+        }),
+        createMockStory({
+          id: 3,
+          name: "Newest Story",
+          full_slug: "blog/newest-story",
+          created_at: TEST_DATES.FEBRUARY_1,
+          published_at: TEST_DATES.FEBRUARY_10,
+          first_published_at: TEST_DATES.FEBRUARY_3, // First published most recently
+        }),
+      ];
+
+      it("should fetch stories with first_published_at sorting and process them correctly", async () => {
+        const config = createBasicConfig({
+          contentTypes: ["blog-post"],
+          storyblokParams: {
+            version: "published",
+            sort_by: SortByEnum.FIRST_PUBLISHED_AT_DESC,
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+        const mockStories = createStoriesWithFirstPublishedAt();
+
+        mockFetchStories.mockResolvedValue(mockStories);
+        mockProcessStoriesResponse.mockReturnValue(new Date(TEST_DATES.FEBRUARY_10));
+
+        await loader.load(context);
+
+        // Verify API was called with correct sorting
+        expect(mockFetchStories).toHaveBeenCalledWith(mockClient, {}, "blog-post", {
+          version: "published",
+          sort_by: "first_published_at:desc",
+        });
+
+        // Verify stories were processed
+        expectProcessedStories(mockStories, context, "blog-post", null, config);
+
+        // Verify metadata was updated
+        expect(context.meta.set).toHaveBeenCalledWith("lastPublishedAt", TEST_DATES.FEBRUARY_10);
+      });
+
+      it("should handle multiple content types with first_published_at sorting", async () => {
+        const config = createBasicConfig({
+          contentTypes: ["blog-post", "news"],
+          storyblokParams: {
+            sort_by: SortByEnum.FIRST_PUBLISHED_AT_ASC,
+          },
+        });
+        const loader = StoryblokLoaderStories(config);
+        const context = createLoaderContext();
+
+        const blogStories = createStoriesWithFirstPublishedAt();
+        const newsStories = [
+          createMockStory({
+            id: 4,
+            name: "Breaking News",
+            full_slug: "news/breaking-news",
+            first_published_at: TEST_DATES.JANUARY_1,
+            published_at: TEST_DATES.JANUARY_10,
+          }),
+        ];
+
+        mockFetchStories.mockResolvedValueOnce(blogStories).mockResolvedValueOnce(newsStories);
+
+        await loader.load(context);
+
+        // Verify both content types were fetched with sorting
+        expect(mockFetchStories).toHaveBeenCalledTimes(2);
+        expect(mockFetchStories).toHaveBeenNthCalledWith(1, mockClient, {}, "blog-post", {
+          sort_by: "first_published_at:asc",
+        });
+        expect(mockFetchStories).toHaveBeenNthCalledWith(2, mockClient, {}, "news", {
+          sort_by: "first_published_at:asc",
+        });
+
+        // Verify processing was called for both content types
+        expect(mockProcessStoriesResponse).toHaveBeenCalledTimes(2);
       });
     });
   });

@@ -157,6 +157,102 @@ describe("Integration Tests", () => {
 
       expect(mockLogger.info).toHaveBeenCalledWith("'draft-collection': Clearing store (draft mode)");
     });
+
+    it("should handle first_published_at sorting across multiple content types", async () => {
+      const config: StoryblokLoaderStoriesConfig = {
+        accessToken: "test-access-token",
+        contentTypes: ["blog-post", "news"],
+        storyblokParams: {
+          version: "published",
+          sort_by: SortByEnum.FIRST_PUBLISHED_AT_DESC,
+        },
+      };
+
+      const loader = StoryblokLoaderStories(config);
+      const context = createLoaderContext();
+      context.collection = "sorted-stories";
+
+      // Mock blog posts with different first_published_at dates
+      const blogPosts = [
+        createMockStory({
+          id: 1,
+          name: "Recent Blog Post",
+          full_slug: "blog/recent-post",
+          content: { component: "blog-post", title: "Recent Blog Post" },
+          created_at: "2024-01-20T10:00:00.000Z",
+          published_at: "2024-01-25T10:00:00.000Z",
+          first_published_at: "2024-01-22T10:00:00.000Z",
+        }),
+        createMockStory({
+          id: 2,
+          name: "Older Blog Post",
+          full_slug: "blog/older-post",
+          content: { component: "blog-post", title: "Older Blog Post" },
+          created_at: "2024-01-10T10:00:00.000Z",
+          published_at: "2024-01-15T10:00:00.000Z",
+          first_published_at: "2024-01-12T10:00:00.000Z",
+        }),
+      ];
+
+      // Mock news articles
+      const newsArticles = [
+        createMockStory({
+          id: 3,
+          name: "Breaking News",
+          full_slug: "news/breaking-news",
+          content: { component: "news", title: "Breaking News" },
+          created_at: "2024-01-30T10:00:00.000Z",
+          published_at: "2024-02-01T10:00:00.000Z",
+          first_published_at: "2024-01-31T10:00:00.000Z",
+        }),
+      ];
+
+      // Mock API responses
+      mockClient.getAll
+        .mockResolvedValueOnce(blogPosts) // First call for blog-post content type
+        .mockResolvedValueOnce(newsArticles); // Second call for news content type
+
+      await loader.load(context);
+
+      // Verify API was called with correct parameters for each content type
+      expect(mockClient.getAll).toHaveBeenCalledTimes(2);
+
+      // First call should be for blog-post with sorting
+      expect(mockClient.getAll).toHaveBeenNthCalledWith(1, "cdn/stories", {
+        content_type: "blog-post",
+        version: "published",
+        sort_by: "first_published_at:desc",
+      });
+
+      // Second call should be for news with sorting
+      expect(mockClient.getAll).toHaveBeenNthCalledWith(2, "cdn/stories", {
+        content_type: "news",
+        version: "published",
+        sort_by: "first_published_at:desc",
+      });
+
+      // Verify stories were stored with correct IDs
+      expect(context.store.set).toHaveBeenCalledTimes(3);
+      expect(context.store.set).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          name: "Recent Blog Post",
+          first_published_at: "2024-01-22T10:00:00.000Z",
+        }),
+        id: "blog/recent-post",
+      });
+      expect(context.store.set).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          name: "Breaking News",
+          first_published_at: "2024-01-31T10:00:00.000Z",
+        }),
+        id: "news/breaking-news",
+      });
+
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        "'sorted-stories': Processed 2 stories for content type \"blog-post\""
+      );
+      expect(mockLogger.info).toHaveBeenCalledWith("'sorted-stories': Processed 1 stories for content type \"news\"");
+    });
   });
 
   describe("StoryblokLoaderDatasource - End-to-End", () => {
