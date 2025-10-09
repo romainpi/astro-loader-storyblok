@@ -1,7 +1,9 @@
 ---
 import { getCollection } from "astro:content";
+import SampleTable from "../components/SampleTable.astro";
 
-const storiesCollection = await getCollection("stories");
+const draftStoriesCollection = await getCollection("draftStories");
+const publishedStoriesCollection = await getCollection("publishedStories");
 ---
 
 <html lang="en">
@@ -15,66 +17,10 @@ const storiesCollection = await getCollection("stories");
   <body>
     <h1>astro-loader-storyblok</h1>
 
-    <table>
-      <caption>List of Stories</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Full slug</th>
-          <th>Created at</th>
-          <th>Updated at</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          storiesCollection.map((story) => (
-            <tr data-story-uuid={story.data.uuid}>
-              <td>{story.data.name}</td>
-              <td>{story.data.full_slug}</td>
-              <td>{story.data.created_at}</td>
-              <td>{story.data.updated_at}</td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+    <h2>Draft stories</h2>
+    <SampleTable storiesCollection={draftStoriesCollection} />
+
+    <h2>Published stories</h2>
+    <SampleTable storiesCollection={publishedStoriesCollection} />
   </body>
-
-  <style>
-    th,
-    td {
-      border: 1px solid rgb(160 160 160);
-      padding: 8px 10px;
-    }
-
-    th[scope="col"] {
-      background-color: #505050;
-      color: white;
-    }
-
-    th[scope="row"] {
-      background-color: #d6ecd4;
-    }
-
-    td {
-      text-align: center;
-    }
-
-    tr:nth-of-type(even) {
-      background-color: #eeeeee;
-    }
-
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(140 140 140);
-      font-family: sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-    }
-
-    caption {
-      caption-side: bottom;
-      padding: 10px;
-    }
-  </style>
 </html>

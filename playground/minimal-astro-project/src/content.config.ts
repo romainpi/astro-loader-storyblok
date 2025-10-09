@@ -12,7 +12,7 @@ const sbContentLoaderConfig: StoryblokLoaderCommonConfig = {
 
 const storyblokLoader = new StoryblokLoader(sbContentLoaderConfig);
 
-const stories = defineCollection({
+const draftStories = defineCollection({
   loader: storyblokLoader.getStoriesLoader({
     storyblokParams: {
       version: "draft",
@@ -21,4 +21,13 @@ const stories = defineCollection({
   }),
 });
 
-export const collections = { stories };
+const publishedStories = defineCollection({
+  loader: storyblokLoader.getStoriesLoader({
+    storyblokParams: {
+      version: "published",
+      sort_by: SortByEnum.FIRST_PUBLISHED_AT_DESC,
+    },
+  }),
+});
+
+export const collections = { draftStories, publishedStories };
