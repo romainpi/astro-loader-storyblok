@@ -49,12 +49,13 @@ describe("Integration Tests", () => {
         accessToken: "test-access-token",
         contentTypes: ["page", "post"],
         useUuids: false,
+        storyblokParams: {
+          version: "published",
+          sort_by: SortByEnum.CREATED_AT_DESC,
+        },
       };
 
-      const loader = StoryblokLoaderStories(config, {
-        version: "published",
-        sort_by: SortByEnum.CREATED_AT_DESC,
-      });
+      const loader = StoryblokLoaderStories(config);
 
       const context = createLoaderContext();
       context.collection = "my-stories";
@@ -128,9 +129,10 @@ describe("Integration Tests", () => {
     it("should handle draft mode with store clearing", async () => {
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-access-token",
+        storyblokParams: { version: "draft" },
       };
 
-      const loader = StoryblokLoaderStories(config, { version: "draft" });
+      const loader = StoryblokLoaderStories(config);
       const context = createLoaderContext();
       context.logger = mockLogger;
       context.collection = "draft-collection";
