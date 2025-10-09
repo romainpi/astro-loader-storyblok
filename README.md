@@ -321,14 +321,16 @@ The `SortByEnum` enum provides the following default sorting options for use in 
 import { SortByEnum } from "astro-loader-storyblok";
 
 // Available sorting options
-SortByEnum.CREATED_AT_ASC    // "created_at:asc"
-SortByEnum.CREATED_AT_DESC   // "created_at:desc"
-SortByEnum.NAME_ASC          // "name:asc"
-SortByEnum.NAME_DESC         // "name:desc"
-SortByEnum.SLUG_ASC          // "slug:asc"
-SortByEnum.SLUG_DESC         // "slug:desc"
-SortByEnum.UPDATED_AT_ASC    // "updated_at:asc"
-SortByEnum.UPDATED_AT_DESC   // "updated_at:desc"
+SortByEnum.CREATED_AT_ASC             // "created_at:asc"
+SortByEnum.CREATED_AT_DESC            // "created_at:desc"
+SortByEnum.FIRST_PUBLISHED_AT_ASC     // "first_published_at:asc"
+SortByEnum.FIRST_PUBLISHED_AT_DESC    // "first_published_at:desc"
+SortByEnum.NAME_ASC                   // "name:asc"
+SortByEnum.NAME_DESC                  // "name:desc"
+SortByEnum.SLUG_ASC                   // "slug:asc"
+SortByEnum.SLUG_DESC                  // "slug:desc"
+SortByEnum.UPDATED_AT_ASC             // "updated_at:asc"
+SortByEnum.UPDATED_AT_DESC            // "updated_at:desc"
 
 // Usage example
 const stories = defineCollection({
@@ -763,11 +765,11 @@ There are two ways of outputting debug messages from `astro-loader-storyblok` to
 
 1. Run `astro` with the [`--verbose` flag][astro-verbose] in order to output all of Astro's and Vite's debug messages to
    console.
-2. Enable and filter only for messages from `astro-loader-storyblok` with the `DEBUG=astro:astro-loader-storyblok*`
+2. Enable and filter only for messages from `loader-storyblok` with the `DEBUG=astro:loader-storyblok*`
    environment variable ([more info][debugjs-env]). Example:
 
    ```bash
-   DEBUG=astro:astro-loader-storyblok* astro build
+   DEBUG=astro:loader-storyblok* astro build
    ```
 
 ## Feedback
