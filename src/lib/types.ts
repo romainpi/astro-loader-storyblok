@@ -3,6 +3,11 @@ import type { DatasourceEntry } from "@storyblok/management-api-client/resources
 import { z } from "astro/zod";
 
 /**
+ * Custom sort function for stories
+ */
+export type StorySortFunction = (a: ISbStoryData, b: ISbStoryData) => number;
+
+/**
  * Common configuration shared between all Storyblok loaders
  */
 export interface StoryblokLoaderCommonConfig {
@@ -25,6 +30,23 @@ export interface StoryblokLoaderCommonConfig {
    * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2#core-resources/stories/retrieve-multiple-stories | Storyblok API Documentation}
    */
   sortBy?: string;
+
+  /**
+   * Custom sort function for stories. When provided, this takes precedence over `sortBy`.
+   * The function should return a negative number if the first story should come before the second,
+   * a positive number if it should come after, and zero if they are equal.
+   *
+   * @example
+   * ```typescript
+   * customSort: (a, b) => {
+   *   // Sort by a custom field in the content
+   *   const priorityA = a.content.priority || 0;
+   *   const priorityB = b.content.priority || 0;
+   *   return priorityB - priorityA; // Higher priority first
+   * }
+   * ```
+   */
+  customSort?: StorySortFunction;
 }
 
 /**

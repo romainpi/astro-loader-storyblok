@@ -8,6 +8,7 @@ export type {
   StoryblokLoaderDatasourceConfig,
   StoryblokLoaderDatasourceParameters,
   StoryblokLoaderStoriesParameters,
+  StorySortFunction,
 } from "./lib/types";
 
 export { SortByEnum } from "./lib/enums";

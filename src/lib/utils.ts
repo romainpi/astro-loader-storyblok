@@ -7,6 +7,7 @@ import type {
   StoryblokLoaderDatasourceConfig,
   StoryblokLoaderStoriesConfig,
   StoryblokStory,
+  StorySortFunction,
 } from "./types";
 import type { ISbStoriesParams, ISbStoryData } from "@storyblok/js";
 import type { AstroIntegrationLogger } from "astro";
@@ -131,12 +132,12 @@ export function processStoriesResponse(
 ): Date | null {
   let updatedLatestPublishedAt = latestPublishedAt;
 
-  // Get the effective sort parameter
-  const sortBy = getEffectiveSortBy(config);
+  // Get the effective sort configuration
+  const sortConfig = getEffectiveSortConfig(config);
 
   // If we have sorting configured and this is an incremental update,
   // we need to maintain proper sort order
-  if (sortBy && response.length > 0) {
+  if (sortConfig.type !== "none" && response.length > 0) {
     // Get existing stories from store for this content type
     const existingStories: ISbStoryData[] = [];
     for (const [, entry] of store.entries()) {
@@ -149,7 +150,7 @@ export function processStoriesResponse(
 
     // Combine existing and new stories, then sort
     const allStories = [...existingStories, ...response];
-    const sortedStories = sortStories(allStories, sortBy);
+    const sortedStories = sortStoriesWithConfig(allStories, sortConfig);
 
     // Clear the store for this content type and repopulate in sorted order
     if (contentType) {
@@ -177,8 +178,9 @@ export function processStoriesResponse(
       setStoryInStore(store, story as StoryblokStory, config, logger, collection);
     }
 
+    const sortTypeLabel = sortConfig.type === "custom" ? "custom sort" : `sort by ${sortConfig.sortBy}`;
     logger.info(
-      `[${collection}] Processed and sorted ${response.length} new stories with ${existingStories.length} existing stories${
+      `[${collection}] Processed and sorted ${response.length} new stories with ${existingStories.length} existing stories (${sortTypeLabel})${
         contentType ? ` for content type "${contentType}"` : ""
       }`
     );
@@ -332,6 +334,52 @@ export function sortStories(stories: ISbStoryData[], sortBy?: string): ISbStoryD
   if (!sortBy || !stories.length) return stories;
   
   return [...stories].sort((a, b) => compareStories(a, b, sortBy));
+}
+
+/**
+ * Sorts an array of stories using either a custom sort function or standard sorting
+ * @param stories - Array of stories to sort
+ * @param sortConfig - Sort configuration object with type and function/parameter
+ * @returns Sorted array of stories
+ */
+export function sortStoriesWithConfig(
+  stories: ISbStoryData[],
+  sortConfig: { type: "custom" | "standard" | "none"; sortFunction?: StorySortFunction; sortBy?: string }
+): ISbStoryData[] {
+  if (!stories.length || sortConfig.type === "none") return stories;
+  
+  if (sortConfig.type === "custom" && sortConfig.sortFunction) {
+    return [...stories].sort(sortConfig.sortFunction);
+  }
+  
+  if (sortConfig.type === "standard" && sortConfig.sortBy) {
+    return sortStories(stories, sortConfig.sortBy);
+  }
+  
+  return stories;
+}
+
+/**
+ * Gets the effective sorting configuration from config, with priority:
+ * 1. config.customSort (if provided)
+ * 2. config.sortBy
+ * 3. config.storyblokParams?.sort_by
+ */
+export function getEffectiveSortConfig(config: StoryblokLoaderStoriesConfig): {
+  type: "custom" | "standard" | "none";
+  sortFunction?: StorySortFunction;
+  sortBy?: string;
+} {
+  if (config.customSort) {
+    return { type: "custom", sortFunction: config.customSort };
+  }
+  
+  const sortBy = config.sortBy || config.storyblokParams?.sort_by;
+  if (sortBy) {
+    return { type: "standard", sortBy };
+  }
+  
+  return { type: "none" };
 }
 
 /**

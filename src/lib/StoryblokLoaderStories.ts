@@ -8,7 +8,7 @@ import {
   processStoriesResponse,
   setStoryInStore,
   shouldUseDateFilter,
-  getEffectiveSortBy,
+  getEffectiveSortConfig,
 } from "./utils";
 
 /**
@@ -55,10 +55,16 @@ export async function storyblokLoaderStoriesImplem(
       : {};
 
     // Store sort configuration in metadata for consistent sorting
-    const effectiveSortBy = getEffectiveSortBy(config);
-    if (effectiveSortBy) {
-      meta.set("sortBy", effectiveSortBy);
-      logger.debug(`[${collection}] Using sort parameter: ${effectiveSortBy}`);
+    const sortConfig = getEffectiveSortConfig(config);
+    if (sortConfig.type !== "none") {
+      if (sortConfig.type === "custom") {
+        meta.set("sortType", "custom");
+        logger.debug(`[${collection}] Using custom sort function`);
+      } else {
+        meta.set("sortType", "standard");
+        meta.set("sortBy", sortConfig.sortBy || "");
+        logger.debug(`[${collection}] Using sort parameter: ${sortConfig.sortBy}`);
+      }
     }
 
     // Clear store for draft mode to ensure fresh data
