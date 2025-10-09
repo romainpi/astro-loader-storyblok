@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "./node_modules/.bin/astro dev",
+      "command": "DEBUG=astro:loader-storyblok* ./node_modules/.bin/astro dev",
       "cwd": "${workspaceFolder}/playground/minimal-astro-project",
       "name": "minimal-astro-project playground: Astro Development server",
       "request": "launch",
