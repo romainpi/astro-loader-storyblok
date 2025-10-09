@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import SampleTable from "../components/SampleTable.astro";
+
+const draftStoriesCollection = await getCollection("draftStories");
+const publishedStoriesCollection = await getCollection("publishedStories");
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>astro-loader-storyblok minimal</title>
+  </head>
+  <body>
+    <h1>astro-loader-storyblok</h1>
+
+    <h2>Draft stories</h2>
+    <SampleTable storiesCollection={draftStoriesCollection} />
+
+    <h2>Published stories</h2>
+    <SampleTable storiesCollection={publishedStoriesCollection} />
+  </body>
+</html>
