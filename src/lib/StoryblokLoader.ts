@@ -9,6 +9,7 @@ import { createStoryblokClient, fetchSpaceCacheVersionValue } from "./utils";
 import { storyblokLoaderDatasourceImplem } from "./StoryblokLoaderDatasource";
 import type { StoryblokClient } from "@storyblok/js";
 import { storyblokLoaderStoriesImplem } from "./StoryblokLoaderStories";
+import type { AstroIntegrationLogger } from "astro";
 
 export class StoryblokLoader {
   private commonConfig: StoryblokLoaderCommonConfig;
@@ -17,11 +18,15 @@ export class StoryblokLoader {
   /** Cache version announced by API */
   private cv?: number;
 
+  /** Last time we checked the cache version */
+  private lastCvCheckDate?: Date;
+
   constructor(config: StoryblokLoaderCommonConfig) {
     this.commonConfig = config;
     this.storyblokApi = createStoryblokClient(config);
 
     this.cv = undefined;
+    this.lastCvCheckDate = undefined;
   }
 
   public getDatasourceLoader(config: StoryblokLoaderDatasourceParameters): Loader {
@@ -29,7 +34,7 @@ export class StoryblokLoader {
     return {
       name: "loader-storyblok-datasource",
       load: async (context) => {
-        this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
+        await this.updateCacheVersionValue(context.logger);
 
         return storyblokLoaderDatasourceImplem(
           { ...this.commonConfig, ...config },
@@ -47,10 +52,24 @@ export class StoryblokLoader {
     return {
       name: "loader-storyblok-stories",
       load: async (context) => {
-        this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
+        await this.updateCacheVersionValue(context.logger);
 
         return storyblokLoaderStoriesImplem({ ...this.commonConfig, ...config }, this.storyblokApi, context, this.cv);
       },
     };
+  }
+
+  private async updateCacheVersionValue(logger: AstroIntegrationLogger): Promise<void> {
+    const timeNow = new Date();
+
+    // Only fetch the CV if we haven't done so in the last five seconds:
+    if (this.lastCvCheckDate && timeNow.getTime() - this.lastCvCheckDate.getTime() < 5000) {
+      return;
+    }
+
+    this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, logger);
+
+    // Set the last CV check time to now
+    this.lastCvCheckDate = timeNow;
   }
 }
