@@ -4,7 +4,7 @@
     {
       "command": "./node_modules/.bin/astro dev",
       "cwd": "${workspaceFolder}/playground/minimal-astro-project",
-      "name": "Development server",
+      "name": "minimal-astro-project playground: Astro Development server",
       "request": "launch",
       "type": "node-terminal"
     }
