@@ -5,10 +5,11 @@ import {
   type StoryblokLoaderDatasourceParameters,
   type StoryblokLoaderStoriesParameters,
 } from "./types";
-import { createStoryblokClient, fetchSpaceCacheVersionValue, timeAgo } from "./utils";
+import { createStoryblokClient, timeAgo } from "./utils";
 import { storyblokLoaderDatasourceImplem } from "./StoryblokLoaderDatasource";
 import type { StoryblokClient } from "@storyblok/js";
 import { storyblokLoaderStoriesImplem } from "./StoryblokLoaderStories";
+import { CacheVersionUpdatePromise } from "./CacheVersionUpdatePromise";
 
 export class StoryblokLoader {
   private commonConfig: StoryblokLoaderCommonConfig;
@@ -17,15 +18,14 @@ export class StoryblokLoader {
   /** Cache version announced by API */
   private cv?: number;
 
-  /** Last time we checked the cache version */
-  private lastCvCheckDate?: Date;
+  /** Promise for checking cache version */
+  private checkingCvPromise: CacheVersionUpdatePromise | null = null;
 
   constructor(config: StoryblokLoaderCommonConfig) {
     this.commonConfig = config;
     this.storyblokApi = createStoryblokClient(config);
 
     this.cv = undefined;
-    this.lastCvCheckDate = undefined;
   }
 
   public getDatasourceLoader(config: StoryblokLoaderDatasourceParameters): Loader {
@@ -60,16 +60,34 @@ export class StoryblokLoader {
 
   private async updateCacheVersionValue(context: LoaderContext): Promise<void> {
     const { logger, collection } = context;
-    const timeNow = new Date();
 
-    // Only fetch the CV if we haven't done so in the last five seconds:
-    if (this.lastCvCheckDate && timeNow.getTime() - this.lastCvCheckDate.getTime() < 5000) {
+    if (this.checkingCvPromise === null) {
+      logger.debug(`[${collection}] Fetching space's latest CV value from Storyblok...`);
+      this.checkingCvPromise = new CacheVersionUpdatePromise(this.storyblokApi, context);
+
+      try {
+        this.cv = await this.checkingCvPromise;
+
+        logger.debug(
+          `[${collection}] Fetched space's latest CV value: '${this.cv}' (${timeAgo(
+            new Date(this.cv * 1000)
+          )}) from Storyblok.`
+        );
+      } catch (error) {
+        logger.error(`[${collection}] Failed updating CV value. Fetching error: ${error}`);
+      } finally {
+        this.checkingCvPromise = null;
+      }
+    } else {
+      const collectionName = this.checkingCvPromise.getCollection();
+
+      logger.debug(`[${collection}] Waiting for '${collectionName}' to complete updating the CV value ...`);
+
+      await this.checkingCvPromise;
+
+      logger.debug(`[${collection}] Finished waiting for '${collectionName}'.`);
+
       return;
     }
-
-    this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, logger);
-
-    // Set the last CV check time to now
-    this.lastCvCheckDate = timeNow;
   }
 }
