@@ -2,9 +2,6 @@ export { StoryblokLoaderStories } from "./lib/StoryblokLoaderStories";
 export { StoryblokLoaderDatasource } from "./lib/StoryblokLoaderDatasource";
 export { StoryblokLoader } from "./lib/StoryblokLoader";
 
-// Utility functions
-export { createStoriesConfig } from "./lib/utils";
-
 export type {
   StoryblokLoaderCommonConfig,
   StoryblokLoaderStoriesConfig,

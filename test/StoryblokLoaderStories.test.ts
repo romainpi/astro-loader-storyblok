@@ -159,8 +159,9 @@ describe("StoryblokLoaderStories", () => {
   it("should use date filtering when available and not in draft mode", async () => {
     const config: StoryblokLoaderStoriesConfig = {
       accessToken: "test-token",
+      storyblokParams: { version: "published" },
     };
-    const loader = StoryblokLoaderStories(config, { version: "published" });
+    const loader = StoryblokLoaderStories(config);
     const context = createLoaderContext();
     const mockStories = createMockStories(1);
 
@@ -182,8 +183,9 @@ describe("StoryblokLoaderStories", () => {
   it("should clear store in draft mode", async () => {
     const config: StoryblokLoaderStoriesConfig = {
       accessToken: "test-token",
+      storyblokParams: { version: "draft" },
     };
-    const loader = StoryblokLoaderStories(config, { version: "draft" });
+    const loader = StoryblokLoaderStories(config);
     const context = createLoaderContext();
     const mockStories = createMockStories(1);
 

@@ -1,5 +1,5 @@
 import type { Loader, LoaderContext } from "astro/loaders";
-import { type ISbStoryData, type ISbStoriesParams, type StoryblokClient } from "@storyblok/js";
+import { type ISbStoryData, type StoryblokClient } from "@storyblok/js";
 import { checkStoredVersionUpToDate, createStoryblokClient } from "./utils";
 
 import type { StoryblokLoaderStoriesConfig } from "./types";
@@ -11,45 +11,7 @@ import { fetchStories, processStoriesResponse, setStoryInStore, shouldUseDateFil
  * @param config - Configuration options for the Stories loader
  * @returns Astro Loader instance for Storyblok Stories
  */
-export function StoryblokLoaderStories(config: StoryblokLoaderStoriesConfig): Loader;
-
-/**
- * Creates a Storyblok Stories loader with the provided configuration
- *
- * @param config - Configuration options for the Stories loader
- * @param storyblokParams - **DEPRECATED**: Pass storyblok parameters via config.storyblokParams instead
- * @deprecated Use config.storyblokParams instead of the second parameter
- * @returns Astro Loader instance for Storyblok Stories
- */
-export function StoryblokLoaderStories(config: StoryblokLoaderStoriesConfig, storyblokParams: ISbStoriesParams): Loader;
-
-export function StoryblokLoaderStories(
-  config: StoryblokLoaderStoriesConfig,
-  /** @deprecated Use config.storyblokParams instead of the second parameter */
-  storyblokParams: ISbStoriesParams | undefined = undefined
-): Loader {
-  // Detect and warn about deprecated parameter usage
-  if (storyblokParams && Object.keys(storyblokParams).length > 0) {
-    console.warn(
-      "⚠️  DEPRECATED: The 'storyblokParams' second parameter is deprecated and will be ignored.\n" +
-        "   Please move your storyblok parameters to config.storyblokParams instead.\n" +
-        "   \n" +
-        "   Before: StoryblokLoaderStories(config, { version: 'draft' })\n" +
-        "   After:  StoryblokLoaderStories({ ...config, storyblokParams: { version: 'draft' } })\n" +
-        "   \n" +
-        "   This parameter will be removed in a future version."
-    );
-
-    // For backward compatibility, merge the deprecated parameter into config if config.storyblokParams is not set
-    if (!config.storyblokParams) {
-      console.warn("   → Automatically applying deprecated parameters for backward compatibility.");
-      config = {
-        ...config,
-        storyblokParams,
-      };
-    }
-  }
-
+export function StoryblokLoaderStories(config: StoryblokLoaderStoriesConfig): Loader {
   const storyblokApi = createStoryblokClient(config);
 
   return {
