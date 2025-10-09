@@ -16,7 +16,6 @@ const draftStories = defineCollection({
   loader: storyblokLoader.getStoriesLoader({
     storyblokParams: {
       version: "draft",
-      sort_by: SortByEnum.FIRST_PUBLISHED_AT_DESC,
     },
   }),
 });
