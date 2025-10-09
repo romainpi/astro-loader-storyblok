@@ -8,7 +8,7 @@
 ![Maturity](https://img.shields.io/github/created-at/romainpi/astro-loader-storyblok?label=born&color=hotpink)
 [![License](https://img.shields.io/npm/l/astro-loader-storyblok?label=license&color=blue)](https://github.com/romainpi/astro-loader-storyblok/blob/main/LICENSE.txt)
 
-~~A robust~~ _An experimental_ [Astro content loader][astro-collections] for Storyblok.
+A robust [Astro content loader][astro-collections] for Storyblok.
 
 `astro-loader-storyblok` is a community-driven continuation of Storyblok’s [archived Astro Content Layer
 integration](#background), enabling smooth integration between Storyblok CMS and Astro content collections. Read more
@@ -427,6 +427,64 @@ export const collections = { stories, categories };
 ```
 
 ## What's New
+
+### v1.0.0
+
+#### 🎉 Major Release - Production Ready
+
+This is the first stable release of `astro-loader-storyblok`! After extensive testing and refinement through alpha
+versions, the loader is now production-ready and feature-complete.
+
+#### 💥 Breaking Changes
+
+- **Removed deprecated configuration**: The second parameter pattern `StoryblokLoaderStories(config, storyblokParams)`
+  has been completely removed. Use the single configuration object with `storyblokParams` property instead.
+- **Removed helper function**: The `createStoriesConfig()` utility function has been removed as it's no longer needed.
+- **Cleaner API**: Simplified the API surface by removing backward compatibility shims and deprecated exports.
+
+#### ⚡ Performance Improvements
+
+- **Optimized cache version checking**: Implemented promise-based cache version updates to prevent redundant API calls
+  when multiple collections are loading simultaneously
+- **Better collection synchronization**: Fixed issues where pressing 's' to sync collections in development mode
+  wouldn't properly trigger refetching (#4)
+
+#### 🔧 Enhanced Developer Experience
+
+- **Improved debugging**: Enhanced debug logging output with better formatting and more informative messages
+- **Better error context**: More detailed error reporting with collection-specific context
+- **Playground improvements**: Updated the playground with better examples and configuration for testing both draft
+  and published content
+
+#### 🏗️ Code Quality & Maintenance
+
+- **Comprehensive test coverage**: Expanded test suite with edge cases, integration tests, and sorting functionality
+  across multiple content types
+- **Code organization**: Removed redundant code and cleaned up internal implementations
+- **TypeScript improvements**: Better type safety and exports organization with `EXPORTS_TYPES_SHOULD_BE_FIRST`
+  compliance
+- **Documentation updates**: Refreshed examples and removed references to deprecated functionality
+
+#### 🚀 Migration from v0.x
+
+**Old (no longer supported):**
+
+```typescript
+const stories = defineCollection({
+  loader: StoryblokLoaderStories(config, { version: "draft" }),
+});
+```
+
+**New (v1.0.0+):**
+
+```typescript
+const stories = defineCollection({
+  loader: StoryblokLoaderStories({
+    ...config,
+    storyblokParams: { version: "draft" },
+  }),
+});
+```
 
 ### v0.2.7
 
