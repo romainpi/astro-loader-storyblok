@@ -155,7 +155,7 @@ const stories = defineCollection({
 ### Advanced Configuration
 
 ```typescript
-import { StoryblokLoaderStories, SortByEnum } from "astro-loader-storyblok";
+import { StoryblokLoaderStories, SortByEnum, type StorySortFunction } from "astro-loader-storyblok";
 
 const stories = defineCollection({
   loader: StoryblokLoaderStories({
@@ -167,6 +167,17 @@ const stories = defineCollection({
     // Use UUIDs instead of slugs as IDs
     useUuids: true,
 
+    // Sort stories using the new sortBy property (takes precedence over storyblokParams.sort_by)
+    sortBy: SortByEnum.CREATED_AT_DESC,
+
+    // Or use a custom sort function (takes precedence over sortBy)
+    customSort: (a, b) => {
+      // Example: Sort by a custom priority field
+      const priorityA = a.content?.priority || 0;
+      const priorityB = b.content?.priority || 0;
+      return priorityB - priorityA; // Higher priority first
+    },
+
     // Additional Storyblok API options
     apiOptions: {
       region: "us", // 'eu' (default), 'us', 'ap', 'ca', 'cn'
@@ -176,7 +187,7 @@ const stories = defineCollection({
       },
     },
 
-    // Storyblok API parameters (new in v0.2.0)
+    // Storyblok API parameters
     storyblokParams: {
       // Content version
       version: "draft", // "draft" or "published" (default)
@@ -184,7 +195,7 @@ const stories = defineCollection({
       // Exclude specific slugs
       excluding_slugs: "home,about,contact",
 
-      // Sort stories
+      // Sort stories (lower precedence than sortBy/customSort)
       sort_by: SortByEnum.CREATED_AT_DESC,
     },
   }),
@@ -270,17 +281,21 @@ export interface StoryblokLoaderStoriesConfig {
   apiOptions?: ISbConfig;
   contentTypes?: string[];
   useUuids?: boolean;
+  sortBy?: string;
+  customSort?: StorySortFunction;
   storyblokParams?: ISbStoriesParams;
 }
 ```
 
-| Option             | Type               | Default      | Description                                  |
-|--------------------|--------------------|--------------|----------------------------------------------|
-| `accessToken`      | `string`           | **Required** | Your Storyblok access token                  |
-| `apiOptions`       | `ISbConfig`        | `{}`         | Additional Storyblok API configuration       |
-| `contentTypes`     | `string[]`         | `undefined`  | Array of content types to load               |
-| `useUuids`         | `boolean`          | `false`      | Use story UUIDs instead of slugs as IDs      |
-| `storyblokParams`  | `ISbStoriesParams` | `{}`         | Storyblok API query parameters (see below)   |
+| Option             | Type                 | Default      | Description                                  |
+|--------------------|----------------------|--------------|----------------------------------------------|
+| `accessToken`      | `string`             | **Required** | Your Storyblok access token                  |
+| `apiOptions`       | `ISbConfig`          | `{}`         | Additional Storyblok API configuration       |
+| `contentTypes`     | `string[]`           | `undefined`  | Array of content types to load               |
+| `useUuids`         | `boolean`            | `false`      | Use story UUIDs instead of slugs as IDs      |
+| `sortBy`           | `string`             | `undefined`  | Sort order for stories (overrides `storyblokParams.sort_by`)             |
+| `customSort`       | `StorySortFunction`  | `undefined`  | Custom sort function (overrides `sortBy`)                                |
+| `storyblokParams`  | `ISbStoriesParams`   | `{}`         | Storyblok API query parameters (see below)   |
 
 **Storyblok API Parameters (`storyblokParams`):**
 
@@ -295,6 +310,16 @@ The `storyblokParams` property accepts all standard Storyblok Stories API parame
 | `by_slugs`        | `string`                 | `undefined`   | Filter by specific slugs                 |
 
 For a complete list of available parameters, see the [Storyblok Stories API documentation][stories-query-params].
+
+**Sorting Priority:**
+
+The loader supports multiple ways to sort stories, with the following precedence order (highest to lowest):
+
+1. **`customSort`** - Custom sort function for complex sorting logic
+2. **`sortBy`** - Simple string-based sorting parameter  
+3. **`storyblokParams.sort_by`** - Legacy Storyblok API parameter
+
+When multiple sorting options are provided, only the highest priority option will be used.
 
 ### `StoryblokLoaderDatasource` Configuration
 
@@ -315,6 +340,20 @@ export interface StoryblokLoaderDatasourceConfig {
 | `dimension`            | `string`    | `undefined`  | Filter entries by dimension (if configured in Storyblok) |
 | `switchNamesAndValues` | `boolean`   | `false`      | Use value as ID and name as body instead of the default  |
 | `apiOptions`           | `ISbConfig` | `{}`         | Additional Storyblok API configuration                   |
+
+### StorySortFunction Type
+
+For advanced sorting scenarios, you can provide a custom sort function:
+
+```typescript
+export type StorySortFunction = (a: ISbStoryData, b: ISbStoryData) => number;
+```
+
+The function should return:
+
+- A negative number if the first story should come before the second
+- A positive number if it should come after  
+- Zero if they are equal
 
 ### Sorting Options
 
@@ -426,6 +465,78 @@ const categories = defineCollection({
 export const collections = { stories, categories };
 ```
 
+### Custom Sorting Examples
+
+#### Priority-based Sorting
+
+Sort stories by a custom priority field in your content:
+
+```typescript
+const stories = defineCollection({
+  loader: StoryblokLoaderStories({
+    accessToken: import.meta.env.STORYBLOK_TOKEN,
+    contentTypes: ["article"],
+    customSort: (a, b) => {
+      const priorityA = a.content?.priority || 0;
+      const priorityB = b.content?.priority || 0;
+      return priorityB - priorityA; // Higher priority first
+    },
+  }),
+});
+```
+
+#### Multi-level Sorting
+
+First sort by category, then by date within each category:
+
+```typescript
+const stories = defineCollection({
+  loader: StoryblokLoaderStories({
+    accessToken: import.meta.env.STORYBLOK_TOKEN,
+    customSort: (a, b) => {
+      // First level: sort by category
+      const categoryA = a.content?.category || "zzz";
+      const categoryB = b.content?.category || "zzz";
+      
+      if (categoryA !== categoryB) {
+        return categoryA.localeCompare(categoryB);
+      }
+      
+      // Second level: sort by date (newest first within same category)
+      const dateA = new Date(a.created_at || 0);
+      const dateB = new Date(b.created_at || 0);
+      return dateB.getTime() - dateA.getTime();
+    },
+  }),
+});
+```
+
+#### Featured Content First
+
+Show featured content at the top, then sort the rest by date:
+
+```typescript
+const stories = defineCollection({
+  loader: StoryblokLoaderStories({
+    accessToken: import.meta.env.STORYBLOK_TOKEN,
+    customSort: (a, b) => {
+      // Featured content first
+      const featuredA = a.content?.featured || false;
+      const featuredB = b.content?.featured || false;
+      
+      if (featuredA !== featuredB) {
+        return featuredB ? 1 : -1; // Featured items come first
+      }
+      
+      // Then sort by creation date (newest first)
+      const dateA = new Date(a.created_at || 0);
+      const dateB = new Date(b.created_at || 0);
+      return dateB.getTime() - dateA.getTime();
+    },
+  }),
+});
+```
+
 ## What's New
 
 ### v1.0.0
@@ -448,7 +559,14 @@ This is the first stable release of `astro-loader-storyblok`! After some testing
 - **Improved debugging**: Enhanced debug logging output with better formatting and more informative messages
 - **Playground**: Includes a playground sample useful for testing this loader.
 
-#### 🏗️ Code Quality & Maintenance
+#### � New Sorting Features
+
+- **Custom Sort Functions**: New `customSort` property allows complex sorting logic using custom functions
+- **Simplified Sorting**: New `sortBy` property provides easier sorting configuration with priority over `storyblokParams.sort_by`
+- **Sorting Precedence**: Clear hierarchy of sorting options: `customSort` > `sortBy` > `storyblokParams.sort_by`
+- **Maintained Sort Order**: Improved sorting logic ensures proper order when adding new entries to cached collections
+
+#### �🏗️ Code Quality & Maintenance
 
 - **Comprehensive test coverage**: Expanded test suite with edge cases, integration tests, and sorting functionality
   across multiple content types
@@ -822,12 +940,14 @@ The playground showcases:
 
 ## TypeScript Support
 
-This package is built with TypeScript and provides full type definitions. For even better type safety, consider using
-[`storyblok-to-zod`] to generate Zod schemas for your Storyblok components.
+This package is built with TypeScript and provides full type definitions, including the `StorySortFunction` type for  
+custom sorting.
+
+For even better type safety, consider using [`storyblok-to-zod`] to generate Zod schemas for your Storyblok components.
 
 ```typescript
 import { z } from "astro:content";
-import { StoryblokLoaderStories } from "astro-loader-storyblok";
+import { StoryblokLoaderStories, type StorySortFunction } from "astro-loader-storyblok";
 import { pageSchema } from "./types/storyblok.zod.ts";
 
 // Example with Zod schema (when using storyblok-to-zod)
