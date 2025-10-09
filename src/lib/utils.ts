@@ -180,9 +180,9 @@ export function processStoriesResponse(
 
     const sortTypeLabel = sortConfig.type === "custom" ? "custom sort" : `sort by ${sortConfig.sortBy}`;
     logger.info(
-      `[${collection}] Processed and sorted ${response.length} new stories with ${existingStories.length} existing stories (${sortTypeLabel})${
-        contentType ? ` for content type "${contentType}"` : ""
-      }`
+      `[${collection}] Processed and sorted ${response.length} new stories with ${
+        existingStories.length
+      } existing stories (${sortTypeLabel})${contentType ? ` for content type "${contentType}"` : ""}`
     );
   } else {
     // No sorting required, use original logic
@@ -257,10 +257,10 @@ export function timeAgo(date: Date): string {
 export function parseSortBy(sortBy: string): { field: string; direction: "asc" | "desc" } | null {
   const parts = sortBy.split(":");
   if (parts.length !== 2) return null;
-  
+
   const [field, direction] = parts;
   if (direction !== "asc" && direction !== "desc") return null;
-  
+
   return { field, direction };
 }
 
@@ -300,18 +300,18 @@ export function getSortableValue(story: ISbStoryData, field: string): Date | str
 export function compareStories(storyA: ISbStoryData, storyB: ISbStoryData, sortBy: string): number {
   const parsed = parseSortBy(sortBy);
   if (!parsed) return 0;
-  
+
   const { field, direction } = parsed;
   const valueA = getSortableValue(storyA, field);
   const valueB = getSortableValue(storyB, field);
-  
+
   // Handle null values (put them at the end)
   if (valueA === null && valueB === null) return 0;
   if (valueA === null) return 1;
   if (valueB === null) return -1;
-  
+
   let comparison = 0;
-  
+
   if (valueA instanceof Date && valueB instanceof Date) {
     comparison = valueA.getTime() - valueB.getTime();
   } else if (typeof valueA === "string" && typeof valueB === "string") {
@@ -320,7 +320,7 @@ export function compareStories(storyA: ISbStoryData, storyB: ISbStoryData, sortB
     // Fallback for other types
     comparison = valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
   }
-  
+
   return direction === "desc" ? -comparison : comparison;
 }
 
@@ -332,7 +332,7 @@ export function compareStories(storyA: ISbStoryData, storyB: ISbStoryData, sortB
  */
 export function sortStories(stories: ISbStoryData[], sortBy?: string): ISbStoryData[] {
   if (!sortBy || !stories.length) return stories;
-  
+
   return [...stories].sort((a, b) => compareStories(a, b, sortBy));
 }
 
@@ -347,15 +347,15 @@ export function sortStoriesWithConfig(
   sortConfig: { type: "custom" | "standard" | "none"; sortFunction?: StorySortFunction; sortBy?: string }
 ): ISbStoryData[] {
   if (!stories.length || sortConfig.type === "none") return stories;
-  
+
   if (sortConfig.type === "custom" && sortConfig.sortFunction) {
     return [...stories].sort(sortConfig.sortFunction);
   }
-  
+
   if (sortConfig.type === "standard" && sortConfig.sortBy) {
     return sortStories(stories, sortConfig.sortBy);
   }
-  
+
   return stories;
 }
 
@@ -373,12 +373,12 @@ export function getEffectiveSortConfig(config: StoryblokLoaderStoriesConfig): {
   if (config.customSort) {
     return { type: "custom", sortFunction: config.customSort };
   }
-  
+
   const sortBy = config.sortBy || config.storyblokParams?.sort_by;
   if (sortBy) {
     return { type: "standard", sortBy };
   }
-  
+
   return { type: "none" };
 }
 
