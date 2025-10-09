@@ -188,45 +188,6 @@ const stories = defineCollection({
 });
 ```
 
-#### Backward Compatibility (Deprecated)
-
-The old two-parameter syntax is still supported but deprecated:
-
-```typescript
-// ⚠️ DEPRECATED: This will show a deprecation warning
-const stories = defineCollection({
-  loader: StoryblokLoaderStories(
-    {
-      accessToken: "your-access-token",
-      contentTypes: ["article", "page", "product"],
-      useUuids: true,
-      apiOptions: { region: "us" },
-    },
-    {
-      // This second parameter is deprecated
-      version: "draft",
-      excluding_slugs: "home,about,contact",
-      sort_by: SortByEnum.CREATED_AT_DESC,
-    }
-  ),
-});
-```
-
-**Migration**: Use the `createStoriesConfig` helper function for easier migration:
-
-```typescript
-import { StoryblokLoaderStories, createStoriesConfig } from "astro-loader-storyblok";
-
-const stories = defineCollection({
-  loader: StoryblokLoaderStories(
-    createStoriesConfig(
-      { accessToken: "your-token" },
-      { version: "draft" }
-    )
-  ),
-});
-```
-
 ## Datasource Loader
 
 The `StoryblokLoaderDatasource` allows you to load data from Storyblok datasources into your Astro content collections.
@@ -497,12 +458,6 @@ export const collections = { stories, categories };
   - `StoryblokLoader` - Advanced class-based usage
 - **Better Type Safety**: Enhanced TypeScript definitions and schema validation for datasources
 
-#### 🔧 Configuration Enhancements
-
-- **Unified Configuration**: New single-parameter configuration structure with `storyblokParams` property
-- **Backward Compatibility**: Deprecated two-parameter syntax still works with automatic migration warnings
-- **Helper Functions**: New `createStoriesConfig()` utility for easier migration from deprecated patterns
-
 #### 🛠️ Developer Experience
 
 - **Better Debugging**: Enhanced logging with collection context and debug information
@@ -516,17 +471,18 @@ export const collections = { stories, categories };
 
 ### Since v0.2.0
 
-This section documents changes that may affect your configuration but are backward compatible through deprecation
-warnings.
+This section documents changes that may affect your configuration ~~but are backward compatible through deprecation
+warnings~~.
 
-#### ⚠️ Configuration Structure Change (Deprecated but Compatible)
+#### ⚠️ Configuration Structure Change (Deprecated)
 
 **What changed**: The two-parameter configuration pattern is deprecated in favor of a single configuration object.
 
-**Impact**: Your existing code will continue to work but will show deprecation warnings.
+**Impact**: ~~Your existing code will continue to work but will show deprecation warnings.~~ < v0.2.0 configuration
+pattern will not work anymore.
 
 ```typescript
-// ⚠️ DEPRECATED (but still works with warnings)
+// ⚠️ DEPRECATED: ABANDONED since v1.0.0
 const stories = defineCollection({
   loader: StoryblokLoaderStories(config, { version: "draft" }),
 });
@@ -537,18 +493,6 @@ const stories = defineCollection({
     ...config,
     storyblokParams: { version: "draft" },
   }),
-});
-```
-
-**Migration**: Use the `createStoriesConfig` helper for gradual migration:
-
-```typescript
-import { createStoriesConfig } from "astro-loader-storyblok";
-
-const stories = defineCollection({
-  loader: StoryblokLoaderStories(
-    createStoriesConfig(config, { version: "draft" })
-  )
 });
 ```
 
@@ -715,13 +659,13 @@ import type {
 
 #### ⚠️ Deprecation Notice (v0.2.0)
 
-**The second parameter in `StoryblokLoaderStories` is deprecated.** While still functional with automatic backward
-compatibility, it will be removed in a future major version.
+**The second parameter in `StoryblokLoaderStories` is deprecated.** ~~While still functional with automatic backward
+compatibility~~, it will be removed in a future major version ✅.
 
-**Old (deprecated but still works):**
+**Old (deprecated ~~but still works~~):**
 
 ```javascript
-// ⚠️ This triggers a deprecation warning but works
+// ⚠️ This used to trigger a deprecation warning but will not work anymore
 const stories = defineCollection({
   loader: StoryblokLoaderStories(config, { version: "draft" }),
 });
