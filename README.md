@@ -430,17 +430,10 @@ export const collections = { stories, categories };
 
 ### v1.0.0
 
-#### 🎉 Major Release - Production Ready
+#### Major Release 🎉🎉🎉
 
-This is the first stable release of `astro-loader-storyblok`! After extensive testing and refinement through alpha
-versions, the loader is now production-ready and feature-complete.
-
-#### 💥 Breaking Changes
-
-- **Removed deprecated configuration**: The second parameter pattern `StoryblokLoaderStories(config, storyblokParams)`
-  has been completely removed. Use the single configuration object with `storyblokParams` property instead.
-- **Removed helper function**: The `createStoriesConfig()` utility function has been removed as it's no longer needed.
-- **Cleaner API**: Simplified the API surface by removing backward compatibility shims and deprecated exports.
+This is the first stable release of `astro-loader-storyblok`! After some testing and refinement, the loader is now
+"feature-complete".
 
 #### ⚡ Performance Improvements
 
@@ -451,19 +444,21 @@ versions, the loader is now production-ready and feature-complete.
 
 #### 🔧 Enhanced Developer Experience
 
-- **Improved debugging**: Enhanced debug logging output with better formatting and more informative messages
 - **Better error context**: More detailed error reporting with collection-specific context
-- **Playground improvements**: Updated the playground with better examples and configuration for testing both draft
-  and published content
+- **Improved debugging**: Enhanced debug logging output with better formatting and more informative messages
+- **Playground**: Includes a playground sample useful for testing this loader.
 
 #### 🏗️ Code Quality & Maintenance
 
 - **Comprehensive test coverage**: Expanded test suite with edge cases, integration tests, and sorting functionality
   across multiple content types
 - **Code organization**: Removed redundant code and cleaned up internal implementations
-- **TypeScript improvements**: Better type safety and exports organization with `EXPORTS_TYPES_SHOULD_BE_FIRST`
-  compliance
 - **Documentation updates**: Refreshed examples and removed references to deprecated functionality
+
+#### Breaking Changes
+
+- **Removed deprecated configuration**: The second parameter pattern `StoryblokLoaderStories(config, storyblokParams)`
+  has been completely removed. Use the single configuration object with `storyblokParams` property instead.
 
 #### 🚀 Migration from v0.x
 
