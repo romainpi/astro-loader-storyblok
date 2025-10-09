@@ -90,10 +90,10 @@ describe("Integration Tests", () => {
 
       // Verify logging - check for both content type specific logs
       expect(mockLogger.info).toHaveBeenCalledWith(
-        '[my-stories] Processed and sorted 2 new stories with 0 existing stories for content type "page"'
+        '[my-stories] Processed and sorted 2 new stories with 0 existing stories (sort by created_at:desc) for content type "page"'
       );
       expect(mockLogger.info).toHaveBeenCalledWith(
-        '[my-stories] Processed and sorted 3 new stories with 0 existing stories for content type "post"'
+        '[my-stories] Processed and sorted 3 new stories with 0 existing stories (sort by created_at:desc) for content type "post"'
       );
     });
 
@@ -253,10 +253,10 @@ describe("Integration Tests", () => {
       });
 
       expect(mockLogger.info).toHaveBeenCalledWith(
-        '[sorted-stories] Processed and sorted 2 new stories with 0 existing stories for content type "blog-post"'
+        '[sorted-stories] Processed and sorted 2 new stories with 0 existing stories (sort by first_published_at:desc) for content type "blog-post"'
       );
       expect(mockLogger.info).toHaveBeenCalledWith(
-        '[sorted-stories] Processed and sorted 1 new stories with 0 existing stories for content type "news"'
+        '[sorted-stories] Processed and sorted 1 new stories with 0 existing stories (sort by first_published_at:desc) for content type "news"'
       );
     });
   });
