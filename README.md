@@ -31,7 +31,6 @@ about the [origins of this project here](#background).
 - **Incremental Updates**: Only fetches content that has changed since the last published date
 - **Efficient Caching**: Stores metadata about cache version and last published date to minimize API calls
 - **Selective Loading**: Load only specific content types to reduce payload size
-- **Smart Cache Validation**: Automatically skips fetching when no changes are detected in the Storyblok space
 
 ## Installation
 
