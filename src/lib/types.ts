@@ -18,6 +18,13 @@ export interface StoryblokLoaderCommonConfig {
    * @see {@link https://github.com/storyblok/storyblok-js-client#class-storyblok | `storyblok-js-client` Docs}
    */
   apiOptions?: ISbConfig;
+
+  /**
+   * Sort order for stories. This parameter is handled by the loader to ensure proper
+   * client-side sorting when new entries are added to cached collections.
+   * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2#core-resources/stories/retrieve-multiple-stories | Storyblok API Documentation}
+   */
+  sortBy?: string;
 }
 
 /**
@@ -68,7 +75,7 @@ export interface StoryblokLoaderDatasourceConfig
  * Extended story type with proper typing for refreshContextData
  */
 export interface StoryblokStory extends ISbStoryData {
-  [key: string]: any; // Add index signature for DataStore compatibility
+  [key: string]: unknown; // Add index signature for DataStore compatibility
 }
 
 /**

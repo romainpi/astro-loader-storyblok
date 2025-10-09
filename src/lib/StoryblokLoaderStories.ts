@@ -2,8 +2,14 @@ import type { Loader, LoaderContext } from "astro/loaders";
 import { type ISbStoryData, type StoryblokClient } from "@storyblok/js";
 import { checkStoredVersionUpToDate, createStoryblokClient, timeAgo } from "./utils";
 
-import type { StoryblokLoaderStoriesConfig } from "./types";
-import { fetchStories, processStoriesResponse, setStoryInStore, shouldUseDateFilter } from "./utils";
+import type { StoryblokLoaderStoriesConfig, StoryblokStory } from "./types";
+import {
+  fetchStories,
+  processStoriesResponse,
+  setStoryInStore,
+  shouldUseDateFilter,
+  getEffectiveSortBy,
+} from "./utils";
 
 /**
  * Creates a Storyblok Stories loader with the provided configuration
@@ -32,7 +38,7 @@ export async function storyblokLoaderStoriesImplem(
     if (refreshContextData?.story) {
       logger.info(`[${collection}] Syncing... story updated in Storyblok`);
       const updatedStory = refreshContextData.story as ISbStoryData;
-      setStoryInStore(store, updatedStory, config, logger, collection);
+      setStoryInStore(store, updatedStory as StoryblokStory, config, logger, collection);
       return;
     }
 
@@ -47,6 +53,13 @@ export async function storyblokLoaderStoriesImplem(
     const otherParams = shouldUseDateFilter(storedLastPublishedAt, config.storyblokParams?.version)
       ? { published_at_gt: storedLastPublishedAt }
       : {};
+
+    // Store sort configuration in metadata for consistent sorting
+    const effectiveSortBy = getEffectiveSortBy(config);
+    if (effectiveSortBy) {
+      meta.set("sortBy", effectiveSortBy);
+      logger.debug(`[${collection}] Using sort parameter: ${effectiveSortBy}`);
+    }
 
     // Clear store for draft mode to ensure fresh data
     if (config.storyblokParams?.version === "draft") {

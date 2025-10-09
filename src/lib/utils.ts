@@ -131,20 +131,74 @@ export function processStoriesResponse(
 ): Date | null {
   let updatedLatestPublishedAt = latestPublishedAt;
 
-  for (const story of response) {
-    const publishedAt = story.published_at ? new Date(story.published_at) : null;
+  // Get the effective sort parameter
+  const sortBy = getEffectiveSortBy(config);
 
-    // Track the latest published timestamp
-    if (publishedAt && (!updatedLatestPublishedAt || publishedAt > updatedLatestPublishedAt)) {
-      updatedLatestPublishedAt = publishedAt;
+  // If we have sorting configured and this is an incremental update,
+  // we need to maintain proper sort order
+  if (sortBy && response.length > 0) {
+    // Get existing stories from store for this content type
+    const existingStories: ISbStoryData[] = [];
+    for (const [, entry] of store.entries()) {
+      const storyData = entry.data as unknown as ISbStoryData;
+      // Filter by content type if specified, otherwise include all
+      if (!contentType || storyData.content?.component === contentType) {
+        existingStories.push(storyData);
+      }
     }
 
-    setStoryInStore(store, story, config, logger, collection);
-  }
+    // Combine existing and new stories, then sort
+    const allStories = [...existingStories, ...response];
+    const sortedStories = sortStories(allStories, sortBy);
 
-  logger.info(
-    `[${collection}] Processed ${response.length} stories${contentType ? ` for content type "${contentType}"` : ""}`
-  );
+    // Clear the store for this content type and repopulate in sorted order
+    if (contentType) {
+      // Remove only stories of this content type
+      for (const [key, entry] of store.entries()) {
+        const storyData = entry.data as unknown as ISbStoryData;
+        if (storyData.content?.component === contentType) {
+          store.delete(key);
+        }
+      }
+    } else {
+      // Clear all stories if no content type filter
+      store.clear();
+    }
+
+    // Add all stories back in sorted order
+    for (const story of sortedStories) {
+      const publishedAt = story.published_at ? new Date(story.published_at) : null;
+
+      // Track the latest published timestamp
+      if (publishedAt && (!updatedLatestPublishedAt || publishedAt > updatedLatestPublishedAt)) {
+        updatedLatestPublishedAt = publishedAt;
+      }
+
+      setStoryInStore(store, story as StoryblokStory, config, logger, collection);
+    }
+
+    logger.info(
+      `[${collection}] Processed and sorted ${response.length} new stories with ${existingStories.length} existing stories${
+        contentType ? ` for content type "${contentType}"` : ""
+      }`
+    );
+  } else {
+    // No sorting required, use original logic
+    for (const story of response) {
+      const publishedAt = story.published_at ? new Date(story.published_at) : null;
+
+      // Track the latest published timestamp
+      if (publishedAt && (!updatedLatestPublishedAt || publishedAt > updatedLatestPublishedAt)) {
+        updatedLatestPublishedAt = publishedAt;
+      }
+
+      setStoryInStore(store, story as StoryblokStory, config, logger, collection);
+    }
+
+    logger.info(
+      `[${collection}] Processed ${response.length} stories${contentType ? ` for content type "${contentType}"` : ""}`
+    );
+  }
 
   return updatedLatestPublishedAt;
 }
@@ -191,6 +245,115 @@ export function timeAgo(date: Date): string {
   if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
   if (diffDays < 30) return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
   return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? "" : "s"} ago`;
+}
+
+/**
+ * Parses a Storyblok sort_by parameter into field and direction
+ * @param sortBy - The sort parameter (e.g., "created_at:desc", "name:asc")
+ * @returns Object with field and direction, or null if invalid
+ */
+export function parseSortBy(sortBy: string): { field: string; direction: "asc" | "desc" } | null {
+  const parts = sortBy.split(":");
+  if (parts.length !== 2) return null;
+  
+  const [field, direction] = parts;
+  if (direction !== "asc" && direction !== "desc") return null;
+  
+  return { field, direction };
+}
+
+/**
+ * Gets the sortable value from a story based on the field
+ * @param story - The Storyblok story
+ * @param field - The field to get the value for (e.g., "created_at", "name", "slug")
+ * @returns The sortable value or null if not found
+ */
+export function getSortableValue(story: ISbStoryData, field: string): Date | string | number | null {
+  switch (field) {
+    case "created_at":
+      return story.created_at ? new Date(story.created_at) : null;
+    case "published_at":
+      return story.published_at ? new Date(story.published_at) : null;
+    case "first_published_at":
+      return story.first_published_at ? new Date(story.first_published_at) : null;
+    case "updated_at":
+      return story.updated_at ? new Date(story.updated_at) : null;
+    case "name":
+      return story.name?.toLowerCase() || "";
+    case "slug":
+      return story.slug?.toLowerCase() || "";
+    default:
+      // Handle custom fields from story content
+      return story.content && typeof story.content === "object" && field in story.content ? story.content[field] : null;
+  }
+}
+
+/**
+ * Compares two stories based on the sort parameters
+ * @param storyA - First story to compare
+ * @param storyB - Second story to compare
+ * @param sortBy - The sort parameter (e.g., "created_at:desc")
+ * @returns Comparison result for Array.sort()
+ */
+export function compareStories(storyA: ISbStoryData, storyB: ISbStoryData, sortBy: string): number {
+  const parsed = parseSortBy(sortBy);
+  if (!parsed) return 0;
+  
+  const { field, direction } = parsed;
+  const valueA = getSortableValue(storyA, field);
+  const valueB = getSortableValue(storyB, field);
+  
+  // Handle null values (put them at the end)
+  if (valueA === null && valueB === null) return 0;
+  if (valueA === null) return 1;
+  if (valueB === null) return -1;
+  
+  let comparison = 0;
+  
+  if (valueA instanceof Date && valueB instanceof Date) {
+    comparison = valueA.getTime() - valueB.getTime();
+  } else if (typeof valueA === "string" && typeof valueB === "string") {
+    comparison = valueA.localeCompare(valueB);
+  } else {
+    // Fallback for other types
+    comparison = valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+  }
+  
+  return direction === "desc" ? -comparison : comparison;
+}
+
+/**
+ * Sorts an array of stories based on the sort_by parameter
+ * @param stories - Array of stories to sort
+ * @param sortBy - The sort parameter (e.g., "created_at:desc")
+ * @returns Sorted array of stories
+ */
+export function sortStories(stories: ISbStoryData[], sortBy?: string): ISbStoryData[] {
+  if (!sortBy || !stories.length) return stories;
+  
+  return [...stories].sort((a, b) => compareStories(a, b, sortBy));
+}
+
+/**
+ * Gets the effective sort_by parameter from configuration, giving priority to
+ * the new sortBy property in the common config over the storyblokParams.sort_by
+ */
+export function getEffectiveSortBy(config: StoryblokLoaderStoriesConfig): string | undefined {
+  // Priority: config.sortBy > config.storyblokParams?.sort_by
+  return config.sortBy || config.storyblokParams?.sort_by;
+}
+
+/**
+ * Creates a helper configuration function for easier migration from deprecated API
+ */
+export function createStoriesConfig(
+  config: Omit<StoryblokLoaderStoriesConfig, "storyblokParams">,
+  storyblokParams?: ISbStoriesParams
+): StoryblokLoaderStoriesConfig {
+  return {
+    ...config,
+    storyblokParams,
+  };
 }
 
 export function checkStoredVersionUpToDate(
