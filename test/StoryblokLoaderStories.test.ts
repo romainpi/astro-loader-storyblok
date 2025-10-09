@@ -10,6 +10,7 @@ vi.mock("../src/lib/utils", () => ({
   setStoryInStore: vi.fn(),
   shouldUseDateFilter: vi.fn(),
   checkStoredVersionUpToDate: vi.fn(),
+  getEffectiveSortBy: vi.fn(),
 }));
 
 // Mock @storyblok/js
@@ -31,6 +32,7 @@ import {
   setStoryInStore,
   shouldUseDateFilter,
   checkStoredVersionUpToDate,
+  getEffectiveSortBy,
 } from "../src/lib/utils";
 
 // Import the loader after mocking
@@ -43,6 +45,7 @@ const mockProcessStoriesResponse = vi.mocked(processStoriesResponse);
 const mockSetStoryInStore = vi.mocked(setStoryInStore);
 const mockShouldUseDateFilter = vi.mocked(shouldUseDateFilter);
 const mockCheckStoredVersionUpToDate = vi.mocked(checkStoredVersionUpToDate);
+const mockGetEffectiveSortBy = vi.mocked(getEffectiveSortBy);
 
 // Test constants
 const TEST_DATES = {
@@ -81,6 +84,7 @@ const setupMockDefaults = () => {
   mockShouldUseDateFilter.mockReturnValue(false);
   mockProcessStoriesResponse.mockReturnValue(null);
   mockCheckStoredVersionUpToDate.mockReturnValue(false);
+  mockGetEffectiveSortBy.mockReturnValue(undefined);
 };
 
 const expectLoaderStructure = (loader: ReturnType<typeof StoryblokLoaderStories>) => {

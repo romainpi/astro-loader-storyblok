@@ -89,8 +89,12 @@ describe("Integration Tests", () => {
       expect(context.meta.set).toHaveBeenCalledWith("lastPublishedAt", expect.any(String));
 
       // Verify logging - check for both content type specific logs
-      expect(mockLogger.info).toHaveBeenCalledWith('[my-stories] Processed 2 stories for content type "page"');
-      expect(mockLogger.info).toHaveBeenCalledWith('[my-stories] Processed 3 stories for content type "post"');
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        '[my-stories] Processed and sorted 2 new stories with 0 existing stories for content type "page"'
+      );
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        '[my-stories] Processed and sorted 3 new stories with 0 existing stories for content type "post"'
+      );
     });
 
     it("should handle webhook updates during incremental sync", async () => {
@@ -248,8 +252,12 @@ describe("Integration Tests", () => {
         id: "news/breaking-news",
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith('[sorted-stories] Processed 2 stories for content type "blog-post"');
-      expect(mockLogger.info).toHaveBeenCalledWith('[sorted-stories] Processed 1 stories for content type "news"');
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        '[sorted-stories] Processed and sorted 2 new stories with 0 existing stories for content type "blog-post"'
+      );
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        '[sorted-stories] Processed and sorted 1 new stories with 0 existing stories for content type "news"'
+      );
     });
   });
 
