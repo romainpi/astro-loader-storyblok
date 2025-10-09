@@ -29,9 +29,7 @@ export class StoryblokLoader {
     return {
       name: "loader-storyblok-datasource",
       load: async (context) => {
-        if (!this.cv) {
-          this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
-        }
+        this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
 
         return storyblokLoaderDatasourceImplem(
           { ...this.commonConfig, ...config },
@@ -49,9 +47,7 @@ export class StoryblokLoader {
     return {
       name: "loader-storyblok-stories",
       load: async (context) => {
-        if (!this.cv) {
-          this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
-        }
+        this.cv = await fetchSpaceCacheVersionValue(this.storyblokApi, context.logger);
 
         return storyblokLoaderStoriesImplem({ ...this.commonConfig, ...config }, this.storyblokApi, context, this.cv);
       },
