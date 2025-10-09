@@ -30,7 +30,7 @@ export async function storyblokLoaderStoriesImplem(
   try {
     // Handle story updates from webhooks
     if (refreshContextData?.story) {
-      logger.info(`'${collection}': Syncing... story updated in Storyblok`);
+      logger.info(`[${collection}] Syncing... story updated in Storyblok`);
       const updatedStory = refreshContextData.story as ISbStoryData;
       setStoryInStore(store, updatedStory, config, logger, collection);
       return;
@@ -50,7 +50,7 @@ export async function storyblokLoaderStoriesImplem(
 
     // Clear store for draft mode to ensure fresh data
     if (config.storyblokParams?.version === "draft") {
-      logger.info(`'${collection}': Clearing store (draft mode)`);
+      logger.info(`[${collection}] Clearing store (draft mode)`);
       store.clear();
     }
 
@@ -85,7 +85,7 @@ export async function storyblokLoaderStoriesImplem(
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    logger.error(`'${collection}': Failed to load stories for "${collection}": ${errorMessage}`);
+    logger.error(`[${collection}] Failed to load stories for "${collection}": ${errorMessage}`);
     throw error;
   }
 }

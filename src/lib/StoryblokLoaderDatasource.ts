@@ -39,15 +39,15 @@ export async function storyblokLoaderDatasourceImplem(
     const { datasource_entries: entries, cv: responseCv } = response;
     const lastUpdate = timeAgo(new Date(Number(responseCv) * 1000));
 
-    logger.info(`'${collection}': Loaded ${entries.length} entries (updated ${lastUpdate})`);
+    logger.info(`[${collection}] Loaded ${entries.length} entries (updated ${lastUpdate})`);
 
     if (config.switchNamesAndValues) {
-      logger.info(`'${collection}': Switching names and values`);
+      logger.info(`[${collection}] Switching names and values`);
     }
 
     for (const entry of entries) {
       if (!entry) {
-        logger.warn(`'${collection}': Skipping null or undefined entry: ${JSON.stringify(entry)}`);
+        logger.warn(`[${collection}] Skipping null or undefined entry: ${JSON.stringify(entry)}`);
         continue;
       }
 
@@ -56,7 +56,7 @@ export async function storyblokLoaderDatasourceImplem(
 
       // We tolerate empty body but not empty id
       if (!idValue || idValue === "") {
-        logger.warn(`'${collection}': Skipping entry with empty id: ${JSON.stringify(entry)}`);
+        logger.warn(`[${collection}] Skipping entry with empty id: ${JSON.stringify(entry)}`);
         continue;
       }
 

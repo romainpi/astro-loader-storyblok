@@ -143,7 +143,7 @@ export function processStoriesResponse(
   }
 
   logger.info(
-    `'${collection}': Processed ${response.length} stories${contentType ? ` for content type "${contentType}"` : ""}`
+    `[${collection}] Processed ${response.length} stories${contentType ? ` for content type "${contentType}"` : ""}`
   );
 
   return updatedLatestPublishedAt;
@@ -206,7 +206,9 @@ export function checkStoredVersionUpToDate(
     logger.debug(`[${collection}] Cached collection's CV value: '${metaCv}' (${timeAgo(new Date(metaCv * 1000))}).`);
 
     if (metaCv === cacheVersion) {
-      logger.info(`'${collection}': No changes detected (cv: ${cacheVersion}), skipping fetch`);
+      logger.info(
+        `[${collection}] No changes detected compared to cached version from ${timeAgo(new Date(metaCv * 1000))}.`
+      );
       return true;
     }
   }

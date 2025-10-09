@@ -5,7 +5,7 @@ import {
   type StoryblokLoaderDatasourceParameters,
   type StoryblokLoaderStoriesParameters,
 } from "./types";
-import { createStoryblokClient, fetchSpaceCacheVersionValue } from "./utils";
+import { createStoryblokClient, fetchSpaceCacheVersionValue, timeAgo } from "./utils";
 import { storyblokLoaderDatasourceImplem } from "./StoryblokLoaderDatasource";
 import type { StoryblokClient } from "@storyblok/js";
 import { storyblokLoaderStoriesImplem } from "./StoryblokLoaderStories";
