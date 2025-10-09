@@ -89,8 +89,8 @@ describe("Integration Tests", () => {
       expect(context.meta.set).toHaveBeenCalledWith("lastPublishedAt", expect.any(String));
 
       // Verify logging - check for both content type specific logs
-      expect(mockLogger.info).toHaveBeenCalledWith("'my-stories': Processed 2 stories for content type \"page\"");
-      expect(mockLogger.info).toHaveBeenCalledWith("'my-stories': Processed 3 stories for content type \"post\"");
+      expect(mockLogger.info).toHaveBeenCalledWith('[my-stories] Processed 2 stories for content type "page"');
+      expect(mockLogger.info).toHaveBeenCalledWith('[my-stories] Processed 3 stories for content type "post"');
     });
 
     it("should handle webhook updates during incremental sync", async () => {
@@ -123,7 +123,7 @@ describe("Integration Tests", () => {
         id: "webhook-story-uuid",
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith("'webhook-collection': Syncing... story updated in Storyblok");
+      expect(mockLogger.info).toHaveBeenCalledWith("[webhook-collection] Syncing... story updated in Storyblok");
     });
 
     it("should handle draft mode with store clearing", async () => {
@@ -155,7 +155,7 @@ describe("Integration Tests", () => {
         version: "draft",
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith("'draft-collection': Clearing store (draft mode)");
+      expect(mockLogger.info).toHaveBeenCalledWith("[draft-collection] Clearing store (draft mode)");
     });
 
     it("should handle first_published_at sorting across multiple content types", async () => {
@@ -248,10 +248,8 @@ describe("Integration Tests", () => {
         id: "news/breaking-news",
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        "'sorted-stories': Processed 2 stories for content type \"blog-post\""
-      );
-      expect(mockLogger.info).toHaveBeenCalledWith("'sorted-stories': Processed 1 stories for content type \"news\"");
+      expect(mockLogger.info).toHaveBeenCalledWith('[sorted-stories] Processed 2 stories for content type "blog-post"');
+      expect(mockLogger.info).toHaveBeenCalledWith('[sorted-stories] Processed 1 stories for content type "news"');
     });
   });
 
@@ -300,7 +298,7 @@ describe("Integration Tests", () => {
         }),
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith("'category-datasource': Loaded 3 entries (updated 45 months ago)");
+      expect(mockLogger.info).toHaveBeenCalledWith("[category-datasource] Loaded 3 entries (updated 45 months ago)");
     });
 
     it("should handle switched names and values configuration", async () => {
@@ -371,7 +369,7 @@ describe("Integration Tests", () => {
       await expect(loader.load(context)).rejects.toThrow("Network timeout");
 
       expect(mockLogger.error).toHaveBeenCalledWith(
-        "'network-test': Failed to load stories for \"network-test\": Failed to fetch stories: Network timeout"
+        '[network-test] Failed to load stories for "network-test": Failed to fetch stories: Network timeout'
       );
     });
 

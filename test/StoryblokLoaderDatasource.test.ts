@@ -69,7 +69,7 @@ describe("StoryblokLoaderDatasource", () => {
     expect(mockFetchDatasourceEntries).toHaveBeenCalledWith(mockClient, config, undefined);
     // Verify that entries were stored directly in the loader
     expect(context.store.set).toHaveBeenCalledTimes(3); // Based on mock response with 3 entries
-    expect(mockLogger.info).toHaveBeenCalledWith(expect.stringContaining("'test-collection': Loaded 3 entries"));
+    expect(mockLogger.info).toHaveBeenCalledWith(expect.stringContaining("[test-collection] Loaded 3 entries"));
   });
 
   it("should handle errors and rethrow them", async () => {

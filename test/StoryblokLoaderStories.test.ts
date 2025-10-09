@@ -96,7 +96,7 @@ const expectWebhookStoryUpdate = (context: any, updatedStory: any, config: Story
     mockLogger,
     TEST_COLLECTIONS.DEFAULT
   );
-  expect(mockLogger.info).toHaveBeenCalledWith(`'${TEST_COLLECTIONS.DEFAULT}': Syncing... story updated in Storyblok`);
+  expect(mockLogger.info).toHaveBeenCalledWith(`[${TEST_COLLECTIONS.DEFAULT}] Syncing... story updated in Storyblok`);
   expect(mockFetchStories).not.toHaveBeenCalled();
 };
 
@@ -494,7 +494,7 @@ describe("StoryblokLoaderStories", () => {
       await loader.load(context);
 
       expect(context.store.clear).toHaveBeenCalled();
-      expect(mockLogger.info).toHaveBeenCalledWith(`'${TEST_COLLECTIONS.DEFAULT}': Clearing store (draft mode)`);
+      expect(mockLogger.info).toHaveBeenCalledWith(`[${TEST_COLLECTIONS.DEFAULT}] Clearing store (draft mode)`);
     });
   });
 
@@ -509,7 +509,7 @@ describe("StoryblokLoaderStories", () => {
 
       await expect(loader.load(context)).rejects.toThrow("API Error");
       expect(mockLogger.error).toHaveBeenCalledWith(
-        `'${TEST_COLLECTIONS.DEFAULT}': Failed to load stories for "${TEST_COLLECTIONS.DEFAULT}": API Error`
+        `[${TEST_COLLECTIONS.DEFAULT}] Failed to load stories for "${TEST_COLLECTIONS.DEFAULT}": API Error`
       );
     });
 
@@ -522,7 +522,7 @@ describe("StoryblokLoaderStories", () => {
 
       await expect(loader.load(context)).rejects.toThrow("String error");
       expect(mockLogger.error).toHaveBeenCalledWith(
-        `'${TEST_COLLECTIONS.DEFAULT}': Failed to load stories for "${TEST_COLLECTIONS.DEFAULT}": String error`
+        `[${TEST_COLLECTIONS.DEFAULT}] Failed to load stories for "${TEST_COLLECTIONS.DEFAULT}": String error`
       );
     });
   });
