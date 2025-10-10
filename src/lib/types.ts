@@ -23,6 +23,19 @@ export interface StoryblokLoaderCommonConfig {
    * @see {@link https://github.com/storyblok/storyblok-js-client#class-storyblok | `storyblok-js-client` Docs}
    */
   apiOptions?: ISbConfig;
+}
+
+/**
+ * Configuration for the Storyblok Stories loader
+ */
+export interface StoryblokLoaderStoriesParameters {
+  /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
+  useUuids?: boolean;
+
+  /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
+  contentTypes?: string[];
+
+  storyblokParams?: ISbStoriesParams;
 
   /**
    * Sort order for stories. This parameter is handled by the loader to ensure proper
@@ -47,19 +60,6 @@ export interface StoryblokLoaderCommonConfig {
    * ```
    */
   customSort?: StorySortFunction;
-}
-
-/**
- * Configuration for the Storyblok Stories loader
- */
-export interface StoryblokLoaderStoriesParameters {
-  /** Use the story's `uuid` instead of `full-slug` for collection entry IDs */
-  useUuids?: boolean;
-
-  /** Content types to filter by. When undefined, the loader will fetch all stories regardless of content type. */
-  contentTypes?: string[];
-
-  storyblokParams?: ISbStoriesParams;
 }
 
 export interface StoryblokLoaderStoriesConfig extends StoryblokLoaderCommonConfig, StoryblokLoaderStoriesParameters {}
