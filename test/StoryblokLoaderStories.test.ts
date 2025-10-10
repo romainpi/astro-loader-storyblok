@@ -13,6 +13,7 @@ vi.mock("../src/lib/utils", () => ({
   getEffectiveSortBy: vi.fn(),
   getEffectiveSortConfig: vi.fn(),
   sortStoriesWithConfig: vi.fn(),
+  formatDateForStoryblok: vi.fn(),
 }));
 
 // Mock @storyblok/js
@@ -52,11 +53,6 @@ const mockCheckStoredVersionUpToDate = vi.mocked(checkStoredVersionUpToDate);
 const mockGetEffectiveSortBy = vi.mocked(getEffectiveSortBy);
 const mockGetEffectiveSortConfig = vi.mocked(getEffectiveSortConfig);
 const mockSortStoriesWithConfig = vi.mocked(sortStoriesWithConfig);
-
-// Helper function to format dates the same way the loader does
-const formatDateForStoryblok = (isoString: string): string => {
-  return new Date(isoString).toISOString().slice(0, 16).replace("T", " ");
-};
 
 // Test constants
 const TEST_DATES = {
@@ -225,7 +221,7 @@ describe("StoryblokLoaderStories", () => {
       await loader.load(context);
 
       expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_1, "published");
-      expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: formatDateForStoryblok(TEST_DATES.JANUARY_1) }, undefined, {
+      expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: "2024-01-01T00:00:00.001Z" }, undefined, {
         version: "published",
       });
     });
@@ -315,7 +311,7 @@ describe("StoryblokLoaderStories", () => {
         expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_15, "published");
         expect(mockFetchStories).toHaveBeenCalledWith(
           mockClient,
-          { published_at_gt: formatDateForStoryblok(TEST_DATES.JANUARY_15) },
+          { published_at_gt: "2024-01-15T10:00:00.001Z" },
           undefined,
           {
             version: "published",
@@ -615,7 +611,7 @@ describe("StoryblokLoaderStories", () => {
       await loader.load(context);
 
       expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_20, "published");
-      expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: formatDateForStoryblok(TEST_DATES.JANUARY_20) }, undefined, {
+      expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: "2024-01-20T10:00:00.001Z" }, undefined, {
         version: "published",
       });
       expect(mockProcessStoriesResponse).toHaveBeenCalledWith(
@@ -674,7 +670,7 @@ describe("StoryblokLoaderStories", () => {
     await loader.load(context);
 
     expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_25, "published");
-    expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: formatDateForStoryblok(TEST_DATES.JANUARY_25) }, undefined, {
+    expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: "2024-01-25T12:00:00.001Z" }, undefined, {
       version: "published",
     });
     expect(mockProcessStoriesResponse).toHaveBeenCalledWith(
@@ -745,7 +741,7 @@ describe("StoryblokLoaderStories", () => {
       expect(mockFetchStories).toHaveBeenNthCalledWith(
         1,
         mockClient,
-        { published_at_gt: formatDateForStoryblok(TEST_DATES.JANUARY_1) },
+        { published_at_gt: "2024-01-01T00:00:00.001Z" },
         "page",
         {
           version: "published",
@@ -754,7 +750,7 @@ describe("StoryblokLoaderStories", () => {
       expect(mockFetchStories).toHaveBeenNthCalledWith(
         2,
         mockClient,
-        { published_at_gt: formatDateForStoryblok(TEST_DATES.JANUARY_1) },
+        { published_at_gt: "2024-01-01T00:00:00.001Z" },
         "post",
         {
           version: "published",
