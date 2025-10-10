@@ -22,6 +22,8 @@
     "clean": "rm -rf dist",
     "build": "pnpm clean && tsc",
     "dev": "tsc --watch",
+    "debug:playground": "DEBUG=astro:loader-storyblok* pnpm --filter ./playground/minimal-astro-project dev",
+    "debug:playground:force": "DEBUG=astro:loader-storyblok* pnpm --filter ./playground/minimal-astro-project dev --force",
     "prepublishOnly": "pnpm build",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs --fix",

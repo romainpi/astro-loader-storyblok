@@ -2,9 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "DEBUG=astro:loader-storyblok* ./node_modules/.bin/astro dev",
-      "cwd": "${workspaceFolder}/playground/minimal-astro-project",
-      "name": "minimal-astro-project playground: Astro Development server",
+      "command": "pnpm debug:playground",
+      "name": "astro dev::playground:minimal-astro-project",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "pnpm debug:playground:force",
+      "name": "astro dev::playground:minimal-astro-project (force cache clear)",
       "request": "launch",
       "type": "node-terminal"
     }
