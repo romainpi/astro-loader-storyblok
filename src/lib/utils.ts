@@ -124,12 +124,12 @@ export async function fetchSpaceCacheVersionValue(
 export function processStoriesResponse(
   response: Array<ISbStoryData>,
   store: DataStore,
-  logger: AstroIntegrationLogger,
-  collection: string,
+  context: LoaderContext,
   contentType: string | undefined,
   latestPublishedAt: Date | null,
   config: StoryblokLoaderStoriesConfig
 ): Date | null {
+  const { logger, collection } = context;
   let updatedLatestPublishedAt = latestPublishedAt;
 
   // Get the effective sort configuration
@@ -184,7 +184,7 @@ export function processStoriesResponse(
         updatedLatestPublishedAt = publishedAt;
       }
 
-      setStoryInStore(store, story as StoryblokStory, config, logger, collection);
+      setStoryInStore(store, story as StoryblokStory, config, context);
     }
 
     const sortTypeLabel = sortConfig.type === "custom" ? "custom sort" : `sort by ${sortConfig.sortBy}`;
@@ -203,7 +203,7 @@ export function processStoriesResponse(
         updatedLatestPublishedAt = publishedAt;
       }
 
-      setStoryInStore(store, story as StoryblokStory, config, logger, collection);
+      setStoryInStore(store, story as StoryblokStory, config, context);
     }
 
     logger.info(
@@ -221,13 +221,13 @@ export function setStoryInStore(
   store: DataStore,
   story: StoryblokStory,
   config: StoryblokLoaderStoriesConfig,
-  logger: AstroIntegrationLogger,
-  collection: string
+  context: LoaderContext
 ): void {
+  const { logger, collection } = context;
+
   logger.debug(
     `[${collection}] Storing story - ID: ${config.useUuids ? story.uuid : story.full_slug}, Title: ${story.name}`
   );
-
   store.set({
     data: story,
     id: config.useUuids ? story.uuid : story.full_slug,

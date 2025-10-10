@@ -38,7 +38,7 @@ export async function storyblokLoaderStoriesImplem(
     if (refreshContextData?.story) {
       logger.info(`[${collection}] Syncing... story updated in Storyblok`);
       const updatedStory = refreshContextData.story as ISbStoryData;
-      setStoryInStore(store, updatedStory as StoryblokStory, config, logger, collection);
+      setStoryInStore(store, updatedStory as StoryblokStory, config, context);
       return;
     }
 
@@ -81,15 +81,7 @@ export async function storyblokLoaderStoriesImplem(
     for (const contentType of contentTypes) {
       const response = await fetchStories(storyblokApi, otherParams, contentType, config.storyblokParams);
 
-      latestPublishedAt = processStoriesResponse(
-        response,
-        store,
-        logger,
-        collection,
-        contentType,
-        latestPublishedAt,
-        config
-      );
+      latestPublishedAt = processStoriesResponse(response, store, context, contentType, latestPublishedAt, config);
     }
 
     // Update metadata with latest published timestamp
