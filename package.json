@@ -21,6 +21,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "pnpm clean && tsc",
+    "dev": "tsc --watch",
     "prepublishOnly": "pnpm build",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs --fix",
