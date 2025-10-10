@@ -1,6 +1,7 @@
 import type { ISbConfig, ISbStoriesParams, ISbStoryData } from "@storyblok/js";
 import type { DatasourceEntry } from "@storyblok/management-api-client/resources/datasource_entries";
 import { z } from "astro/zod";
+import type { SortByEnum } from "./enums";
 
 /**
  * Custom sort function for stories
@@ -42,7 +43,7 @@ export interface StoryblokLoaderStoriesParameters {
    * client-side sorting when new entries are added to cached collections.
    * @see {@link https://www.storyblok.com/docs/api/content-delivery/v2#core-resources/stories/retrieve-multiple-stories | Storyblok API Documentation}
    */
-  sortBy?: string;
+  sortBy?: SortByEnum;
 
   /**
    * Custom sort function for stories. When provided, this takes precedence over `sortBy`.
