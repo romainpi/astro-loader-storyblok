@@ -148,8 +148,17 @@ export function processStoriesResponse(
       }
     }
 
-    // Combine existing and new stories, then sort
-    const allStories = [...existingStories, ...response];
+    // Create a Set of identifiers for stories in the response to avoid duplicates
+    const responseStoryIds = new Set(response.map((story) => (config.useUuids ? story.uuid : story.full_slug)));
+
+    // Filter out existing stories that are also in the response (updated stories)
+    const filteredExistingStories = existingStories.filter((story) => {
+      const storyId = config.useUuids ? story.uuid : story.full_slug;
+      return !responseStoryIds.has(storyId);
+    });
+
+    // Combine filtered existing and new stories, then sort
+    const allStories = [...filteredExistingStories, ...response];
     const sortedStories = sortStoriesWithConfig(allStories, sortConfig);
 
     // Clear the store for this content type and repopulate in sorted order
@@ -181,7 +190,7 @@ export function processStoriesResponse(
     const sortTypeLabel = sortConfig.type === "custom" ? "custom sort" : `sort by ${sortConfig.sortBy}`;
     logger.info(
       `[${collection}] Processed and sorted ${response.length} new stories with ${
-        existingStories.length
+        filteredExistingStories.length
       } existing stories (${sortTypeLabel})${contentType ? ` for content type "${contentType}"` : ""}`
     );
   } else {

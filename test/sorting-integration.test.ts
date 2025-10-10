@@ -8,7 +8,7 @@ describe("Sorting Bug Fix Integration Tests", () => {
   describe("processStoriesResponse with client-side sorting", () => {
     it("should maintain sort order when adding new entries to cached collection", () => {
       const store = new MockDataStore();
-      
+
       // Configuration with sorting by created_at descending (newest first)
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
@@ -83,7 +83,7 @@ describe("Sorting Bug Fix Integration Tests", () => {
       // The final order should be: Newest (Mar 1) > New Middle (Feb 20) > Middle (Feb 15) > Oldest (Feb 1)
       expect(finalEntries).toHaveLength(4);
       expect(finalEntries.map((s) => s.id)).toEqual(sortedByCreatedAt.map((s) => s.id));
-      
+
       // Specifically check that the new story is in the correct position (2nd)
       expect(finalEntries[0].id).toBe(1); // Newest existing (Mar 1)
       expect(finalEntries[1].id).toBe(4); // New middle story (Feb 20)
@@ -93,7 +93,7 @@ describe("Sorting Bug Fix Integration Tests", () => {
 
     it("should work correctly with ascending sort order", () => {
       const store = new MockDataStore();
-      
+
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
         sortBy: SortByEnum.CREATED_AT_ASC, // Using new config property
@@ -130,18 +130,10 @@ describe("Sorting Bug Fix Integration Tests", () => {
         }),
       ];
 
-      processStoriesResponse(
-        newStories,
-        store,
-        mockLogger,
-        "test-collection",
-        "blog-post",
-        null,
-        config
-      );
+      processStoriesResponse(newStories, store, mockLogger, "test-collection", "blog-post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
-      
+
       // ASC order should be: Oldest (Feb 1) > Middle (Feb 15) > Newest (Mar 1)
       expect(finalEntries[0].id).toBe(1); // Feb 1
       expect(finalEntries[1].id).toBe(3); // Feb 15 (new entry)
@@ -150,7 +142,7 @@ describe("Sorting Bug Fix Integration Tests", () => {
 
     it("should handle mixed content types correctly", () => {
       const store = new MockDataStore();
-      
+
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
         storyblokParams: {
@@ -205,27 +197,27 @@ describe("Sorting Bug Fix Integration Tests", () => {
       );
 
       const allEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
-      
+
       // Should have 3 total entries
       expect(allEntries).toHaveLength(3);
-      
+
       // News article should remain unchanged
       const newsArticle = allEntries.find((entry) => entry.content.component === "news-article");
       expect(newsArticle).toBeDefined();
       expect(newsArticle.id).toBe(2);
-      
+
       // Blog posts should be sorted correctly
       const blogPosts = allEntries
         .filter((entry) => entry.content.component === "blog-post")
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-      
+
       expect(blogPosts[0].id).toBe(3); // New post (Feb 25)
       expect(blogPosts[1].id).toBe(1); // Existing post (Feb 15)
     });
 
     it("should handle no sorting configuration gracefully", () => {
       const store = new MockDataStore();
-      
+
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
         // No sorting configuration
@@ -249,22 +241,14 @@ describe("Sorting Bug Fix Integration Tests", () => {
       const newStories = [
         createMockStory({
           id: 2,
-          full_slug: "blog/second", 
+          full_slug: "blog/second",
           created_at: "2024-02-10T10:00:00.000Z",
         }),
       ];
 
       // Should not throw error and should use original logic (append new entries)
       expect(() => {
-        processStoriesResponse(
-          newStories,
-          store,
-          mockLogger,
-          "test-collection",
-          undefined,
-          null,
-          config
-        );
+        processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
       }).not.toThrow();
 
       expect(store.size()).toBe(2);
@@ -272,7 +256,7 @@ describe("Sorting Bug Fix Integration Tests", () => {
 
     it("should prioritize config.sortBy over storyblokParams.sort_by", () => {
       const store = new MockDataStore();
-      
+
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
         sortBy: SortByEnum.NAME_ASC, // This should take precedence
@@ -306,21 +290,145 @@ describe("Sorting Bug Fix Integration Tests", () => {
         }),
       ];
 
-      processStoriesResponse(
-        newStories,
-        store,
-        mockLogger,
-        "test-collection",
-        undefined,
-        null,
-        config
-      );
+      processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
-      
+
       // Should be sorted by name (ASC), not by created_at
       expect(finalEntries[0].name).toBe("Alpha Story"); // Should be first alphabetically
       expect(finalEntries[1].name).toBe("Zebra Story"); // Should be last alphabetically
+    });
+
+    it("should not duplicate updated stories when sorting is enabled", () => {
+      const store = new MockDataStore();
+
+      // Configuration with sorting enabled
+      const config: StoryblokLoaderStoriesConfig = {
+        accessToken: "test-token",
+        storyblokParams: {
+          sort_by: SortByEnum.CREATED_AT_DESC,
+        },
+      };
+
+      // Add initial stories to store
+      const initialStories = [
+        createMockStory({
+          id: 1,
+          name: "First Story",
+          full_slug: "blog/first",
+          created_at: "2024-03-01T10:00:00.000Z",
+          content: { component: "blog-post" },
+        }),
+        createMockStory({
+          id: 2,
+          name: "Second Story",
+          full_slug: "blog/second",
+          created_at: "2024-02-15T10:00:00.000Z",
+          content: { component: "blog-post" },
+        }),
+      ];
+
+      initialStories.forEach((story) => {
+        store.set({
+          id: story.full_slug,
+          data: story,
+        });
+      });
+
+      // Process an updated version of an existing story
+      const updatedStories = [
+        createMockStory({
+          id: 1, // Same ID as the first story
+          name: "First Story - Updated", // Updated name
+          full_slug: "blog/first", // Same slug
+          created_at: "2024-03-01T10:00:00.000Z", // Same date
+          content: { component: "blog-post", updated: true }, // Updated content
+        }),
+      ];
+
+      processStoriesResponse(updatedStories, store, mockLogger, "test-collection", "blog-post", null, config);
+
+      const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
+
+      // Should have exactly 2 stories, not 3 (no duplicates)
+      expect(finalEntries).toHaveLength(2);
+
+      // The updated story should be present with its updated content
+      const updatedStory = finalEntries.find((story) => story.full_slug === "blog/first");
+      expect(updatedStory).toBeDefined();
+      expect(updatedStory.name).toBe("First Story - Updated");
+      expect(updatedStory.content.updated).toBe(true);
+
+      // The second story should still be present
+      const secondStory = finalEntries.find((story) => story.full_slug === "blog/second");
+      expect(secondStory).toBeDefined();
+      expect(secondStory.name).toBe("Second Story");
+    });
+
+    it("should not duplicate updated stories when using UUIDs", () => {
+      const store = new MockDataStore();
+
+      // Configuration with UUIDs and sorting enabled
+      const config: StoryblokLoaderStoriesConfig = {
+        accessToken: "test-token",
+        useUuids: true,
+        storyblokParams: {
+          sort_by: SortByEnum.NAME_ASC,
+        },
+      };
+
+      // Add initial stories to store using UUIDs
+      const initialStories = [
+        createMockStory({
+          id: 1,
+          name: "Alpha Story",
+          uuid: "uuid-alpha-123",
+          full_slug: "blog/alpha",
+          content: { component: "blog-post" },
+        }),
+        createMockStory({
+          id: 2,
+          name: "Beta Story",
+          uuid: "uuid-beta-456",
+          full_slug: "blog/beta",
+          content: { component: "blog-post" },
+        }),
+      ];
+
+      initialStories.forEach((story) => {
+        store.set({
+          id: story.uuid,
+          data: story,
+        });
+      });
+
+      // Process an updated version of an existing story (identified by UUID)
+      const updatedStories = [
+        createMockStory({
+          id: 1, // Same ID
+          name: "Alpha Story - Updated", // Updated name
+          uuid: "uuid-alpha-123", // Same UUID
+          full_slug: "blog/alpha", // Same slug
+          content: { component: "blog-post", updated: true }, // Updated content
+        }),
+      ];
+
+      processStoriesResponse(updatedStories, store, mockLogger, "test-collection", "blog-post", null, config);
+
+      const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
+
+      // Should have exactly 2 stories, not 3 (no duplicates)
+      expect(finalEntries).toHaveLength(2);
+
+      // The updated story should be present with its updated content
+      const updatedStory = finalEntries.find((story) => story.uuid === "uuid-alpha-123");
+      expect(updatedStory).toBeDefined();
+      expect(updatedStory.name).toBe("Alpha Story - Updated");
+      expect(updatedStory.content.updated).toBe(true);
+
+      // The stories should be sorted by name (Alpha first, Beta second)
+      expect(finalEntries[0].name).toBe("Alpha Story - Updated");
+      expect(finalEntries[1].name).toBe("Beta Story");
     });
   });
 });

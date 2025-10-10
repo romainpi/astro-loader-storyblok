@@ -16,7 +16,7 @@ describe("Custom Sort Function Tests", () => {
       };
 
       const result = getEffectiveSortConfig(config);
-      
+
       expect(result.type).toBe("custom");
       expect(result.sortFunction).toBe(customSort);
       expect(result.sortBy).toBeUndefined();
@@ -33,7 +33,7 @@ describe("Custom Sort Function Tests", () => {
       };
 
       const result = getEffectiveSortConfig(config);
-      
+
       expect(result.type).toBe("custom");
       expect(result.sortFunction).toBe(customSort);
     });
@@ -45,7 +45,7 @@ describe("Custom Sort Function Tests", () => {
       };
 
       const result = getEffectiveSortConfig(config);
-      
+
       expect(result.type).toBe("standard");
       expect(result.sortBy).toBe(SortByEnum.CREATED_AT_DESC);
       expect(result.sortFunction).toBeUndefined();
@@ -60,7 +60,7 @@ describe("Custom Sort Function Tests", () => {
       };
 
       const result = getEffectiveSortConfig(config);
-      
+
       expect(result.type).toBe("standard");
       expect(result.sortBy).toBe(SortByEnum.NAME_ASC);
     });
@@ -71,7 +71,7 @@ describe("Custom Sort Function Tests", () => {
       };
 
       const result = getEffectiveSortConfig(config);
-      
+
       expect(result.type).toBe("none");
       expect(result.sortFunction).toBeUndefined();
       expect(result.sortBy).toBeUndefined();
@@ -112,7 +112,7 @@ describe("Custom Sort Function Tests", () => {
         sortFunction: customSort,
       });
 
-      expect(result.map(s => s.id)).toEqual([1, 3, 2]); // Priority: 3, 2, 1
+      expect(result.map((s) => s.id)).toEqual([1, 3, 2]); // Priority: 3, 2, 1
     });
 
     it("should use standard sorting when type is standard", () => {
@@ -121,7 +121,7 @@ describe("Custom Sort Function Tests", () => {
         sortBy: "name:asc",
       });
 
-      expect(result.map(s => s.name)).toEqual(["Alpha Story", "Beta Story", "Charlie Story"]);
+      expect(result.map((s) => s.name)).toEqual(["Alpha Story", "Beta Story", "Charlie Story"]);
     });
 
     it("should return original array when type is none", () => {
@@ -151,21 +151,21 @@ describe("Custom Sort Function Tests", () => {
     });
 
     it("should not mutate the original array", () => {
-      const originalOrder = stories.map(s => s.id);
-      
+      const originalOrder = stories.map((s) => s.id);
+
       sortStoriesWithConfig(stories, {
         type: "custom",
         sortFunction: (a, b) => b.id - a.id,
       });
 
-      expect(stories.map(s => s.id)).toEqual(originalOrder);
+      expect(stories.map((s) => s.id)).toEqual(originalOrder);
     });
   });
 
   describe("processStoriesResponse with custom sort", () => {
     it("should use custom sort function for incremental updates", () => {
       const store = new MockDataStore();
-      
+
       // Custom sort: Sort by a custom priority field (higher priority first)
       const customSort: StorySortFunction = (a, b) => {
         const priorityA = a.content?.priority || 0;
@@ -208,18 +208,10 @@ describe("Custom Sort Function Tests", () => {
         }),
       ];
 
-      processStoriesResponse(
-        newStories,
-        store,
-        mockLogger,
-        "test-collection",
-        "blog-post",
-        null,
-        config
-      );
+      processStoriesResponse(newStories, store, mockLogger, "test-collection", "blog-post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
-      
+
       // Should be sorted by priority: 5, 3, 1
       expect(finalEntries).toHaveLength(3);
       expect(finalEntries[0].id).toBe(1); // Priority 5
@@ -229,16 +221,16 @@ describe("Custom Sort Function Tests", () => {
 
     it("should handle custom sort with complex logic", () => {
       const store = new MockDataStore();
-      
+
       // Custom sort: First by category, then by date within category
       const customSort: StorySortFunction = (a, b) => {
         const categoryA = a.content?.category || "zzz";
         const categoryB = b.content?.category || "zzz";
-        
+
         if (categoryA !== categoryB) {
           return categoryA.localeCompare(categoryB);
         }
-        
+
         // Same category: sort by date descending
         const dateA = new Date(a.created_at || 0);
         const dateB = new Date(b.created_at || 0);
@@ -260,7 +252,7 @@ describe("Custom Sort Function Tests", () => {
         createMockStory({
           id: 2,
           full_slug: "blog/tech-old",
-          created_at: "2024-01-01T10:00:00.000Z", 
+          created_at: "2024-01-01T10:00:00.000Z",
           content: { component: "post", category: "tech" },
         }),
       ];
@@ -281,18 +273,10 @@ describe("Custom Sort Function Tests", () => {
         }),
       ];
 
-      processStoriesResponse(
-        newStories,
-        store,
-        mockLogger,
-        "test-collection",
-        "post",
-        null,
-        config
-      );
+      processStoriesResponse(newStories, store, mockLogger, "test-collection", "post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
-      
+
       // Should be: news (newest first), then tech
       expect(finalEntries).toHaveLength(3);
       expect(finalEntries[0].id).toBe(3); // News category, newest date
@@ -302,7 +286,7 @@ describe("Custom Sort Function Tests", () => {
 
     it("should handle custom sort that returns 0 for equal items", () => {
       const store = new MockDataStore();
-      
+
       const customSort: StorySortFunction = (a, b) => {
         const priorityA = a.content?.priority || 0;
         const priorityB = b.content?.priority || 0;
@@ -338,15 +322,7 @@ describe("Custom Sort Function Tests", () => {
       ];
 
       expect(() => {
-        processStoriesResponse(
-          newStories,
-          store,
-          mockLogger,
-          "test-collection",
-          "post",
-          null,
-          config
-        );
+        processStoriesResponse(newStories, store, mockLogger, "test-collection", "post", null, config);
       }).not.toThrow();
 
       expect(store.size()).toBe(2);
@@ -354,7 +330,7 @@ describe("Custom Sort Function Tests", () => {
 
     it("should prioritize custom sort over sortBy parameter", () => {
       const store = new MockDataStore();
-      
+
       const customSort: StorySortFunction = (a, b) => {
         return a.name.localeCompare(b.name); // Sort by name ascending
       };
@@ -385,23 +361,15 @@ describe("Custom Sort Function Tests", () => {
         createMockStory({
           id: 2,
           name: "Alpha Story",
-          full_slug: "blog/alpha", 
+          full_slug: "blog/alpha",
           created_at: "2024-01-01T10:00:00.000Z", // Even older, but should come first by name
         }),
       ];
 
-      processStoriesResponse(
-        newStories,
-        store,
-        mockLogger,
-        "test-collection",
-        undefined,
-        null,
-        config
-      );
+      processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
-      
+
       // Should be sorted by name (Alpha, Zebra), not by creation date
       expect(finalEntries[0].name).toBe("Alpha Story");
       expect(finalEntries[1].name).toBe("Zebra Story");
@@ -409,7 +377,7 @@ describe("Custom Sort Function Tests", () => {
 
     it("should handle custom sort function with edge cases", () => {
       const store = new MockDataStore();
-      
+
       // Custom sort function that handles missing properties gracefully
       const customSort: StorySortFunction = (a, b) => {
         const scoreA = a.content?.score ?? -1;
@@ -450,18 +418,10 @@ describe("Custom Sort Function Tests", () => {
         }),
       ];
 
-      processStoriesResponse(
-        newStories,
-        store,
-        mockLogger,
-        "test-collection",
-        "post", 
-        null,
-        config
-      );
+      processStoriesResponse(newStories, store, mockLogger, "test-collection", "post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
-      
+
       // Should be: high score (100), medium score (50), no score (-1)
       expect(finalEntries[0].id).toBe(2); // Score 100
       expect(finalEntries[1].id).toBe(3); // Score 50
@@ -470,7 +430,7 @@ describe("Custom Sort Function Tests", () => {
 
     it("should log custom sort usage correctly", () => {
       const store = new MockDataStore();
-      
+
       const customSort: StorySortFunction = (a, b) => a.id - b.id;
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
@@ -479,15 +439,7 @@ describe("Custom Sort Function Tests", () => {
 
       const newStories = [createMockStory({ id: 1, full_slug: "blog/test" })];
 
-      processStoriesResponse(
-        newStories,
-        store,
-        mockLogger,
-        "test-collection",
-        undefined,
-        null,
-        config
-      );
+      processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
 
       expect(mockLogger.info).toHaveBeenCalledWith(
         "[test-collection] Processed and sorted 1 new stories with 0 existing stories (custom sort)"
