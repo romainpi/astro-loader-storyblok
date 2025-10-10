@@ -50,8 +50,14 @@ export async function storyblokLoaderStoriesImplem(
     // Only fetches stories since the last published timestamp if available
     // and not in draft mode (which should always fetch everything)
     const storedLastPublishedAt = meta.get("lastPublishedAt");
+
+    // Storyblok API states datetime should be with format "yyyy-MM-dd HH:mm"
+    const formattedLastPublishedAt = storedLastPublishedAt
+      ? new Date(storedLastPublishedAt).toISOString().slice(0, 16).replace("T", " ")
+      : undefined;
+
     const otherParams = shouldUseDateFilter(storedLastPublishedAt, config.storyblokParams?.version)
-      ? { published_at_gt: storedLastPublishedAt }
+      ? { published_at_gt: formattedLastPublishedAt }
       : {};
 
     // Store sort configuration in metadata for consistent sorting
