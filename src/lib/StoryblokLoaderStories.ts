@@ -51,13 +51,17 @@ export async function storyblokLoaderStoriesImplem(
     // and not in draft mode (which should always fetch everything)
     const storedLastPublishedAt = meta.get("lastPublishedAt");
 
-    // Storyblok API states datetime should be with format "yyyy-MM-dd HH:mm"
-    const formattedLastPublishedAt = storedLastPublishedAt
-      ? new Date(storedLastPublishedAt).toISOString().slice(0, 16).replace("T", " ")
-      : undefined;
+    // Add 1 millisecond to avoid fetching the same last entry again
+    // I've submitted a ticket to Storyblok, looks like a bug, it should be called `published_at_gte`
+    // NOTE: Storyblok docs states datetime should be with format "yyyy-MM-dd HH:mm"
+    // But in pratise Date.toISOString() seems to work fine
+    const fixedLastPublishedAt = storedLastPublishedAt ? new Date(storedLastPublishedAt) : undefined;
+    if (fixedLastPublishedAt) {
+      fixedLastPublishedAt.setMilliseconds(fixedLastPublishedAt.getMilliseconds() + 1);
+    }
 
     const otherParams = shouldUseDateFilter(storedLastPublishedAt, config.storyblokParams?.version)
-      ? { published_at_gt: formattedLastPublishedAt }
+      ? { published_at_gt: fixedLastPublishedAt?.toISOString() }
       : {};
 
     // Store sort configuration in metadata for consistent sorting
