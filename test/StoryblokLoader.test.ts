@@ -282,6 +282,7 @@ describe("StoryblokLoader", () => {
       const storiesLoader = loader.getStoriesLoader({});
 
       // Call both loaders concurrently
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [result1, result2] = await Promise.all([
         datasourceLoader.load(mockContext),
         storiesLoader.load(mockContext),
@@ -296,6 +297,7 @@ describe("StoryblokLoader", () => {
 
       // Mock CacheVersionUpdatePromise to simulate the actual logging flow
       const mockPromise = {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         then: vi.fn((onFulfilled, onRejected) => {
           // Simulate successful resolution
           setTimeout(() => {
