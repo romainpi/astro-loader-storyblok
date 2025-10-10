@@ -1,28 +1,45 @@
 ---
+import type { ISbStoryData } from "@storyblok/js";
+
 const { storiesCollection } = Astro.props;
+
+function formatDate(dateString: string | null | undefined): string {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 ---
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Full slug</th>
-      <th>Created at</th>
-      <th>Updated at</th>
-      <th>Published at</th>
-      <th>First published at</th>
+      <th>full_slug</th>
+      <th>name</th>
+      <th>type</th>
+      <th>created_at</th>
+      <th>updated_at</th>
+      <th>published_at</th>
+      <th>first_published_at</th>
     </tr>
   </thead>
   <tbody>
     {
-      storiesCollection.map((story) => (
+      storiesCollection.map((story: { data: ISbStoryData }) => (
         <tr data-story-uuid={story.data.uuid}>
-          <td>{story.data.name}</td>
           <td>{story.data.full_slug}</td>
-          <td>{story.data.created_at}</td>
-          <td>{story.data.updated_at}</td>
-          <td>{story.data.published_at}</td>
-          <td>{story.data.first_published_at}</td>
+          <td>{story.data.name}</td>
+          <td>{story.data.content.component}</td>
+          <td>{formatDate(story.data.created_at)}</td>
+          <td>{formatDate(story.data.updated_at)}</td>
+          <td>{formatDate(story.data.published_at)}</td>
+          <td>{formatDate(story.data.first_published_at)}</td>
         </tr>
       ))
     }
@@ -44,5 +61,6 @@ const { storiesCollection } = Astro.props;
   table {
     border-collapse: collapse;
     border: 2px solid rgb(36, 36, 36);
+    width: 100%;
   }
 </style>
