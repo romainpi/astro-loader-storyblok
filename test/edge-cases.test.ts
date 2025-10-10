@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createMockStory, MockDataStore, mockLogger } from "./mocks";
+import { createMockStory, MockDataStore, createLoaderContext } from "./mocks";
 import { processStoriesResponse } from "../src/lib/utils";
 import type { StoryblokLoaderStoriesConfig, StoryblokLoaderDatasourceConfig } from "../src/lib/types";
 
@@ -7,11 +7,13 @@ describe("Edge Cases and Coverage Tests", () => {
   describe("processStoriesResponse edge cases", () => {
     it("should handle empty stories array", () => {
       const store = new MockDataStore();
+      const context = createLoaderContext();
+      context.collection = "empty-collection";
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
       };
 
-      const result = processStoriesResponse([], store, mockLogger, "empty-collection", undefined, null, config);
+      const result = processStoriesResponse([], store, context, undefined, null, config);
 
       expect(result).toBeNull();
       expect(store.size()).toBe(0);
@@ -19,6 +21,8 @@ describe("Edge Cases and Coverage Tests", () => {
 
     it("should handle stories with mixed published_at values", () => {
       const store = new MockDataStore();
+      const context = createLoaderContext();
+      context.collection = "mixed-collection";
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
       };
@@ -35,8 +39,7 @@ describe("Edge Cases and Coverage Tests", () => {
       const result = processStoriesResponse(
         stories,
         store,
-        mockLogger,
-        "mixed-collection",
+        context,
         "page",
         existingLatest,
         config
@@ -48,6 +51,8 @@ describe("Edge Cases and Coverage Tests", () => {
 
     it("should maintain existing latest date when no newer stories", () => {
       const store = new MockDataStore();
+      const context = createLoaderContext();
+      context.collection = "maintain-collection";
       const config: StoryblokLoaderStoriesConfig = {
         accessToken: "test-token",
       };
@@ -61,8 +66,7 @@ describe("Edge Cases and Coverage Tests", () => {
       const result = processStoriesResponse(
         stories,
         store,
-        mockLogger,
-        "older-collection",
+        context,
         undefined,
         existingLatest,
         config

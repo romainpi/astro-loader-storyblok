@@ -6,11 +6,11 @@ import type {
 } from "../src/lib/types";
 import {
   MockDataStore,
-  mockLogger,
   createMockStory,
   createMockStories,
   createMockDatasourceResponse,
   resetAllMocks,
+  createLoaderContext,
 } from "./mocks";
 
 // Mock @storyblok/js completely
@@ -174,7 +174,9 @@ describe("utils", () => {
       stories[0].published_at = "2024-01-15T10:00:00.000Z";
       stories[1].published_at = "2024-01-20T10:00:00.000Z";
 
-      const result = processStoriesResponse(stories, store, mockLogger, "test-collection", "page", null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      const result = processStoriesResponse(stories, store, context, "page", null, config);
 
       expect(store.size()).toBe(2);
       expect(result).toEqual(new Date("2024-01-20T10:00:00.000Z"));
@@ -192,7 +194,9 @@ describe("utils", () => {
         useUuids: true,
       };
 
-      processStoriesResponse(stories, store, mockLogger, "test-collection", undefined, null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(stories, store, context, undefined, null, config);
 
       expect(store.has("test-uuid-123")).toBe(true);
       expect(store.has("test/test-story-1")).toBe(false);
@@ -205,7 +209,9 @@ describe("utils", () => {
         accessToken: "test-token",
       };
 
-      const result = processStoriesResponse(stories, store, mockLogger, "test-collection", undefined, null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      const result = processStoriesResponse(stories, store, context, undefined, null, config);
 
       expect(result).toBeNull();
       expect(store.size()).toBe(1);
@@ -220,7 +226,9 @@ describe("utils", () => {
         accessToken: "test-token",
       };
 
-      setStoryInStore(store, story, config, mockLogger, "test-collection");
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      setStoryInStore(store, story as any, config, context);
 
       const storedEntry = store.get("test/test-story");
       expect(storedEntry).toEqual({
@@ -237,7 +245,9 @@ describe("utils", () => {
         useUuids: true,
       };
 
-      setStoryInStore(store, story, config, mockLogger, "test-collection");
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      setStoryInStore(store, story as any, config, context);
 
       const storedEntry = store.get("test-uuid-123");
       expect(storedEntry).toEqual({

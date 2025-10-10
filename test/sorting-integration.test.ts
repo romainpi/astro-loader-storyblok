@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { processStoriesResponse } from "../src/lib/utils";
-import { MockDataStore, mockLogger, createMockStory } from "./mocks";
+import { MockDataStore, createMockStory, createLoaderContext } from "./mocks";
 import type { StoryblokLoaderStoriesConfig } from "../src/lib/types";
 import { SortByEnum } from "../src/lib/enums";
 
@@ -62,11 +62,12 @@ describe("Sorting Bug Fix Integration Tests", () => {
       ];
 
       // Process the new stories - this is where the bug was occurring
+      const context = createLoaderContext();
+      context.collection = "test-collection";
       processStoriesResponse(
         newStories,
         store,
-        mockLogger,
-        "test-collection",
+        context,
         "blog-post", // content type filter
         null,
         config
@@ -130,7 +131,9 @@ describe("Sorting Bug Fix Integration Tests", () => {
         }),
       ];
 
-      processStoriesResponse(newStories, store, mockLogger, "test-collection", "blog-post", null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(newStories, store, context, "blog-post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 
@@ -186,11 +189,12 @@ describe("Sorting Bug Fix Integration Tests", () => {
         }),
       ];
 
+      const context2 = createLoaderContext();
+      context2.collection = "test-collection";
       processStoriesResponse(
         newBlogPosts,
         store,
-        mockLogger,
-        "test-collection",
+        context2,
         "blog-post", // Only processing blog-posts
         null,
         config
@@ -248,7 +252,9 @@ describe("Sorting Bug Fix Integration Tests", () => {
 
       // Should not throw error and should use original logic (append new entries)
       expect(() => {
-        processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
+        const context = createLoaderContext();
+        context.collection = "test-collection";
+        processStoriesResponse(newStories, store, context, undefined, null, config);
       }).not.toThrow();
 
       expect(store.size()).toBe(2);
@@ -290,7 +296,9 @@ describe("Sorting Bug Fix Integration Tests", () => {
         }),
       ];
 
-      processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(newStories, store, context, undefined, null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 
@@ -346,7 +354,9 @@ describe("Sorting Bug Fix Integration Tests", () => {
         }),
       ];
 
-      processStoriesResponse(updatedStories, store, mockLogger, "test-collection", "blog-post", null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(updatedStories, store, context, "blog-post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 
@@ -413,7 +423,9 @@ describe("Sorting Bug Fix Integration Tests", () => {
         }),
       ];
 
-      processStoriesResponse(updatedStories, store, mockLogger, "test-collection", "blog-post", null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(updatedStories, store, context, "blog-post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 

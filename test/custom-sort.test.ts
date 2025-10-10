@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { getEffectiveSortConfig, sortStoriesWithConfig } from "../src/lib/utils";
-import { createMockStory, MockDataStore, mockLogger } from "./mocks";
+import { createMockStory, MockDataStore, createLoaderContext, mockLogger } from "./mocks";
 import { processStoriesResponse } from "../src/lib/utils";
 import type { StoryblokLoaderStoriesConfig, StorySortFunction } from "../src/lib/types";
 import { SortByEnum } from "../src/lib/enums";
@@ -208,7 +208,9 @@ describe("Custom Sort Function Tests", () => {
         }),
       ];
 
-      processStoriesResponse(newStories, store, mockLogger, "test-collection", "blog-post", null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(newStories, store, context, "blog-post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 
@@ -273,7 +275,9 @@ describe("Custom Sort Function Tests", () => {
         }),
       ];
 
-      processStoriesResponse(newStories, store, mockLogger, "test-collection", "post", null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(newStories, store, context, "post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 
@@ -322,7 +326,9 @@ describe("Custom Sort Function Tests", () => {
       ];
 
       expect(() => {
-        processStoriesResponse(newStories, store, mockLogger, "test-collection", "post", null, config);
+        const context = createLoaderContext();
+        context.collection = "test-collection";
+        processStoriesResponse(newStories, store, context, "post", null, config);
       }).not.toThrow();
 
       expect(store.size()).toBe(2);
@@ -366,7 +372,9 @@ describe("Custom Sort Function Tests", () => {
         }),
       ];
 
-      processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(newStories, store, context, undefined, null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 
@@ -418,7 +426,9 @@ describe("Custom Sort Function Tests", () => {
         }),
       ];
 
-      processStoriesResponse(newStories, store, mockLogger, "test-collection", "post", null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(newStories, store, context, "post", null, config);
 
       const finalEntries = Array.from(store.entries()).map(([, entry]) => entry.data);
 
@@ -439,7 +449,9 @@ describe("Custom Sort Function Tests", () => {
 
       const newStories = [createMockStory({ id: 1, full_slug: "blog/test" })];
 
-      processStoriesResponse(newStories, store, mockLogger, "test-collection", undefined, null, config);
+      const context = createLoaderContext();
+      context.collection = "test-collection";
+      processStoriesResponse(newStories, store, context, undefined, null, config);
 
       expect(mockLogger.info).toHaveBeenCalledWith(
         "[test-collection] Processed and sorted 1 new stories with 0 existing stories (custom sort)"
