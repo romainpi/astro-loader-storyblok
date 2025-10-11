@@ -102,12 +102,7 @@ const expectLoaderStructure = (loader: ReturnType<typeof StoryblokLoaderStories>
 };
 
 const expectWebhookStoryUpdate = (context: any, updatedStory: any, config: StoryblokLoaderStoriesConfig) => {
-  expect(mockSetStoryInStore).toHaveBeenCalledWith(
-    context.store,
-    updatedStory,
-    config,
-    context
-  );
+  expect(mockSetStoryInStore).toHaveBeenCalledWith(context.store, updatedStory, config, context);
   expect(mockLogger.info).toHaveBeenCalledWith(`[${TEST_COLLECTIONS.DEFAULT}] Syncing... story updated in Storyblok`);
   expect(mockFetchStories).not.toHaveBeenCalled();
 };
@@ -221,9 +216,14 @@ describe("StoryblokLoaderStories", () => {
       await loader.load(context);
 
       expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_1, "published");
-      expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: "2024-01-01T00:00:00.001Z" }, undefined, {
-        version: "published",
-      });
+      expect(mockFetchStories).toHaveBeenCalledWith(
+        mockClient,
+        { published_at_gt: "2024-01-01T00:00:00.001Z" },
+        undefined,
+        {
+          version: "published",
+        }
+      );
     });
   });
 
@@ -611,9 +611,14 @@ describe("StoryblokLoaderStories", () => {
       await loader.load(context);
 
       expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_20, "published");
-      expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: "2024-01-20T10:00:00.001Z" }, undefined, {
-        version: "published",
-      });
+      expect(mockFetchStories).toHaveBeenCalledWith(
+        mockClient,
+        { published_at_gt: "2024-01-20T10:00:00.001Z" },
+        undefined,
+        {
+          version: "published",
+        }
+      );
       expect(mockProcessStoriesResponse).toHaveBeenCalledWith(
         refetchStories,
         context.store,
@@ -670,9 +675,14 @@ describe("StoryblokLoaderStories", () => {
     await loader.load(context);
 
     expect(mockShouldUseDateFilter).toHaveBeenCalledWith(TEST_DATES.JANUARY_25, "published");
-    expect(mockFetchStories).toHaveBeenCalledWith(mockClient, { published_at_gt: "2024-01-25T12:00:00.001Z" }, undefined, {
-      version: "published",
-    });
+    expect(mockFetchStories).toHaveBeenCalledWith(
+      mockClient,
+      { published_at_gt: "2024-01-25T12:00:00.001Z" },
+      undefined,
+      {
+        version: "published",
+      }
+    );
     expect(mockProcessStoriesResponse).toHaveBeenCalledWith(
       mixedStories,
       context.store,

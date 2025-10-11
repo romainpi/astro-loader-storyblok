@@ -36,14 +36,7 @@ describe("Edge Cases and Coverage Tests", () => {
 
       const existingLatest = new Date("2024-01-01T10:00:00.000Z");
 
-      const result = processStoriesResponse(
-        stories,
-        store,
-        context,
-        "page",
-        existingLatest,
-        config
-      );
+      const result = processStoriesResponse(stories, store, context, "page", existingLatest, config);
 
       expect(result).toEqual(new Date("2024-01-20T10:00:00.000Z"));
       expect(store.size()).toBe(4); // All stories stored regardless of published_at
@@ -63,14 +56,7 @@ describe("Edge Cases and Coverage Tests", () => {
       ];
 
       const existingLatest = new Date("2024-01-15T10:00:00.000Z");
-      const result = processStoriesResponse(
-        stories,
-        store,
-        context,
-        undefined,
-        existingLatest,
-        config
-      );
+      const result = processStoriesResponse(stories, store, context, undefined, existingLatest, config);
 
       expect(result).toEqual(existingLatest);
     });
