@@ -52,6 +52,6 @@ export default defineConfig(
     },
   },
   {
-    ignores: ["dist/**", "coverage/**", "node_modules/**", ".astro/**"],
+    ignores: ["**/dist/**", "coverage/**", "**/node_modules/**", "**/.astro/**"],
   }
 );
