@@ -1,5 +1,5 @@
 import type { Loader, LoaderContext } from "astro/loaders";
-import { type ISbStoryData, type StoryblokClient } from "@storyblok/js";
+import type { ISbStoryData, StoryblokClient } from "@storyblok/js";
 import { checkStoredVersionUpToDate, createStoryblokClient, timeAgo } from "./utils";
 
 import type { StoryblokLoaderStoriesConfig, StoryblokStory } from "./types";
