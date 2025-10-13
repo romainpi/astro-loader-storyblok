@@ -1,12 +1,12 @@
-export { StoryblokLoaderStories } from "./lib/StoryblokLoaderStories";
-export { StoryblokLoaderDatasource } from "./lib/StoryblokLoaderDatasource";
 export { StoryblokLoader } from "./lib/StoryblokLoader";
+export { StoryblokLoaderDatasource } from "./lib/StoryblokLoaderDatasource";
+export { StoryblokLoaderStories } from "./lib/StoryblokLoaderStories";
 
 export type {
   StoryblokLoaderCommonConfig,
-  StoryblokLoaderStoriesConfig,
   StoryblokLoaderDatasourceConfig,
   StoryblokLoaderDatasourceParameters,
+  StoryblokLoaderStoriesConfig,
   StoryblokLoaderStoriesParameters,
   StorySortFunction,
 } from "./lib/types";

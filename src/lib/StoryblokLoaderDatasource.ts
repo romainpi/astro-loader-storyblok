@@ -1,8 +1,8 @@
-import type { Loader, LoaderContext } from "astro/loaders";
-import { checkStoredVersionUpToDate, createStoryblokClient, fetchDatasourceEntries, timeAgo } from "./utils";
-import { DatasourceEntrySchema, type StoryblokLoaderDatasourceConfig } from "./types";
-import type { DataEntry } from "astro/content/config";
 import type { StoryblokClient } from "@storyblok/js";
+import type { DataEntry } from "astro/content/config";
+import type { Loader, LoaderContext } from "astro/loaders";
+import { DatasourceEntrySchema, type StoryblokLoaderDatasourceConfig } from "./types";
+import { checkStoredVersionUpToDate, createStoryblokClient, fetchDatasourceEntries, timeAgo } from "./utils";
 
 /**
  * Creates a Storyblok Datasource loader with the provided configuration

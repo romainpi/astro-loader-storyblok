@@ -5,17 +5,17 @@ import {
   type ISbStoryData,
   type StoryblokClient,
 } from "@storyblok/js";
-import type { StoryblokLoaderCommonConfig } from "./types";
-import { SLUGS } from "./constants";
+import type { AstroIntegrationLogger } from "astro";
 import type { DataStore, LoaderContext, MetaStore } from "astro/loaders";
+import { SLUGS } from "./constants";
 import type {
   StoryblokDatasourceResponse,
+  StoryblokLoaderCommonConfig,
   StoryblokLoaderDatasourceConfig,
   StoryblokLoaderStoriesConfig,
   StoryblokStory,
   StorySortFunction,
 } from "./types";
-import type { AstroIntegrationLogger } from "astro";
 
 /**
  * Initializes the Storyblok API client with comprehensive error handling

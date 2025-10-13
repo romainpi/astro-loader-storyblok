@@ -1,4 +1,8 @@
+import type { StoryblokClient } from "@storyblok/js";
 import type { Loader, LoaderContext } from "astro/loaders";
+import { CacheVersionUpdatePromise } from "./CacheVersionUpdatePromise";
+import { storyblokLoaderDatasourceImplem } from "./StoryblokLoaderDatasource";
+import { storyblokLoaderStoriesImplem } from "./StoryblokLoaderStories";
 import {
   DatasourceEntrySchema,
   type StoryblokLoaderCommonConfig,
@@ -6,10 +10,6 @@ import {
   type StoryblokLoaderStoriesParameters,
 } from "./types";
 import { createStoryblokClient, timeAgo } from "./utils";
-import { storyblokLoaderDatasourceImplem } from "./StoryblokLoaderDatasource";
-import type { StoryblokClient } from "@storyblok/js";
-import { storyblokLoaderStoriesImplem } from "./StoryblokLoaderStories";
-import { CacheVersionUpdatePromise } from "./CacheVersionUpdatePromise";
 
 export class StoryblokLoader {
   private commonConfig: StoryblokLoaderCommonConfig;

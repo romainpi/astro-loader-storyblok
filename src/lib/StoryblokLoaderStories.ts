@@ -1,14 +1,14 @@
-import type { Loader, LoaderContext } from "astro/loaders";
 import type { ISbStoryData, StoryblokClient } from "@storyblok/js";
+import type { Loader, LoaderContext } from "astro/loaders";
 import { checkStoredVersionUpToDate, createStoryblokClient, timeAgo } from "./utils";
 
 import type { StoryblokLoaderStoriesConfig, StoryblokStory } from "./types";
 import {
   fetchStories,
+  getEffectiveSortConfig,
   processStoriesResponse,
   setStoryInStore,
   shouldUseDateFilter,
-  getEffectiveSortConfig,
 } from "./utils";
 
 /**
