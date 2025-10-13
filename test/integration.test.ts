@@ -306,7 +306,9 @@ describe("Integration Tests", () => {
         }),
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith("[category-datasource] Loaded 3 entries (updated 45 months ago)");
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        expect.stringMatching(/^\[category-datasource\] Loaded 3 entries \(updated \d+ months ago\)$/)
+      );
     });
 
     it("should handle switched names and values configuration", async () => {
