@@ -84,7 +84,7 @@ export async function fetchDatasourceEntries(
  */
 export async function fetchStories(
   storyblokApi: StoryblokClient,
-  otherParams: Record<string, any>,
+  otherParams: Record<string, unknown>,
   contentType?: string,
   storyblokParams?: ISbStoriesParams
 ): Promise<Array<ISbStoryData>> {
