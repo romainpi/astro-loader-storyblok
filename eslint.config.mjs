@@ -52,6 +52,12 @@ export default defineConfig(
     },
   },
   {
+    files: ["scripts/**/*.mjs"],
+    rules: {
+      "no-console": "off",
+    },
+  },
+  {
     ignores: ["**/dist/**", "coverage/**", "**/node_modules/**", "**/.astro/**"],
   }
 );
