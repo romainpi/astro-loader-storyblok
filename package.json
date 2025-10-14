@@ -27,12 +27,12 @@
     "prepublishOnly": "pnpm build",
     "lint": "eslint .",
     "lint:fix": "pnpm lint --fix",
-    "type-check": "tsc --noEmit",
     "lint:markdown": "markdownlint-cli2 \"**/*.{md,mdx}\" \"!node_modules\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
+    "type-check": "tsc --noEmit",
     "version": "node ./scripts/increase-package-version.mjs",
     "version-minor": "pnpm run version minor"
   },
