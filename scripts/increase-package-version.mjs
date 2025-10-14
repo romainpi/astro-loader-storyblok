@@ -2,6 +2,7 @@ import { inc } from "semver";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import process from "process";
+import console from "console";
 import { execSync } from "child_process";
 
 const packageJsonPath = join(process.cwd(), "package.json");
