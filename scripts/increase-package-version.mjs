@@ -2,6 +2,7 @@ import { inc } from "semver";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import process from "process";
+import { execSync } from "child_process";
 
 const packageJsonPath = join(process.cwd(), "package.json");
 const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
@@ -9,6 +10,12 @@ const currentVersion = packageJson.version;
 
 if (!currentVersion) {
   throw new Error("Current version not found in package.json");
+}
+
+// Check for git changes
+const gitStatus = execSync("git status --porcelain").toString().trim();
+if (gitStatus) {
+  throw new Error("You have uncommitted changes. Please commit or stash them before running this script.");
 }
 
 // Function to increment the version based on the release type
