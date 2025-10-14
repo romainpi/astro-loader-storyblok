@@ -32,7 +32,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "version": "node ./scripts/increase-package-version.mjs",
+    "version-minor": "pnpm run version minor"
   },
   "keywords": [
     "astro",
