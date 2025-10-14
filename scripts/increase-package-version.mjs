@@ -48,7 +48,8 @@ try {
   if (shouldSave) {
     // Update the package.json file
     packageJson.version = newVersion;
-    writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
+
+    writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
     console.log(`Updated package.json with new version: ${newVersion}`);
   } else {
     console.log("Use --save flag to update package.json file");
