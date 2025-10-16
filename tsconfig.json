@@ -5,7 +5,9 @@
     "outDir": "./dist",
     "declaration": true,
     "allowImportingTsExtensions": false,
-    "noEmit": false
+    "noEmit": false,
+    "moduleResolution": "bundler",
+    "module": "ESNext"
   },
   "include": ["src/**/*"]
 }

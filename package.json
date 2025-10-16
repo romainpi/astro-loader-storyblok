@@ -3,6 +3,10 @@
   "version": "1.0.5",
   "description": "Astro content loader for Storyblok",
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=10.8.0"
+  },
   "main": "./dist/index.js",
   "files": [
     "dist/**/*.js",
@@ -14,7 +18,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
