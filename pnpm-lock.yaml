@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@storyblok/js':
-        specifier: 4.3.2
-        version: 4.3.2
+        specifier: 4.4.0
+        version: 4.4.0
       '@storyblok/management-api-client':
         specifier: 0.1.5
         version: 0.1.5
@@ -665,8 +665,8 @@ packages:
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
 
-  '@storyblok/js@4.3.2':
-    resolution: {integrity: sha512-adaiG7CLhsdgPkuDVCYpBAfCkySkzBOj4HrgfNFmPsNst0rHQHB09uj2Ak6BnFWefSTLgA6EB4BfSj/FymH69Q==}
+  '@storyblok/js@4.4.0':
+    resolution: {integrity: sha512-1McshBjWUBq5aJ32ulWfUnOh2Pyk2YgBUxGTOYJgSN86vYfDrHe1831IqeKNtv6X4Xapsi20vievPO/AQeXHsw==}
 
   '@storyblok/management-api-client@0.1.5':
     resolution: {integrity: sha512-aU25c0pUrgljUk8m3CBmcrZy8XvNdz/mhMRlCwap+i6snr3D4X6gJ07dgvvM3Yb2VEgSFPwOnLhH3pumxODa4g==}
@@ -2995,7 +2995,7 @@ snapshots:
 
   '@sindresorhus/merge-streams@2.3.0': {}
 
-  '@storyblok/js@4.3.2':
+  '@storyblok/js@4.4.0':
     dependencies:
       '@storyblok/richtext': 3.8.2
       storyblok-js-client: 7.1.5
