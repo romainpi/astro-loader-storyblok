@@ -58,7 +58,7 @@
   "devDependencies": {
     "@eslint/js": "9.38.0",
     "@github/markdownlint-github": "0.8.0",
-    "@types/node": "24.8.0",
+    "@types/node": "24.9.0",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "3.2.4",
     "astro": "5.14.7",
