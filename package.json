@@ -65,7 +65,7 @@
     "eslint": "9.37.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
-    "happy-dom": "20.0.2",
+    "happy-dom": "20.0.7",
     "markdown-it": "14.1.0",
     "markdownlint-cli2": "0.18.1",
     "markdownlint-cli2-formatter-pretty": "0.0.8",
