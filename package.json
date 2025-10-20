@@ -56,7 +56,7 @@
   },
   "packageManager": "pnpm@10.18.3+sha256.797d0059bc5fc3356d79c681615a137c7b35e4efc03a4449a8a1abfcbcc4bdc7",
   "devDependencies": {
-    "@eslint/js": "9.37.0",
+    "@eslint/js": "9.38.0",
     "@github/markdownlint-github": "0.8.0",
     "@types/node": "24.8.0",
     "@vitest/coverage-v8": "3.2.4",
