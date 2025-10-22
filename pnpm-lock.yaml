@@ -58,10 +58,10 @@ importers:
         specifier: 7.7.3
         version: 7.7.3
       typescript:
-        specifier: 5.9.3
+        specifier: ^5.9.0
         version: 5.9.3
       typescript-eslint:
-        specifier: 8.46.2
+        specifier: ^8.46.0
         version: 8.46.2(eslint@9.38.0)(typescript@5.9.3)
       vitest:
         specifier: 3.2.4
@@ -70,13 +70,13 @@ importers:
   playground/minimal-astro-project:
     dependencies:
       astro:
-        specifier: ^5.14.8
+        specifier: ^5.14.0
         version: 5.14.8(@types/node@24.9.1)(rollup@4.52.5)(tsx@4.20.6)(typescript@5.9.3)
       astro-loader-storyblok:
         specifier: workspace:*
         version: link:../..
       dotenv:
-        specifier: ^17.2.3
+        specifier: ^17.2.0
         version: 17.2.3
 
 packages:
