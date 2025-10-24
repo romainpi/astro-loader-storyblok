@@ -9,8 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.14.0",
+    "astro": "^5.15.1",
     "astro-loader-storyblok": "workspace:*",
-    "dotenv": "^17.2.0"
+    "dotenv": "^17.2.3"
   }
 }
