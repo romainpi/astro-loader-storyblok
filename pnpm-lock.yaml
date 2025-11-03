@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@storyblok/js':
-        specifier: 4.4.0
-        version: 4.4.0
+        specifier: 4.4.1
+        version: 4.4.1
       '@storyblok/management-api-client':
         specifier: 0.1.6
         version: 0.1.6
@@ -665,8 +665,8 @@ packages:
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
 
-  '@storyblok/js@4.4.0':
-    resolution: {integrity: sha512-1McshBjWUBq5aJ32ulWfUnOh2Pyk2YgBUxGTOYJgSN86vYfDrHe1831IqeKNtv6X4Xapsi20vievPO/AQeXHsw==}
+  '@storyblok/js@4.4.1':
+    resolution: {integrity: sha512-GAMDHiEkNSMd3lQgoHa9GEM5/Vgc/AWXKZVAMIxXX8Hf8f1FFratswpXgL2JIfjKz+Vj0UwYBGbWpjx+6svJHQ==}
 
   '@storyblok/management-api-client@0.1.6':
     resolution: {integrity: sha512-09p7an65WSNxajosnEg4+YimyISWYM3Am3Yspm1uQ28Xt9f2oGUwBEKwxRQsZksxgEljTV3gbCOKynIrxsN15g==}
@@ -2053,8 +2053,8 @@ packages:
   std-env@3.10.0:
     resolution: {integrity: sha512-5GS12FdOZNliM5mAOxFRg7Ir0pWz8MdpYm6AY6VPkGpbA7ZzmbzNcBJQ0GPvvyWgcY7QAhCgf9Uy89I03faLkg==}
 
-  storyblok-js-client@7.1.5:
-    resolution: {integrity: sha512-N+DWilPdbXfnb54O3jbJ7IfPyQMs+Jn7KrTCO3lpS8JAEfb+BXQH3sLPri3qzy+tyk0IhXj+8ao4wOX1z89FNg==}
+  storyblok-js-client@7.1.6:
+    resolution: {integrity: sha512-LWXL4rUT8vM9it6Kodjh1pMicLokgLXAGswpdYi5lEgMsgn+yGjt8Hs1Yg5z3gOtW0m0O6aQ3dTZuc7r+Q+/8w==}
 
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
@@ -2995,10 +2995,10 @@ snapshots:
 
   '@sindresorhus/merge-streams@2.3.0': {}
 
-  '@storyblok/js@4.4.0':
+  '@storyblok/js@4.4.1':
     dependencies:
       '@storyblok/richtext': 3.8.2
-      storyblok-js-client: 7.1.5
+      storyblok-js-client: 7.1.6
 
   '@storyblok/management-api-client@0.1.6':
     dependencies:
@@ -4970,7 +4970,7 @@ snapshots:
 
   std-env@3.10.0: {}
 
-  storyblok-js-client@7.1.5: {}
+  storyblok-js-client@7.1.6: {}
 
   string-width@4.2.3:
     dependencies:
