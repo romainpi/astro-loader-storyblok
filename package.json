@@ -61,7 +61,7 @@
     "@types/node": "^24.10.0",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "3.2.4",
-    "astro": "^5.15.3",
+    "astro": "^5.15.4",
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
