@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
       '@storyblok/management-api-client':
-        specifier: 0.1.7
-        version: 0.1.7
+        specifier: 0.1.8
+        version: 0.1.8
     devDependencies:
       '@eslint/js':
         specifier: 9.39.1
@@ -675,8 +675,8 @@ packages:
   '@storyblok/js@4.4.3':
     resolution: {integrity: sha512-EBJicZkDjAQ2iep5UOE3pOnCIYCr7Qm7mue2gKVk1u5QGgupHTBvTgnfZFYJit+ochDxN/bYfIlXlBrF975nNA==}
 
-  '@storyblok/management-api-client@0.1.7':
-    resolution: {integrity: sha512-vHUN+WQjHqnyW3jtamfDe2KDdMhdjizQGpHBMLiU0aB5n26c9LC/9NMyU7b5Kpz+uMG87rYDCi0a1W/vPWpFNQ==}
+  '@storyblok/management-api-client@0.1.8':
+    resolution: {integrity: sha512-b0mxOPC4iZhg1VDspMsDUt0AGnDk8RYSsN4eD83eiZUsCZoS4ZQ2tCebyG2dqGsQI63qV9MANOIBSwc/x+9P4g==}
 
   '@storyblok/region-helper@1.3.1':
     resolution: {integrity: sha512-6Oc+8/qXGtUQio1dQddD4AakI1sDANg+cpliGA3oHM6hkAGXqNnR9HkskgBKotwUxvr9++nBGZQiHIw49IJQyA==}
@@ -3027,7 +3027,7 @@ snapshots:
       '@storyblok/richtext': 3.8.2
       storyblok-js-client: 7.2.1
 
-  '@storyblok/management-api-client@0.1.7':
+  '@storyblok/management-api-client@0.1.8':
     dependencies:
       '@storyblok/region-helper': 1.3.1
 

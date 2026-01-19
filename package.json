@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "@storyblok/js": "4.4.3",
-    "@storyblok/management-api-client": "0.1.7"
+    "@storyblok/management-api-client": "0.1.8"
   },
   "peerDependencies": {
     "astro": "^5.0.0"
