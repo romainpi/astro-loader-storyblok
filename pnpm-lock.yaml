@@ -52,8 +52,8 @@ importers:
         specifier: 0.20.0
         version: 0.20.0
       markdownlint-cli2-formatter-pretty:
-        specifier: 0.0.9
-        version: 0.0.9(markdownlint-cli2@0.20.0)
+        specifier: 0.0.10
+        version: 0.0.10(markdownlint-cli2@0.20.0)
       semver:
         specifier: 7.7.4
         version: 7.7.4
@@ -1140,8 +1140,8 @@ packages:
   ansi-align@3.0.1:
     resolution: {integrity: sha512-IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w==}
 
-  ansi-escapes@7.2.0:
-    resolution: {integrity: sha512-g6LhBsl+GBPRWGWsBtutpzBYuIIdBkLEvad5C/va/74Db018+5TZiyA26cZJAr3Rft5lprVqOIPxf5Vid6tqAw==}
+  ansi-escapes@7.3.0:
+    resolution: {integrity: sha512-BvU8nYgGQBxcmMuEeUEmNTvrMVjJNSH7RgW24vXexN4Ven6qCvy4TntnvlnwnMLTVlcRQQdbRY8NKnaIoeWDNg==}
     engines: {node: '>=18'}
 
   ansi-regex@5.0.1:
@@ -1885,9 +1885,9 @@ packages:
     peerDependencies:
       markdownlint-cli2: '>=0.0.4'
 
-  markdownlint-cli2-formatter-pretty@0.0.9:
-    resolution: {integrity: sha512-5zuqYonXTUu7yLP+f0ERcYu3c6tlWJVMkp+ovo6RNEvy8NEpkdUXRBAObbuJVSE3bJcaqderebfLSlEdUK8HDg==}
-    engines: {node: '>=14.18.0'}
+  markdownlint-cli2-formatter-pretty@0.0.10:
+    resolution: {integrity: sha512-RyG0KM96sQXWIvQwOt0b7ediw5B9uf1XxiNP9XMpqgLVK7EsFKofxvu+jAxGhGB4V0H8YkPf+3ULWIHhbW6A5A==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0'}
     peerDependencies:
       markdownlint-cli2: '>=0.0.4'
 
@@ -2415,8 +2415,8 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
-  supports-hyperlinks@4.3.0:
-    resolution: {integrity: sha512-i6sWEzuwadSlcr2mOnb0ktlIl+K5FVxsPXmoPfknDd2gyw4ZBIAZ5coc0NQzYqDdEYXMHy8NaY9rWwa1Q1myiQ==}
+  supports-hyperlinks@4.4.0:
+    resolution: {integrity: sha512-UKbpT93hN5Nr9go5UY7bopIB9YQlMz9nm/ct4IXt/irb5YRkn9WaqrOBJGZ5Pwvsd5FQzSVeYlGdXoCAPQZrPg==}
     engines: {node: '>=20'}
 
   svgo@4.0.0:
@@ -3723,7 +3723,7 @@ snapshots:
     dependencies:
       string-width: 4.2.3
 
-  ansi-escapes@7.2.0:
+  ansi-escapes@7.3.0:
     dependencies:
       environment: 1.1.0
 
@@ -4617,9 +4617,8 @@ snapshots:
     dependencies:
       markdownlint-cli2: 0.20.0
 
-  markdownlint-cli2-formatter-pretty@0.0.9(markdownlint-cli2@0.20.0):
+  markdownlint-cli2-formatter-pretty@0.0.10(markdownlint-cli2@0.20.0):
     dependencies:
-      chalk: 5.6.2
       markdownlint-cli2: 0.20.0
       terminal-link: 5.0.0
 
@@ -5468,7 +5467,7 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
-  supports-hyperlinks@4.3.0:
+  supports-hyperlinks@4.4.0:
     dependencies:
       has-flag: 5.0.1
       supports-color: 10.2.2
@@ -5489,8 +5488,8 @@ snapshots:
 
   terminal-link@5.0.0:
     dependencies:
-      ansi-escapes: 7.2.0
-      supports-hyperlinks: 4.3.0
+      ansi-escapes: 7.3.0
+      supports-hyperlinks: 4.4.0
 
   test-exclude@7.0.1:
     dependencies:
