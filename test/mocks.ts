@@ -221,8 +221,11 @@ export function resetAllMocks() {
 /**
  * Vitest 4 class mocks must be constructible when the subject uses `new`.
  */
-export function mockConstructibleClass<T>(mockedClass: { mockImplementation: (fn: (...args: any[]) => any) => any }, factory: () => T): void {
-  mockedClass.mockImplementation(function MockedClass() {
+export function mockConstructibleClass<T>(
+  mockedClass: { mockImplementation: (fn: (...args: any[]) => any) => any },
+  factory: () => T
+): void {
+  mockedClass.mockImplementation(() => {
     return factory() as any;
   });
 }

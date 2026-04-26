@@ -91,8 +91,7 @@ export interface StoryblokLoaderDatasourceParameters extends StoryblokLoaderData
  * Configuration for the Storyblok Datasource loader
  */
 export interface StoryblokLoaderDatasourceConfig
-  extends StoryblokLoaderCommonConfig,
-    StoryblokLoaderDatasourceParameters {}
+  extends StoryblokLoaderCommonConfig, StoryblokLoaderDatasourceParameters {}
 
 /**
  * Extended story type with proper typing for refreshContextData
