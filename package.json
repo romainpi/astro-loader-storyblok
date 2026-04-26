@@ -1,6 +1,6 @@
 {
   "name": "astro-loader-storyblok",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Astro content loader for Storyblok",
   "type": "module",
   "main": "./dist/index.js",
