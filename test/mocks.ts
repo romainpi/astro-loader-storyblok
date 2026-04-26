@@ -225,7 +225,9 @@ export function mockConstructibleClass<T>(
   mockedClass: { mockImplementation: (fn: (...args: any[]) => any) => any },
   factory: () => T
 ): void {
-  mockedClass.mockImplementation(function mockClassImplementation() {
+  function mockClassImplementation() {
     return factory() as any;
-  });
+  }
+
+  mockedClass.mockImplementation(mockClassImplementation);
 }
