@@ -1,5 +1,5 @@
 import type { ISbConfig, ISbStoriesParams, ISbStoryData } from "@storyblok/js";
-import type { DatasourceEntry } from "@storyblok/management-api-client/resources/datasource_entries";
+import type { DatasourceEntry } from "@storyblok/management-api-client";
 import { z } from "astro/zod";
 import type { SortByEnum } from "./enums";
 
