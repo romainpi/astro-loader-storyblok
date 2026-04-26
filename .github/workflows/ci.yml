@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x] # Test all supported Node.js versions
+        node-version: [20.x, 22.x, 24.x] # Test all supported Node.js versions
         
     steps:
       - name: Checkout code
