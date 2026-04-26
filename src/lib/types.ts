@@ -1,5 +1,5 @@
 import type { ISbConfig, ISbStoriesParams, ISbStoryData } from "@storyblok/js";
-import type { DatasourceEntry } from "@storyblok/management-api-client/resources/datasource_entries";
+import type { DatasourceEntry } from "@storyblok/management-api-client";
 import { z } from "astro/zod";
 import type { SortByEnum } from "./enums";
 
@@ -91,8 +91,7 @@ export interface StoryblokLoaderDatasourceParameters extends StoryblokLoaderData
  * Configuration for the Storyblok Datasource loader
  */
 export interface StoryblokLoaderDatasourceConfig
-  extends StoryblokLoaderCommonConfig,
-    StoryblokLoaderDatasourceParameters {}
+  extends StoryblokLoaderCommonConfig, StoryblokLoaderDatasourceParameters {}
 
 /**
  * Extended story type with proper typing for refreshContextData

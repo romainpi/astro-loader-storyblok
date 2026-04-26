@@ -3,7 +3,7 @@ import type { StoryblokClient } from "@storyblok/js";
 import type { LoaderContext } from "astro/dist/content/loaders/index.js";
 import { StoryblokLoader } from "../src/lib/StoryblokLoader";
 import { CacheVersionUpdatePromise } from "../src/lib/CacheVersionUpdatePromise";
-import { resetAllMocks, mockLogger, MockDataStore } from "./mocks";
+import { resetAllMocks, mockLogger, MockDataStore, mockConstructibleClass } from "./mocks";
 import type {
   StoryblokLoaderCommonConfig,
   StoryblokLoaderStoriesParameters,
@@ -105,7 +105,7 @@ describe("StoryblokLoader", () => {
       }),
       getCollection: vi.fn(() => "test-collection"),
     };
-    MockedCacheVersionUpdatePromise.mockImplementation(() => mockCvPromise as any);
+    mockConstructibleClass(MockedCacheVersionUpdatePromise, () => mockCvPromise);
   });
 
   afterEach(() => {
@@ -258,7 +258,7 @@ describe("StoryblokLoader", () => {
       let promiseCount = 0;
       let sharedPromise: any = null;
 
-      MockedCacheVersionUpdatePromise.mockImplementation(() => {
+      mockConstructibleClass(MockedCacheVersionUpdatePromise, () => {
         if (sharedPromise === null) {
           promiseCount++;
           sharedPromise = {
@@ -310,7 +310,7 @@ describe("StoryblokLoader", () => {
         getCollection: vi.fn(() => "test-collection"),
       };
 
-      MockedCacheVersionUpdatePromise.mockImplementation(() => mockPromise as any);
+      mockConstructibleClass(MockedCacheVersionUpdatePromise, () => mockPromise);
 
       const datasourceLoader = loader.getDatasourceLoader({ datasource: "test-ds" });
       await datasourceLoader.load(mockContext);
@@ -336,7 +336,7 @@ describe("StoryblokLoader", () => {
         getCollection: vi.fn(() => "test-collection"),
       };
 
-      MockedCacheVersionUpdatePromise.mockImplementation(() => mockPromise as any);
+      mockConstructibleClass(MockedCacheVersionUpdatePromise, () => mockPromise);
 
       const datasourceLoader = loader.getDatasourceLoader({ datasource: "test-ds" });
 
@@ -363,7 +363,7 @@ describe("StoryblokLoader", () => {
         getCollection: vi.fn(() => "other-collection"),
       };
 
-      MockedCacheVersionUpdatePromise.mockImplementation(() => mockPromise as any);
+      mockConstructibleClass(MockedCacheVersionUpdatePromise, () => mockPromise);
 
       const datasourceLoader = loader.getDatasourceLoader({ datasource: "test-ds" });
 
@@ -401,7 +401,7 @@ describe("StoryblokLoader", () => {
 
       // Mock different CV values for different instances
       let callCount = 0;
-      MockedCacheVersionUpdatePromise.mockImplementation(() => {
+      mockConstructibleClass(MockedCacheVersionUpdatePromise, () => {
         callCount++;
         const cvValue = callCount === 1 ? 11111 : 22222;
         return {

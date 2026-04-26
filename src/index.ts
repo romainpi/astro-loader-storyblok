@@ -15,4 +15,4 @@ export { SortByEnum } from "./lib/enums";
 
 export type { ISbConfig, ISbStoriesParams } from "@storyblok/js";
 
-export type { DatasourceEntry } from "@storyblok/management-api-client/resources/datasource_entries";
+export type { DatasourceEntry } from "@storyblok/management-api-client";

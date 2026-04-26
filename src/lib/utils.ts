@@ -67,7 +67,8 @@ export async function fetchDatasourceEntries(
     throw new Error(
       `Failed to fetch datasource entries for "${config.datasource}": ${
         error instanceof Error ? error.message : String(error)
-      }`
+      }`,
+      { cause: error }
     );
   }
 }
@@ -99,7 +100,8 @@ export async function fetchStories(
   } catch (error) {
     const contentTypeInfo = contentType ? ` for content type "${contentType}"` : "";
     throw new Error(
-      `Failed to fetch stories${contentTypeInfo}: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to fetch stories${contentTypeInfo}: ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
     );
   }
 }
@@ -118,7 +120,9 @@ export async function fetchSpaceCacheVersionValue(
 
     return Number(retValue);
   } catch (error) {
-    throw new Error(`Failed to fetch space cache version: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`Failed to fetch space cache version: ${error instanceof Error ? error.message : String(error)}`, {
+      cause: error,
+    });
   }
 }
 
@@ -324,16 +328,17 @@ export function compareStories(storyA: ISbStoryData, storyB: ISbStoryData, sortB
   if (valueA === null) return 1;
   if (valueB === null) return -1;
 
-  let comparison = 0;
-
-  if (valueA instanceof Date && valueB instanceof Date) {
-    comparison = valueA.getTime() - valueB.getTime();
-  } else if (typeof valueA === "string" && typeof valueB === "string") {
-    comparison = valueA.localeCompare(valueB);
-  } else {
-    // Fallback for other types
-    comparison = valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-  }
+  const comparison =
+    valueA instanceof Date && valueB instanceof Date
+      ? valueA.getTime() - valueB.getTime()
+      : typeof valueA === "string" && typeof valueB === "string"
+        ? valueA.localeCompare(valueB)
+        : // Fallback for other types
+          valueA < valueB
+          ? -1
+          : valueA > valueB
+            ? 1
+            : 0;
 
   return direction === "desc" ? -comparison : comparison;
 }
