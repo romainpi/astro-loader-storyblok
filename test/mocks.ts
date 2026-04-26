@@ -217,3 +217,12 @@ export function resetAllMocks() {
   mockStoryblokClient.get.mockReset();
   mockStoryblokClient.getAll.mockReset();
 }
+
+/**
+ * Vitest 4 class mocks must be constructible when the subject uses `new`.
+ */
+export function mockConstructibleClass<T>(mockedClass: { mockImplementation: (fn: (...args: any[]) => any) => any }, factory: () => T): void {
+  mockedClass.mockImplementation(function MockedClass() {
+    return factory() as any;
+  });
+}
