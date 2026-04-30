@@ -16,7 +16,7 @@ about the [origins of this project here](#background).
 
 ## Features
 
-- ✅ **Full Astro Content Layer API support** - Compatible with Astro 5.0+
+- ✅ **Full Astro Content Layer API support** - Compatible with Astro 5 and 6+
 - 🗂️ **Stories and datasources** - Comprehensive support for both Storyblok stories and datasources
 - 🚀 **Optimized performance** - Incremental updates and efficient caching
 - ✨ **Automatic schema generation** - Auto-generates Astro collection schemas for datasources
