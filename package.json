@@ -82,7 +82,7 @@
     "vitest": "4.1.5"
   },
   "dependencies": {
-    "@storyblok/js": "5.1.4",
+    "@storyblok/js": "5.1.8",
     "@storyblok/management-api-client": "0.2.4"
   },
   "peerDependencies": {
