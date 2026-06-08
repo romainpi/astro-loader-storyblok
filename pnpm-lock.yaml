@@ -19,8 +19,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.2.1)
       '@github/markdownlint-github':
-        specifier: 0.8.0
-        version: 0.8.0
+        specifier: 0.8.1
+        version: 0.8.1
       '@types/node':
         specifier: ^25.6.0
         version: 25.6.0
@@ -329,8 +329,8 @@ packages:
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@github/markdownlint-github@0.8.0':
-    resolution: {integrity: sha512-079sWT/2Z8EI5v02GTtSfvG06E1m8Q6xjYoQiGdPg6rSKVntpfBw6in79fGs+vc9cYihBHl73vkOoDcyH/Jl8g==}
+  '@github/markdownlint-github@0.8.1':
+    resolution: {integrity: sha512-QnAlH3IdyQl1ibPESiKmnX1gC2d0de2pll8d2zGD8pR4nTL+yAIrXkq/kbkA0t3c6TVINsoEYo/4tQXwo5L7Pw==}
     engines: {node: '>=18'}
 
   '@humanfs/core@0.19.2':
@@ -2754,9 +2754,10 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@github/markdownlint-github@0.8.0':
+  '@github/markdownlint-github@0.8.1':
     dependencies:
       lodash-es: 4.18.1
+      markdown-it: 14.1.1
 
   '@humanfs/core@0.19.2':
     dependencies:
